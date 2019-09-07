@@ -12,6 +12,8 @@ from load_data_gadget import *
 simulation_directory = '/u/bvillase/dm/cosmo_2048/'
 data_directory = simulation_directory + 'set_0/data/'
 
+inDir = data_directory
+
 nSnap = 0
 nBox = 0
 
