@@ -5,6 +5,11 @@ import h5py
 import numpy as np
 
 
+#Add Modules from other directories
+currentDirectory = os.getcwd()
+toolsDirectory = os.path.abspath(os.path.join(currentDirectory, os.pardir))
+sys.path.append( toolsDirectory )
+
 
 def load_gadget_file_boxes( nSnap, inDir, nBoxes, part_types=[ 'dm'] ):
   import glio
