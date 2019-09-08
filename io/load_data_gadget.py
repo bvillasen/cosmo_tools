@@ -35,12 +35,12 @@ def get_snapshpt_info( nSnap, inDir, single_file=False ):
 
 
 
-def load_gadget_file_boxes( nSnap, inDir, nBoxes, part_types=[ 'dm'] ):
+def load_gadget_file_boxes( nSnap, inDir, box_list, part_types=[ 'dm'] ):
   import glio
   outputData = {'dm':{ 'mass':[], 'pos_x':[], 'pos_y':[], 'pos_z':[], 'vel_x':[], 'vel_y':[], 'vel_z':[] },
                 'gas':{ 'rho':[], 'u':[], 'mass':[], 'pos_x':[], 'pos_y':[], 'pos_z':[], 'vel_x':[], 'vel_y':[], 'vel_z':[] } }
 
-  for nBox in range(nBoxes):
+  for nBox in box_list:
     snapKey = '_{0:03}.{1}'.format( nSnap, nBox)
     inFileName = 'snapshot{0}'.format( snapKey)
     print ('\nLoading Gadget file:', inFileName )
