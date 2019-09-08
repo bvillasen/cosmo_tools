@@ -20,7 +20,7 @@ file_name_base = 'snapshot'
 
 dataFiles = [f for f in listdir(inDir) if (isfile(join(inDir, f)) and (f.find(file_name_base) == 0 ) )  ]
 snapshots = []
-box_list
+box_list = []
 for file in dataFiles:
   if file.find('.'):
     file_base, n_box = file.split('.')
