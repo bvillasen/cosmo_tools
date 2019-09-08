@@ -30,7 +30,7 @@ for file in dataFiles:
   snapshots.append(n_snap)
 snapshots = np.unique(snapshots)
 
-if len(box_list)>1: boxes = np.unique(box_list) 
+if len(box_list)>1: box_list = np.unique(box_list) 
 
 
 print( snapshots )
