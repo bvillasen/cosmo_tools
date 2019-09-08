@@ -15,7 +15,7 @@ data_directory = simulation_directory + 'set_0/data/'
 z_list = []
 snap_list = []
 
-for nSnap in range(5):
+for nSnap in range(1):
   snapshot_info = get_snapshpt_info( nSnap, data_directory, single_file=False )
   z = snapshot_info['current_z']
   z_list.append( z )
@@ -24,4 +24,5 @@ for nSnap in range(5):
 out_data = np.array([ snap_list, z_list ])  
   
 out_file_name = 'cosmo_2048_outputs.txt'
-np.savetxt( out_file_name, out_data )
+header = 'n_snapshot   redshift'
+np.savetxt( out_file_name, out_data, h=header )
