@@ -9,6 +9,31 @@ currentDirectory = os.getcwd()
 toolsDirectory = os.path.abspath(os.path.join(currentDirectory, os.pardir))
 sys.path.append( toolsDirectory )
 
+def get_snapshpt_info( nSnap, inDir, single_file=False )
+  import glio
+  nBox = 0
+  snapKey = '_{0:03}.{1}'.format( nSnap, nBox)
+  if single_file: snapKey = '_{0:03}'.format( nSnap )
+  inFileName = 'snapshot{0}'.format( snapKey)
+  print ('\nLoading Gadget file:', inFileName )
+  s = glio.GadgetSnapshot( inDir + inFileName )
+  s.load()
+  head = s.header
+  fields = s.fields
+
+  box_size = head.BoxSize             #kpc/h
+  current_a = head.time
+  current_z = head.redshift
+  
+  info = {}
+  info['current_a'] = current_a
+  info['current_z'] = current_z
+  info['boxSize'] = box_size
+  
+  return info
+  
+
+
 
 def load_gadget_file_boxes( nSnap, inDir, nBoxes, part_types=[ 'dm'] ):
   import glio

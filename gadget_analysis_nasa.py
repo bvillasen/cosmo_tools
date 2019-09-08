@@ -12,13 +12,7 @@ from load_data_gadget import *
 simulation_directory = '/u/bvillase/dm/cosmo_2048/'
 data_directory = simulation_directory + 'set_0/data/'
 
-inDir = data_directory
 
 nSnap = 0
-nBox = 0
-
-snapKey = '_{0:03}.{1}'.format( nSnap, nBox)
-inFileName = 'snapshot{0}'.format( snapKey)
-print ('\nLoading Gadget file:', inFileName )
-s = glio.GadgetSnapshot( inDir + inFileName )
-s.load()
+snapshot_info = get_snapshpt_info( nSnap, data_directory, single_file=False )
+print snapshot_info['current_z']
