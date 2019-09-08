@@ -7,6 +7,7 @@ currentDirectory = os.getcwd()
 ioDirectory = currentDirectory + '/io'
 sys.path.append( ioDirectory )
 from load_data_gadget import *
+from get_files import *
 
 
 simulation_directory = '/u/bvillase/dm/cosmo_2048/'
