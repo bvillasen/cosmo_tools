@@ -20,16 +20,21 @@ file_name_base = 'snapshot'
 
 dataFiles = [f for f in listdir(inDir) if (isfile(join(inDir, f)) and (f.find(file_name_base) == 0 ) )  ]
 snapshots = []
+box_list
 for file in dataFiles:
   if file.find('.'):
     file_base, n_box = file.split('.')
+    box_list.append( int(nBox))
   else: file_base = file
-  n_snap = file_base[-3:]
+  n_snap = int(file_base[-3:])
   snapshots.append(n_snap)
-  
+snapshots = unique(snapshots)
+
+if len(box_list)>1: boxes = unique(box_list) 
 
 
 print( snapshots )
+print( box_list )
 # 
 # z_list = []
 # snap_list = []
