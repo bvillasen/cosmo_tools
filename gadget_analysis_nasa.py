@@ -12,29 +12,13 @@ from load_data_gadget import *
 simulation_directory = '/u/bvillase/dm/cosmo_2048/'
 data_directory = simulation_directory + 'set_0/data/'
 
-from os import listdir
-from os.path import isfile, join
-
-inDir = data_directory
 file_name_base = 'snapshot'
+snapshots, box_list,  dataFiles = get_files( data_directory, file_name_base)
 
-dataFiles = [f for f in listdir(inDir) if (isfile(join(inDir, f)) and (f.find(file_name_base) == 0 ) )  ]
-snapshots = []
-box_list = []
-for file in dataFiles:
-  if file.find('.'):
-    file_base, n_box = file.split('.')
-    box_list.append( int(n_box))
-  else: file_base = file
-  n_snap = int(file_base[-3:])
-  snapshots.append(n_snap)
-snapshots = np.unique(snapshots)
-
-if len(box_list)>1: box_list = np.unique(box_list) 
+print( snapshots)
+print( box_list)
 
 
-print( snapshots )
-print( box_list )
 # 
 # z_list = []
 # snap_list = []
