@@ -28,9 +28,9 @@ for file in dataFiles:
   else: file_base = file
   n_snap = int(file_base[-3:])
   snapshots.append(n_snap)
-snapshots = unique(snapshots)
+snapshots = np.unique(snapshots)
 
-if len(box_list)>1: boxes = unique(box_list) 
+if len(box_list)>1: boxes = np.unique(box_list) 
 
 
 print( snapshots )
