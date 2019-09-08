@@ -19,8 +19,17 @@ inDir = data_directory
 file_name_base = 'snapshot'
 
 dataFiles = [f for f in listdir(inDir) if (isfile(join(inDir, f)) and (f.find(file_name_base) == 0 ) )  ]
+for file in dataFiles:
+  snapshots = []
+  if file.find('.'):
+    file_base, n_box = file.split('.')
+  else: file_base = file
+  n_snap = file_base[:-3]
+  snapshots.append(n_snap)
+  
 
-print( dataFiles )
+
+print( snapshots )
 # 
 # z_list = []
 # snap_list = []
