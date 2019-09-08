@@ -13,6 +13,7 @@ simulation_directory = '/u/bvillase/dm/cosmo_2048/'
 data_directory = simulation_directory + 'set_0/data/'
 
 from os import listdir
+from os.path import isfile, join
 
 inDir = data_directory
 file_name_base = 'snapshot'
