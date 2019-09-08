@@ -9,7 +9,7 @@ currentDirectory = os.getcwd()
 toolsDirectory = os.path.abspath(os.path.join(currentDirectory, os.pardir))
 sys.path.append( toolsDirectory )
 
-def get_snapshpt_info( nSnap, inDir, single_file=False )
+def get_snapshpt_info( nSnap, inDir, single_file=False ):
   import glio
   nBox = 0
   snapKey = '_{0:03}.{1}'.format( nSnap, nBox)
