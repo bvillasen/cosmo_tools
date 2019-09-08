@@ -18,7 +18,7 @@ from os.path import isfile, join
 inDir = data_directory
 file_name_base = 'snapshot'
 
-dataFiles = [f for f in listdir(inDir) if (isfile(join(inDir, f)) and (f.find(snapshot) == 0 )  ]
+dataFiles = [f for f in listdir(inDir) if (isfile(join(inDir, f)) and (f.find(snapshot) == 0 ) )  ]
 
 print( dataFiles )
 # 
