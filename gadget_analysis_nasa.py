@@ -26,4 +26,4 @@ out_data = np.array([ snap_list, z_list ]).T
   
 out_file_name = 'cosmo_2048_outputs.txt'
 header = 'n_snapshot   redshift'
-np.savetxt( out_file_name, out_data, header=header )
+np.savetxt( out_file_name, out_data, fmt='%d  %.6e', header=header )
