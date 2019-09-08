@@ -22,7 +22,7 @@ for nSnap in range(3):
   z_list.append( z )
   snap_list.append( nSnap )
   
-out_data = np.array([ snap_list, z_list ])  
+out_data = np.array([ snap_list, z_list ]).T 
   
 out_file_name = 'cosmo_2048_outputs.txt'
 header = 'n_snapshot   redshift'
