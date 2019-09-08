@@ -15,7 +15,8 @@ data_directory = simulation_directory + 'set_0/data/'
 z_list = []
 snap_list = []
 
-for nSnap in range(1):
+for nSnap in range(3):
+  nSnap = 0
   snapshot_info = get_snapshpt_info( nSnap, data_directory, single_file=False )
   z = snapshot_info['current_z']
   z_list.append( z )
