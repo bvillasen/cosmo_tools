@@ -24,7 +24,7 @@ box_list = []
 for file in dataFiles:
   if file.find('.'):
     file_base, n_box = file.split('.')
-    box_list.append( int(nBox))
+    box_list.append( int(n_box))
   else: file_base = file
   n_snap = int(file_base[-3:])
   snapshots.append(n_snap)
