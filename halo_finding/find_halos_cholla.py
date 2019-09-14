@@ -38,7 +38,7 @@ parallelConf = {
 'PERIODIC': 1,                                #non-periodic boundary conditions
 'INBASE':  inDir ,               #"/directory/where/files/are/located"
 'NUM_BLOCKS': 8,                              # <number of files per snapshot>
-'NUM_SNAPS': 2,                               # <total number of snapshots>
+'NUM_SNAPS': 34,                               # <total number of snapshots>
 'STARTING_SNAP': 0,
 'FILENAME': '"<snap>_particles.h5.<block>"',              #"my_sim.<snap>.<block>"
 # 'SNAPSHOT_NAMES': dataDir + 'halos/snaps_names.txt',
