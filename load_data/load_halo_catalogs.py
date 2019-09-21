@@ -62,6 +62,20 @@ def find_parents(snap, box_size, inputDir, rks_dir, outputFile):
   # call([parents_cmnd, list_file, str(box_size), '>', outputFile ])
   # p = Popen([parents_cmnd, list_file, str(box_size)  ], stdin=PIPE, stdout=PIPE, stderr=PIPE)
   # output, err = p.communicate()
+  
+def load_parents_list_file( snapshot, outputDir ):
+  listFile = outputDir + 'catalog_{0}.dat'.format(snapshot)
+  listString = open( listFile ).read()
+  headers = listString.splitlines()[0][1:].split()
+  nColums = len( headers )
+  listData = np.loadtxt( listFile )
+  if len(listData) == 0:
+    ms_halosData = {}
+    ms_halosData['nHalos'] = listData.shape[0]
+  else:
+    ms_halosData = { headers[i]: listData[:,i] for i in range( nColums ) }
+    ms_halosData['nHalos'] = listData.shape[0]
+  return ms_halosData
 
 def load_catalog( start_snap, snap, boxSize, inputDir, rks_dir  ):
   snap_name = 'snapshot_{0:03}'.format( snap )
