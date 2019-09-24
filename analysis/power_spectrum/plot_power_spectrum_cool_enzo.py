@@ -30,6 +30,12 @@ hfont = {'fontname':'Helvetica'}
 
 ticks_font = font_manager.FontProperties(family='Helvetica', style='normal', weight='normal', stretch='normal')
 
+nPoints = 256
+
+out_file_name = 'ps_{0}_cool_enzo_dm_thermal.png'.format( nPoints)
+color_ps_1 = palettable.cmocean.sequential.Thermal_10_r.mpl_colors
+color_ps_2 = palettable.cmocean.sequential.Gray_10.mpl_colors
+color_diff = color_ps_1
 
 
 matplotlib.rcParams['font.sans-serif'] = "Helvetica"
@@ -37,13 +43,11 @@ matplotlib.rcParams['font.sans-serif'] = "Helvetica"
 matplotlib.rcParams['font.family'] = "sans-serif"
 
 
-nPoints = 256
 
 
 ps_dir = dataDir + 'power_spectrum/cool_uv/'
 outDir = figuresDir + 'power_spectrum/'
 create_directory( outDir )
-out_file_name = 'ps_{0}_cool_enzo_dm.png'.format( nPoints)
 
 
 n_plots = 2
@@ -104,8 +108,8 @@ for i in range( n_plots ):
   diff_max = diff_max_list[i]
   
   n_lines=n_snapshots
-  ax1.set_prop_cycle('color', palettable.cmocean.sequential.Haline_10_r.mpl_colors)
-  ax2.set_prop_cycle('color', palettable.cmocean.sequential.Haline_10_r.mpl_colors)
+  ax1.set_prop_cycle('color', color_ps_1)
+  ax2.set_prop_cycle('color', color_diff)
   
   for n in range(n_snapshots):
     if n==0: ax1.plot( k_vals, ps_1[n], '--', c='k', linewidth=1, label=code_label[i] )
@@ -114,9 +118,9 @@ for i in range( n_plots ):
     ax1.plot( k_vals, ps_0[n],  linewidth=3, label=label)
     ax2.plot( k_vals, diff[n] , alpha=0.9)
 
-  ax1.set_prop_cycle('color', palettable.cmocean.sequential.Gray_10.mpl_colors)
+  ax1.set_prop_cycle('color', color_ps_2)
   for n in range(n_snapshots):
-    ax1.plot( k_vals, ps_1[n], '--', c=colors[n], linewidth=1)
+    ax1.plot( k_vals, ps_1[n], '--',  linewidth=1.5)
     
   
   ax2.axhline( y=0., color='r', linestyle='--',  )
