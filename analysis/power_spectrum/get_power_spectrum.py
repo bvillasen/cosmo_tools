@@ -7,6 +7,7 @@ dev_dir = '/home/bruno/Desktop/Dropbox/Developer/'
 cosmo_tools = dev_dir + 'cosmo_tools/'
 subDirectories = [x[0] for x in os.walk(cosmo_tools)]
 sys.path.extend(subDirectories)
+from power_spectrum import get_power_spectrum
 from load_data_cholla import load_snapshot_data, load_snapshot_data_particles
 from load_data_ramses import load_snapshot_ramses
 from load_data_nyx import load_snapshot_nyx
@@ -16,7 +17,7 @@ from tools import *
 dataDir = '/home/bruno/Desktop/data/'
 # dataDir = '/raid/bruno/data/'
 outputsDir = '/home/bruno/Desktop/Dropbox/Developer/cholla/scale_output_files/'
-outDir = cosmo_tools + 'data/power_spectrum/'
+outDir = cosmo_tools + 'data/power_spectrum/dm_only/'
 create_directory( outDir )
 
 
@@ -58,6 +59,10 @@ for z in redshift_list:
 
 #############################################################################################
 # Ramses and Nyx DM simulation
+nyxDir = dataDir + 'cosmo_sims/nyx/256_dm_50Mpc/'
+ramsesDir = dataDir + 'cosmo_sims/ramses/{0}_dm_50Mpc/h5_files/'.format(nPoints )
+chollaDir_ramses = dataDir + 'cosmo_sims/cholla_pm/{0}_dm_50Mpc/data_ramses_2/'.format( nPoints )
+chollaDir_nyx = dataDir + 'cosmo_sims/cholla_pm/{0}_dm_50Mpc/data_nyx/'.format( nPoints )
 outputs_ramses = np.loadtxt( outputsDir + 'outputs_dm_ramses_256_50Mpc.txt')
 outputs_nyx = np.loadtxt( outputsDir + 'outputs_dm_nyx_256_50Mpc.txt')
 z_ramses = 1./(outputs_ramses) - 1
@@ -68,16 +73,9 @@ for z in z_ramses[snapshots_ramses]:
   z_diff_nyx = np.abs( z_nyx - z )
   index_nyx = np.where( z_diff_nyx == z_diff_nyx.min())[0][0]
   snapshots_nyx.append( index_nyx )
+snapshots_ramses.reverse()
+snapshots_nyx.reverse()
 #############################################################################################
-
-
-
-
-
-
-
-
-
 
 
 # set simulation volume dimentions
@@ -89,4 +87,67 @@ Ly = Lbox
 Lz = Lbox
 dx, dy, dz = Lx/(nx), Ly/(ny), Lz/(nz )
 n_kSamples = 20
+
+
+z_list = []
+ps_list = []
+
+snapshots = snapshots_ramses
+# n_snapshots = len( snapshots )
+# for nSnap in snapshots:
+#   data = load_snapshot_ramses( nSnap, ramsesDir, dm=True, hydro=False, cool=False, particles=False)
+#   current_z = data['current_z']
+#   dens = data['dm']['density'][...]
+
+  # data = load_snapshot_data_particles( nSnap, chollaDir_ramses, single_file=True )
+  # current_z = data['current_z'][0]
+  # dens = data['density'][...]
+  # 
+  # if current_z < 0: current_z = 0
+  # print( 'Snap: {0}   current_z: {1:.3f}'.format( nSnap, current_z ))
+  # power_spectrum, k_vals, count = get_power_spectrum( dens, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples)
+  # z_list.append( current_z )
+  # ps_list.append( power_spectrum )
+
+
+
+
+
+snapshots = snapshots_nyx
+n_snapshots = len( snapshots )
+for nSnap in snapshots:
+#   data = load_snapshot_nyx( nSnap, nyxDir, hydro=False, particles=False)
+#   current_z = data['dm']['current_z']
+#   dens = data['dm']['density'][...]
+
+
+  data = load_snapshot_data_particles( nSnap, chollaDir_nyx,  )
+  current_z = data['current_z']
+  dens = data['density'][...]
+  
+  if current_z < 0: current_z = 0
+  print( 'Snap: {0}   current_z: {1:.3f}'.format( nSnap, current_z ))
+  power_spectrum, k_vals, count = get_power_spectrum( dens, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples)
+  z_list.append( current_z )
+  ps_list.append( power_spectrum )
+
+
+
+z_array = np.array( z_list )
+ps_array = np.array( ps_list )
+
+data = np.zeros( [n_snapshots, n_kSamples+1])
+data[:,0] = z_array
+data[:,1:] = ps_array
+
+out_file_name = 'ps_{0}_dmOnly_cholla_nyx.dat'.format( nPoints )
+np.savetxt( outDir + out_file_name, data )
+print( "Saved file: {0}".format( outDir + out_file_name ))
+
+out_file_name = 'ps_{0}_k_values.dat'.format( nPoints )
+np.savetxt( outDir + out_file_name, k_vals )
+print( "Saved file: {0}".format( outDir + out_file_name ))
+
+
+
 
