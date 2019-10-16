@@ -12,6 +12,14 @@ subDirectories = [x[0] for x in os.walk(cosmo_tools)]
 sys.path.extend(subDirectories)
 from tools import *
 
+
+import matplotlib
+# set some global options
+matplotlib.font_manager.findSystemFonts(fontpaths=['/home/bruno/Downloads'], fontext='ttf')
+matplotlib.rcParams['font.sans-serif'] = "Helvetica"
+matplotlib.rcParams['font.family'] = "sans-serif"
+
+
 # # set some global options
 # matplotlib.font_manager.findSystemFonts(fontpaths=['/home/bruno/Downloads'], fontext='ttf')
 # # plt.rcParams['figure.figsize'] = (6,5)
@@ -22,28 +30,30 @@ from tools import *
 # # plt.rcParams['legend.handletextpad'] = 0.1
 # plt.rcParams['font.family'] = 'Helvetica'
 
-from matplotlib import rc, font_manager
-rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
-# rc('font',**{'family':'Helvetica'})
-rc('text', usetex=True)
-hfont = {'fontname':'Helvetica'}
-
-ticks_font = font_manager.FontProperties(family='Helvetica', style='normal', weight='normal', stretch='normal')
-
-
-
-matplotlib.rcParams['font.sans-serif'] = "Helvetica"
-# Then, "ALWAYS use sans-serif fonts"
-matplotlib.rcParams['font.family'] = "sans-serif"
-
-
+# from matplotlib import rc, font_manager
+# rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+# # rc('font',**{'family':'Helvetica'})
+# rc('text', usetex=True)
+# hfont = {'fontname':'Helvetica'}
+# 
+# ticks_font = font_manager.FontProperties(family='Helvetica', style='normal', weight='normal', stretch='normal')
 nPoints = 256
+
+
+color_1 = palettable.cmocean.sequential.Haline_10_r.mpl_colors
+color_1 = palettable.cmocean.sequential.Deep_10.mpl_colors
+color_1 = palettable.cmocean.sequential.Matter_10.mpl_colors
+color_1 = palettable.cmocean.sequential.Thermal_10_r.mpl_colors
+color_2 = palettable.cmocean.sequential.Gray_10.mpl_colors
+color_diff = color_1
+
+out_file_name = 'ps_{0}_dmOnly_enzo_thermal.png'.format( nPoints)
+
 
 
 ps_dir = dataDir + 'power_spectrum/dm_only/'
 outDir = figuresDir + 'power_spectrum/'
 create_directory( outDir )
-out_file_name = 'ps_{0}_dmOnly_enzo.png'.format( nPoints)
 
 
 n_plots = 1
@@ -99,19 +109,19 @@ for i in range( n_plots ):
   diff_max = diff_max_list[i]
   
   n_lines=n_snapshots
-  ax1.set_prop_cycle('color', palettable.cmocean.sequential.Haline_10_r.mpl_colors)
-  ax2.set_prop_cycle('color', palettable.cmocean.sequential.Haline_10_r.mpl_colors)
+  ax1.set_prop_cycle('color', color_1)
+  ax2.set_prop_cycle('color', color_diff)
   
   for n in range(n_snapshots):
     if n==0: ax1.plot( k_vals, ps_1[n], '--', c='k', linewidth=1, label=code_label[i] )
     # c = colors[n]
     label = 'z = {0:.1f}'.format(z_0[n])
-    ax1.plot( k_vals, ps_0[n],  linewidth=3, label=label)
-    ax2.plot( k_vals, diff[n] , alpha=0.9)
+    ax1.plot( k_vals, ps_0[n],  linewidth=3, label=label, )
+    ax2.plot( k_vals, diff[n] )
 
-  ax1.set_prop_cycle('color', palettable.cmocean.sequential.Gray_10.mpl_colors)
+  ax1.set_prop_cycle('color', color_2)
   for n in range(n_snapshots):
-    ax1.plot( k_vals, ps_1[n], '--', c=colors[n], linewidth=1)
+    ax1.plot( k_vals, ps_1[n], '--', linewidth=1.5)
     
   
   ax2.axhline( y=0., color='r', linestyle='--',  )

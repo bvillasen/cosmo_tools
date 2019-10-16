@@ -69,12 +69,17 @@ def load_parents_list_file( snapshot, outputDir ):
   headers = listString.splitlines()[0][1:].split()
   nColums = len( headers )
   listData = np.loadtxt( listFile )
+  # print nColums
   if len(listData) == 0:
     ms_halosData = {}
     ms_halosData['nHalos'] = listData.shape[0]
   else:
-    ms_halosData = { headers[i]: listData[:,i] for i in range( nColums ) }
-    ms_halosData['nHalos'] = listData.shape[0]
+    if len(listData.shape) == 1:
+      ms_halosData = { headers[i]: np.array([listData[i]]) for i in range( nColums ) }
+      ms_halosData['nHalos'] = 1
+    else:
+      ms_halosData = { headers[i]: listData[:,i] for i in range( nColums ) }
+      ms_halosData['nHalos'] = listData.shape[0]
   return ms_halosData
 
 def load_catalog( start_snap, snap, boxSize, inputDir, rks_dir  ):

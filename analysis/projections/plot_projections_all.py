@@ -3,23 +3,30 @@ import numpy as np
 import matplotlib.pyplot as plt
 import h5py as h5
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-import matplotlib
+import matplotlib.transforms as tfrms
 
+import matplotlib
 # set some global options
 matplotlib.font_manager.findSystemFonts(fontpaths=['/home/bruno/Downloads'], fontext='ttf')
+matplotlib.rcParams['font.sans-serif'] = "Helvetica"
+matplotlib.rcParams['font.family'] = "sans-serif"
+
+
+# set some global options
+# matplotlib.font_manager.findSystemFonts(fontpaths=['/home/bruno/Downloads'], fontext='ttf')
 # plt.rcParams['figure.figsize'] = (6,5)
 # plt.rcParams['legend.frameon'] = False
 # plt.rcParams['legend.fontsize'] = 14
 # plt.rcParams['legend.borderpad'] = 0.1
 # plt.rcParams['legend.labelspacing'] = 0.1
 # plt.rcParams['legend.handletextpad'] = 0.1
-plt.rcParams['font.family'] = 'Helvetica'
+# plt.rcParams['font.family'] = 'Helvetica'
 
 
-from matplotlib import rc
-rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+# from matplotlib import rc
 # rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
-rc('text', usetex=True)
+# # rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+# rc('text', usetex=True)
 
 dev_dir = '/home/bruno/Desktop/Dropbox/Developer/'
 cosmo_tools = dev_dir + 'cosmo_tools/'
@@ -37,9 +44,14 @@ from palettable.cmocean.sequential import Deep_20_r
 from palettable.cmocean.sequential import Tempo_20_r
 
 
+show_labels = False
+
 colormaps = [ 'inferno', Deep_20_r.mpl_colormap, 'cividis', 'gist_heat' ]
 # colormaps = [ Matter_20_r.mpl_colormap, Deep_20_r.mpl_colormap, 'cividis', 'gist_heat' ]
-fileName = 'projection_deep.png'
+fileName = 'projection_deep_1.png'
+if show_labels: fileName = 'projection_deep_labels.png'
+
+
 
 outDir = figuresDir + 'projections/'
 create_directory( outDir )
@@ -111,9 +123,11 @@ proj_depth = 100
 # fields = ['density_dm', 'density', 'HI_density',  'temperature' ]
 fields = [ 'density_dm', 'density', 'HI_density', 'temperature' ]
 
-ticks_list = [  [2, 5], [1, 4], [-5, -1.5],  [3.5, 7 ]]
+ticks_list = [  [1.5, 5.0], [0.5, 4], [-5.5, -1.5],  [3.5, 7 ]]
 
-cbar_labels = [ r'log Density  $[ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$', r'log Density  $[ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$',  r'log Density  $[ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$',  r'log Temperature $[K ]$']
+cbar_labels = [ r'$\log_{10}$ Density  $[ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$', r'$\log_{10}$ Density  $[ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$',  r'$\log_{10}$ Density  $[ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$',  r'$\log_{10}$ Temperature $[K ]$']
+field_labels = [ r'$\rho_{DM}$', r'$\rho_{b}$', r'$\rho_{HI}$', r'$T$',   ]
+code_labels = [' (Enzo)', ' (Cholla)']
 
 nSnap = 33
 # n_snapshots = 10
@@ -199,7 +213,7 @@ fig, ax_list = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=(10*n_cols,9.2*n
 plt.subplots_adjust(  wspace=0.5, hspace=0.3)
 # titles = [ 'Z={0:.2f}   DM Density'.format(current_z_ch), 'Gas Density',  'HI', 'HII', 'Temperature' ]
 titles = [ 'DM Density', 'Gas Density',  'HI Density', 'Temperature' ]
-y_labels = [' ENZO', 'CHOLLA', 'DIFFERENCE' ]
+y_labels = [' Enzo', 'Cholla', 'DIFFERENCE' ]
 
 # fig.suptitle(r'$\eta_1={0:0.3f}$   $\eta_2={1:0.4}$   '.format( eta_1, eta_2 ), fontsize=30, y=0.997)
 
@@ -230,22 +244,42 @@ for i in range( n_cols):
     if field == 'HI_density': colormap = colormaps[2]
     if field == 'temperature': colormap = colormaps[3]
     
-    im = ax.imshow( proj, interpolation='bilinear',  vmin=min_val, vmax=max_val, cmap=colormap )
+    im = ax.imshow( proj, interpolation='bilinear',  vmin=min_val, vmax=max_val, cmap=colormap, extent=(0,50., 0, 50) )
     
-
+    
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
     cb = fig.colorbar( im, cax=cax, ticks=ticks_list[i] )
-    cb.ax.tick_params(labelsize=23, size=7)
+    cb.ax.set_yticklabels(['{0:.1f}'.format(float(x)) for x in ticks_list[i]])
+    cb.ax.tick_params(labelsize=23, size=7,)
     cb_fs = 25
-    if i ==0:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-8)
-    if i ==1:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-8)
+    if i ==0:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-30)
+    if i ==1:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-30)
     if i ==2:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-40)
-    if i ==3:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-25)
+    if i ==3:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-30)
 
-    ax.tick_params(axis='both', which='both', bottom=False, top=False, labelbottom=False, right=False, left=False, labelleft=False)
-    if i==0 : ax.set_ylabel( y_labels[n], fontsize=40)
-    if n == 0: ax.set_title( titles[i], fontsize=35)
+    if show_labels:
+      fs_label = 17
+      ax.tick_params(axis='both', which='both', labelsize=fs_label)
+      ax.set_ylabel( r'$Y$ [$h^{-1}$Mpc] ', fontsize=fs_label)
+      ax.set_xlabel( r'$X$ [$h^{-1}$Mpc] ', fontsize=fs_label)
+    else:
+      ax.tick_params(axis='both', which='both', bottom=False, top=False, labelbottom=False, right=False, left=False, labelleft=False)
+      # if i==0 : ax.set_ylabel( y_labels[n], fontsize=40)
+    # if n == 0: ax.set_title( titles[i], fontsize=35)
+    
+    # ax.text(0.025, 0.05, field_labels[i] + code_labels[n], color='w', alpha=1, fontsize=40, horizontalalignment='left', verticalalignment='center', transform=ax.transAxes )
+    ax.text(0.97, 0.05, field_labels[i] + code_labels[n], color='w', alpha=1, fontsize=40, horizontalalignment='right', verticalalignment='center', transform=ax.transAxes )
+    
+    #Scale Bar
+    bar_coords = [ [ 37.5, 47.5 ], [45, 45]]
+    ax.errorbar( bar_coords[0], bar_coords[1], yerr=0.75, linewidth=5, color='w', alpha=0.9 )
+    ax.text(0.925, 0.93, '10 Mpc', color='w', alpha=1, fontsize=30, horizontalalignment='right', verticalalignment='center', transform=ax.transAxes )
+    
+    # plt.text( 5, 0.05, '10kpc',  horizontalalignment='center', verticalalignment='top', transform=trans )
+    
+    # ax.text(0.90, 0.95, field_labels[i], color='w', alpha=0.9, fontsize=40, horizontalalignment='right', verticalalignment='center', transform=ax.transAxes )
+
 
 # 
 fig.tight_layout()

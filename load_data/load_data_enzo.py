@@ -34,7 +34,7 @@ def load_snapshot_enzo( nSnap, inDir, dm=False, particles=False, cool=False, met
     # data['gas']['momentum_z'] = data_gas['momentum_z']
     # data['gas']['Energy'] = data_gas['Energy']
     data['gas']['GasEnergy'] = data_gas['GasEnergy']
-    data['gas']['temperature'] = data_gas['temperature']
+    # data['gas']['temperature'] = data_gas['temperature']
 
   if cool:
     data['gas']['HI_density'] = data_gas['H_dens']
