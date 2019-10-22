@@ -10,7 +10,7 @@ import matplotlib.cm as cm
 
 
 
-def load_snapshot_enzo( nSnap, inDir, dm=False, particles=False, cool=False, metals=False, hydro=True ):
+def load_snapshot_enzo( nSnap, inDir, dm=False, particles=False, cool=False, metals=False, hydro=True, temp=False ):
   snapKey = '_{0:03}'.format( nSnap)
   base_name = 'snapshot'
   fileName = inDir + base_name + snapKey + '.h5'
@@ -34,7 +34,8 @@ def load_snapshot_enzo( nSnap, inDir, dm=False, particles=False, cool=False, met
     # data['gas']['momentum_z'] = data_gas['momentum_z']
     # data['gas']['Energy'] = data_gas['Energy']
     data['gas']['GasEnergy'] = data_gas['GasEnergy']
-    # data['gas']['temperature'] = data_gas['temperature']
+    
+  if temp: data['gas']['temperature'] = data_gas['temperature']
 
   if cool:
     data['gas']['HI_density'] = data_gas['H_dens']

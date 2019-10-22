@@ -48,7 +48,7 @@ show_labels = False
 
 colormaps = [ 'inferno', Deep_20_r.mpl_colormap, 'cividis', 'gist_heat' ]
 # colormaps = [ Matter_20_r.mpl_colormap, Deep_20_r.mpl_colormap, 'cividis', 'gist_heat' ]
-fileName = 'projection_deep_1.png'
+fileName = 'projection_deep_1.pdf'
 if show_labels: fileName = 'projection_deep_labels.png'
 
 
@@ -162,7 +162,7 @@ for i,field in enumerate(fields):
 
 
 data_en = {}
-data_enzo = load_snapshot_enzo( nSnap, enzoDir_uv, dm=True, cool=True, metals=metals )
+data_enzo = load_snapshot_enzo( nSnap, enzoDir_uv, dm=True, cool=True, metals=metals, temp=True )
 current_a_enzo = data_enzo['current_a']
 current_z_enzo = data_enzo['current_z']
 for i,field in enumerate(fields):
