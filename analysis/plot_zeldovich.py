@@ -142,7 +142,7 @@ colors = palettable.cmocean.sequential.Haline_10_r.mpl_colors
 colors_1 = palettable.colorbrewer.sequential.PuBu_9.mpl_colors
 
 c_0 = colors[-1]
-c_1 = colors[4]
+# c_1 = colors_1[3]
 # c_1 = colors_1[4]
 
 
@@ -150,9 +150,7 @@ colors = palettable.cmocean.sequential.Haline_10_r.mpl_colors
 colors = palettable.colorbrewer.sequential.GnBu_9.mpl_colors
 
 
-
-color = colors[-1]
-# color = 'C1'
+c_1 = colors[4]
 
 lw = 6
 
@@ -172,7 +170,6 @@ ax.plot( x, data_en[2], color=color, linewidth=lw )
 
 
 lw = 2
-color = colors[4]
 color = c_1
 for n in range(n_cholla_files):
   data_ch = data_cholla_all[n]
@@ -202,6 +199,7 @@ ax.tick_params(axis='both', which='minor', labelsize=10, size=3)
 
 ax = ax_list[1]
 ax.set_xlim(0,64)
+ax.set_ylim(-1900, 1900)
 ax.set_ylabel(r'Velocity  [ km/s ]', fontsize=fs, )
 ax.tick_params(axis='both', which='major', labelsize=13, size=5)
 ax.tick_params(axis='both', which='minor', labelsize=10, size=3)
@@ -217,7 +215,7 @@ ax.tick_params(axis='both', which='minor', labelsize=10, size=3)
 
 
 
-out_file_name = 'zeldovich_{0}_2.png'.format( nSnap )
+out_file_name = 'zeldovich_{0}_new.pdf'.format( nSnap )
 # out_file_name = 'zeldovich_{0}_dashed.png'.format( nSnap )
 
 fig.tight_layout()

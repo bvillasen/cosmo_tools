@@ -10,7 +10,7 @@ data = np.loadtxt( 'scaling_summit_adiabatic.dat').T
 #n_proc  nx  ny  nz  n_omp  n_steps  dt  hydo  bound  grav_pot  pot_bound  part_dens  part_bound  part_dens_boud  part_adv_1  part_adv_2  total  
 n_procs = data[0]
 nx, ny, nz =  data[1:4]
-n_per_gpu = np.array([ 128, 128, 128, 128, 128, 128, 256, 256, 256, 256, 256, 256, 128, 256, 128, 256, 128])
+n_per_gpu = np.array([ 128, 128, 128, 128, 128, 128, 256, 256, 256, 256, 256, 256, 128, 256, 128, 256, 128, 256])
 t_dt = data[6]
 t_hydro = data[7]
 t_bound = data[8]
