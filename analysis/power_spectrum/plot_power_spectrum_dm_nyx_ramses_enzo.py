@@ -49,10 +49,10 @@ nPoints = 256
 ps_dir = dataDir + 'power_spectrum/dm_only/'
 outDir = figuresDir + 'power_spectrum/'
 create_directory( outDir )
-out_file_name = 'ps_{0}_dmOnly_ramses_nyx.pdf'.format( nPoints)
+out_file_name = 'ps_{0}_dmOnly_ramses_nyx_enzo.pdf'.format( nPoints)
 
 
-n_plots = 2
+n_plots = 3
 
 fileNames_0 = [ ps_dir + 'ps_{0}_dmOnly_cholla_nyx.dat'.format( nPoints ), ps_dir + 'ps_{0}_dmOnly_nyx.dat'.format( nPoints ) ]
 data_0 = [ np.loadtxt( fileNames_0[i]) for i in range(len(fileNames_0))]
@@ -60,10 +60,13 @@ data_0 = [ np.loadtxt( fileNames_0[i]) for i in range(len(fileNames_0))]
 fileNames_1 = [ ps_dir + 'ps_{0}_dmOnly_cholla_ramses.dat'.format( nPoints ), ps_dir + 'ps_{0}_dmOnly_ramses.dat'.format( nPoints ) ]
 data_1 = [ np.loadtxt( fileNames_1[i]) for i in range(len(fileNames_1))]
 
+fileNames_2 = [ ps_dir + 'ps_{0}_dmOnly_cholla_enzo.dat'.format( nPoints ), ps_dir + 'ps_{0}_dmOnly_enzo.dat'.format( nPoints ) ]
+data_2 = [ np.loadtxt( fileNames_2[i]) for i in range(len(fileNames_2))]
+
 k_vals = np.loadtxt( ps_dir + 'ps_{0}_k_values.dat'.format( nPoints ) )
 
-data_all_list = [ data_0, data_1 ]
-code_label = ['Nyx', 'Ramses']
+data_all_list = [ data_0, data_1, data_2 ]
+code_label = ['Nyx', 'Ramses', 'Enzo']
 
 
 
@@ -76,10 +79,14 @@ box_text[1] = {}
 box_text[1]['text'] = 'Dark Matter Power Spectrum\nComparison to Ramses'
 box_text[1]['pos'] = (0.96, 0.93)
 
-diff_max_list = [ 0.001, 0.01]
+box_text[2] = {}
+box_text[2]['text'] = 'Dark Matter Power Spectrum\nComparison to Enzo'
+box_text[2]['pos'] = (0.96, 0.93)
+
+diff_max_list = [ 0.001, 0.01, 0.35]
 
 fig = plt.figure(0)
-fig.set_size_inches(8*n_plots,7)
+fig.set_size_inches(6*n_plots,6)
 fig.clf()
 
 
@@ -92,6 +99,11 @@ if n_plots > 1:
   ax3 = plt.subplot(gs[0:4, 1])
   ax4 = plt.subplot(gs[4:5, 1])
   ax_list.append(( ax3, ax4))
+  
+if n_plots > 2:
+  ax5 = plt.subplot(gs[0:4, 2])
+  ax6 = plt.subplot(gs[4:5, 2])
+  ax_list.append(( ax5, ax6))
 
 colors = ['k', 'k', 'k', 'k', 'w', 'w', 'w', 'w', 'w',  'w', ]
 
@@ -128,7 +140,7 @@ for i in range( n_plots ):
   ax2.ticklabel_format(axis='both', style='sci')
   
   text = box_text[i]
-  ax1.text(text['pos'][0], text['pos'][1], text['text'], fontsize=16, horizontalalignment='right', verticalalignment='center', transform=ax1.transAxes )
+  ax1.text(text['pos'][0], text['pos'][1], text['text'], fontsize=14, horizontalalignment='right', verticalalignment='center', transform=ax1.transAxes )
 
 
   # for label in ax1.get_xticklabels():
@@ -138,9 +150,9 @@ for i in range( n_plots ):
   #     label.set_fontproperties(ticks_font)
       
 
-  ax1.tick_params(axis='both', which='major', labelsize=13, size=5)
+  ax1.tick_params(axis='both', which='major', labelsize=10, size=3)
   ax1.tick_params(axis='both', which='minor', labelsize=10, size=3)
-  ax2.tick_params(axis='both', which='major', labelsize=13, size=5)
+  ax2.tick_params(axis='both', which='major', labelsize=10, size=3)
   ax2.tick_params(axis='both', which='minor', labelsize=10, size=3)
   # ax2.ticklabel_format( style='sci', scilimits=(0, 1))
 
@@ -153,12 +165,12 @@ for i in range( n_plots ):
   ax1.set_yscale('log')
   ax2.set_xscale('log')
 
-  ax1.legend( loc=3, fontsize=10, frameon=False)
-  ax2.set_xlabel( r'$k \, \, \, \,[h \mathrm{Mpc}^{-1}]$', fontsize=15)
+  ax1.legend( loc=3, fontsize=8.5, frameon=False)
+  ax2.set_xlabel( r'$k \, \, \, \,[h \mathrm{Mpc}^{-1}]$', fontsize=13)
 
   if i == 0:
-    ax1.set_ylabel( r'$P(k)$   $[h^3$Mpc$^{-3}]$', fontsize=15)
-    ax2.set_ylabel( r'$\frac{\Delta P(k)}{P(k)}$', fontsize=15)
+    ax1.set_ylabel( r'$P(k)$   $[h^3$Mpc$^{-3}]$', fontsize=13)
+    ax2.set_ylabel( r'$\frac{\Delta P(k)}{P(k)}$', fontsize=13)
 
 
 fileName = outDir + out_file_name

@@ -52,4 +52,4 @@ dens_gpu = gpu_data['density'][...]
 # 
 # cpu_data.close()
 # 
-# gpu_data.close()
+gpu_data.close()
