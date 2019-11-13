@@ -8,7 +8,7 @@ import numpy as np
 import time
 
 
-dataDir = '//data/groups/comp-astro/bruno/data/1024_cool_uv_50Mpc/'
+dataDir = '/data/groups/comp-astro/bruno/data/1024_cool_uv_50Mpc/'
 inDir = dataDir + 'out_files/'
 outDir = dataDir + 'snapshots/'
 
