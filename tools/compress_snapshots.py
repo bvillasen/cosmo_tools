@@ -39,9 +39,6 @@ snapshots_all.sort()
 nSnapshots = len( snapshots_all )
 nBoxes = len( boxes )
 
-# nSnapshots = 310
-# nBoxes = 512
-
 print( "Number of snapshots: {0}".format(nSnapshots) )
 print( "Number of files per snapshot: {0}".format(nBoxes) )
 
@@ -49,17 +46,7 @@ print( "Number of files per snapshot: {0}".format(nBoxes) )
 #Set wich snapshots to compress
 # snapshots_to_compress = snapshots_all
 snapshots_to_compress = range( nSnapshots )
-# snapshots_to_compress_all = range( snap_start, snap_end)
-# 
-# n_snapshots_local = len(snapshots_to_compress_all) / size
-# snapshots_to_compress = snapshots_to_compress_all[rank*n_snapshots_local: (rank+1)*n_snapshots_local]
-
 print( "\nNumber of snapshots to compres: {0}".format(len(snapshots_to_compress)) )
-# print( " pId: {0}  snapshots: {1} ".format( rank, snapshots_to_compress ))
-
-
-
-
 
 #available Hydro Fields:
 #[ density, momentum_x, momentum_y, momentum_z, Enegy, GasEnergy ]
@@ -79,10 +66,6 @@ precision = np.float64
 # precision = np.float32
 # precision = np.float16
 print( "\nPrecision: {0}".format( precision ))
-
-
-
-
 
 print( "\nCompressing Snapshots..." )
 for nSnap in snapshots_to_compress:
