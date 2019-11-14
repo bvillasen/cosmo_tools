@@ -55,8 +55,8 @@ def load_snapshot_data_particles( nSnap, inputDir, single_file=False ):
 
 
 def load_snapshot_data( nSnap, inDir, cool=False, dm=True, cosmo=True, hydro=True, single_file=False ):
-  gridFileName = inDir + 'grid_{0}.h5'.format(nSnap)
-  partFileName = inDir + 'particles_{0}.h5'.format(nSnap)
+  gridFileName = inDir + 'grid_{0:03}.h5'.format(nSnap)
+  partFileName = inDir + 'particles_{0:03}.h5'.format(nSnap)
   
   if single_file:
     partFileName = inDir + '{0}_particles.h5'.format(nSnap)
@@ -75,7 +75,7 @@ def load_snapshot_data( nSnap, inDir, cool=False, dm=True, cosmo=True, hydro=Tru
   if dm:
     data_part = h5.File( partFileName, 'r' )
     fields_data = data_part.keys()
-    fields_part = [ 'density',  'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z' ]
+    fields_part = [ 'density',  'grav_potential', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z' ]
     # current_z = data_part.attrs['current_z']
     # current_a = data_part.attrs['current_a']
     # outDir['current_a'] = current_a

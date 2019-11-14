@@ -22,27 +22,19 @@ from tools import *
 # # plt.rcParams['legend.handletextpad'] = 0.1
 # plt.rcParams['font.family'] = 'Helvetica'
 
-# from matplotlib import rc, font_manager
-# rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
-# # rc('font',**{'family':'Helvetica'})
-# rc('text', usetex=True)
-# hfont = {'fontname':'Helvetica'}
-# 
-# ticks_font = font_manager.FontProperties(family='Helvetica', style='normal', weight='normal', stretch='normal')
-# 
-# 
-# 
-# matplotlib.rcParams['font.sans-serif'] = "Helvetica"
-# # Then, "ALWAYS use sans-serif fonts"
-# matplotlib.rcParams['font.family'] = "sans-serif"
-# 
+from matplotlib import rc, font_manager
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+# rc('font',**{'family':'Helvetica'})
+rc('text', usetex=True)
+hfont = {'fontname':'Helvetica'}
 
-import matplotlib
-# set some global options
-matplotlib.font_manager.findSystemFonts(fontpaths=['/home/bruno/Downloads'], fontext='ttf')
+ticks_font = font_manager.FontProperties(family='Helvetica', style='normal', weight='normal', stretch='normal')
+
+
+
 matplotlib.rcParams['font.sans-serif'] = "Helvetica"
+# Then, "ALWAYS use sans-serif fonts"
 matplotlib.rcParams['font.family'] = "sans-serif"
-
 
 
 nPoints = 256
@@ -51,11 +43,11 @@ nPoints = 256
 ps_dir = dataDir + 'power_spectrum/hydro/'
 outDir = figuresDir + 'power_spectrum/'
 create_directory( outDir )
-out_file_name = 'ps_{0}_hydro_ramses_2.pdf'.format( nPoints)
+out_file_name = 'ps_{0}_hydro_ramses_dm.png'.format( nPoints)
 
 
-n_plots = 1
-fileNames_0 = [ ps_dir + 'ps_{0}_hydro_gas_cholla_ramses.dat'.format( nPoints ), ps_dir + 'ps_{0}_hydro_gas_ramses.dat'.format( nPoints ) ]
+n_plots = 2
+fileNames_0 = [ ps_dir + 'ps_{0}_hydro_dm_cholla_ramses.dat'.format( nPoints ), ps_dir + 'ps_{0}_hydro_dm_ramses.dat'.format( nPoints ) ]
 data_0 = [ np.loadtxt( fileNames_0[i]) for i in range(len(fileNames_0))]
 
 
@@ -73,7 +65,7 @@ code_label = ['Ramses', 'Ramses']
 
 box_text = {}
 box_text[0] = {}
-box_text[0]['text'] = 'Gas Power Spectrum\nComparison to Ramses'
+box_text[0]['text'] = 'Dark Matter Matter Power Spectrum\nComparison to Ramses'
 box_text[0]['pos'] = (0.96, 0.93)
 
 box_text[1] = {}
@@ -83,7 +75,7 @@ box_text[1]['pos'] = (0.96, 0.93)
 diff_max_list = [ 0.1, 0.1]
 
 fig = plt.figure(0)
-fig.set_size_inches(8*n_plots,8)
+fig.set_size_inches(8*n_plots,10)
 fig.clf()
 
 
@@ -157,7 +149,7 @@ for i in range( n_plots ):
   ax1.set_yscale('log')
   ax2.set_xscale('log')
 
-  ax1.legend( loc=3, fontsize=11, frameon=False)
+  ax1.legend( loc=3, fontsize=12, frameon=False)
   ax2.set_xlabel( r'$k \, \, \, \,[h \mathrm{Mpc}^{-1}]$', fontsize=17)
 
   if i == 0:

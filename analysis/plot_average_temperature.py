@@ -147,7 +147,7 @@ ax.set_xlabel(r'$\log_{10}(z+1)$', fontsize=fs)
 ax.set_ylabel(r'$\overline{T}$  [K]', fontsize=fs)
 
 
-fileName = 'virial_temperature_cholla_log_100_midRes_2.pdf'
+fileName = 'virial_temperature.pdf'
 fig.savefig( outDir + fileName , dpi=300, bbox_inches='tight')
 
 
