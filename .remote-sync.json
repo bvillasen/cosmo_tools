@@ -5,14 +5,14 @@
   "uploadOnSave": true,
   "useAtomicWrites": false,
   "deleteLocal": false,
-  "hostname": "lux.ucsc.edu",
+  "hostname": "shamrock.ucsc.edu",
   "port": "22",
-  "target": "cosmo_tools",
+  "target": "/home/bruno/Desktop/Dropbox/Developer/cosmo_tools",
   "ignore": [
     ".remote-sync.json",
     ".git/**"
   ],
-  "username": "brvillas",
+  "username": "bruno",
   "watch": [],
   "useAgent": true,
   "transport": "scp"

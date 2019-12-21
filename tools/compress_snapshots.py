@@ -8,13 +8,14 @@ import numpy as np
 import time
 
 
-dataDir = '/data/groups/comp-astro/bruno/data/1024_cool_uv_50Mpc/'
-inDir = dataDir + 'out_files/'
-outDir = dataDir + 'snapshots/'
+# dataDir = '/data/groups/comp-astro/bruno/data/sphere_collapse/'
+dataDir = '/raid/bruno/data/cosmo_sims/cholla_pm/sphere_collapse/'
+inDir = dataDir 
+outDir = dataDir + 'data_vl_hllc_ppmp/'
 
 hydro = True
-cosmo = True
-
+particles = False
+cosmo = False
 
 def split_name( file_name):
   nSap, name, nBox = file_name.split('.')
