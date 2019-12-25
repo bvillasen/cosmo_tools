@@ -89,5 +89,5 @@ grid_size = [ 256, 256, 256 ]
 outputBaseName = '{0}_particles.h5'.format(nSnap)
 generate_ics_particles(data_enzo, outputDir, outputBaseName, proc_grid, box_size, grid_size)
 # 
-# outputBaseName = '{0}.h5'.format(nSnap)
-# expand_data_grid_to_cholla( proc_grid, data_enzo['gas'], outputDir, outputBaseName )
+outputBaseName = '{0}.h5'.format(nSnap)
+expand_data_grid_to_cholla( proc_grid, data_enzo['gas'], outputDir, outputBaseName )
