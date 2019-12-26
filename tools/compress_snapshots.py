@@ -9,13 +9,13 @@ import time
 
 
 # dataDir = '/data/groups/comp-astro/bruno/data/sphere_collapse/'
-dataDir = '/raid/bruno/data/cosmo_sims/cholla_pm/sphere_collapse/'
-inDir = dataDir 
-outDir = dataDir + 'data_vl_hllc_ppmp/'
+dataDir = '/gpfs/alpine/proj-shared/ast149/cosmo_sims/256_cool_uv_50Mpc/'
+inDir = dataDir + 'output_files/'
+outDir = dataDir + 'data_grackle/'
 
 hydro = True
-particles = False
-cosmo = False
+particles = True
+cosmo = True
 
 def split_name( file_name):
   nSap, name, nBox = file_name.split('.')
@@ -52,14 +52,14 @@ print( "\nNumber of snapshots to compres: {0}".format(len(snapshots_to_compress)
 #available Hydro Fields:
 #[ density, momentum_x, momentum_y, momentum_z, Enegy, GasEnergy ]
 #[ HI_density, HI_density, HeI_density, HeII_density, HeIII_density, e_density, metal_density, temperature, potential ]
-# hydro_fields = 'all'
-hydro_fields = ['density' ]
+hydro_fields = 'all'
+# hydro_fields = ['density' ]
 print( "\nHydro fields: {0}".format(hydro_fields))
 
 #available Particles Fields:
 #[ density, pos_x, pos_y, pos_z, vel_x, vel_y, vel_z, mass, particle_IDs ]
 # particles_fields = 'all'
-particles_fields = ['density', 'grav_potential']
+particles_fields = ['density', ]
 print( "\nParticles fields: {0}".format(particles_fields))
 
 
