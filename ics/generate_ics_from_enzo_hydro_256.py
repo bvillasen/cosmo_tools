@@ -24,7 +24,7 @@ from tools import create_directory
 dataDir = '/gpfs/alpine/proj-shared/ast149/'
 enzoDir = dataDir + 'cosmo_sims/enzo/256_hydro_50Mpc/ics/'
 inDir = enzoDir
-outputDir = dataDir + 'cosmo_sims/256_cool_uv_50Mpc/ics/'
+outputDir = dataDir + 'cosmo_sims/256_cool_uv_50Mpc/ics/ics_single/'
 create_directory( outputDir )
 nSnap_enzo = 0
 
@@ -83,7 +83,7 @@ data_enzo['gas']['Energy'] = gas_E
 
 Lbox = 50000
 
-proc_grid = [ 2, 2, 2]
+proc_grid = [ 1, 1, 1]
 box_size = [ Lbox, Lbox, Lbox ]
 grid_size = [ 256, 256, 256 ]
 outputBaseName = '{0}_particles.h5'.format(nSnap)

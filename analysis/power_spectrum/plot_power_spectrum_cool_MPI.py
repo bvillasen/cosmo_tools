@@ -5,35 +5,31 @@ import h5py as h5
 from power_spectrum import get_power_spectrum
 import matplotlib
 
-dev_dir = '/home/bruno/Desktop/Dropbox/Developer/'
-cosmo_dir = dev_dir + 'cosmo_sims/'
+system = 'lux'
+
+if system == 'shamrock': dev_dir = '/home/bruno/Desktop/Dropbox/Developer/'
+if system == 'lux': dev_dir = '/data/groups/comp-astro/bruno/'
+cosmo_dir = dev_dir + 'cosmo_tools/'
+print 'Cosmos Dir: ', cosmo_dir
 toolsDirectory = cosmo_dir + "tools/"
-sys.path.extend([toolsDirectory ] )
+load_dir = cosmo_dir + "load_data/"
+figures_dir = cosmo_dir + 'figures/'
+sys.path.extend([toolsDirectory, load_dir ] )
 from tools import *
 from load_data_cholla import load_snapshot_data
 from load_data_enzo import load_snapshot_enzo
 
 from mpi4py import MPI
-# 
-# # set some global options
-# matplotlib.font_manager.findSystemFonts(fontpaths=['/home/bruno/Downloads'], fontext='ttf')
-# # plt.rcParams['figure.figsize'] = (6,5)
-# # plt.rcParams['legend.frameon'] = Falses
-# # plt.rcParams['legend.fontsize'] = 14
-# # plt.rcParams['legend.borderpad'] = 0.1
-# # plt.rcParams['legend.labelspacing'] = 0.1
-# # plt.rcParams['legend.handletextpad'] = 0.1
-# plt.rcParams['font.family'] = 'Helvetica'
-# hfont = {'fontname':'Helvetica'}
-
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 
-dataDir = '/raid/bruno/data/'
-outputsDir = '/home/bruno/cholla/scale_output_files/'
+if system == 'shamrock':
+  dataDir = '/raid/bruno/data/'
+  outputsDir = '/home/bruno/cholla/scale_output_files/'
 
-# dataDir = '/home/bruno/Desktop/data/'
-# outputsDir = '/home/bruno/Desktop/Dropbox/Developer/cholla/scale_output_files/'
+if system == 'lux':
+  dataDir = '/data/groups/comp-astro/bruno/'
+  outputsDir = '/home/brvillas/cholla/scale_output_files/'
 
 show_dm = True
 
@@ -41,14 +37,14 @@ nPoints = 256
 Lbox = 50.0   #Mpc/h
 
 
-chollaDir_0 = dataDir + 'cosmo_sims/cholla_pm/{0}_cool_uv_50Mpc/data_table_grackle/'.format( nPoints )
-chollaDir_1 = dataDir + 'cosmo_sims/cholla_pm/{0}_cool_uv_50Mpc/data_table_grackle_bruno/'.format( nPoints )
+chollaDir_0 = dataDir + 'cosmo_sims/{0}_cool_uv_50Mpc/data_hm12_grackle/'.format( nPoints )
+chollaDir_1 = dataDir + 'cosmo_sims/{0}_cool_uv_50Mpc/data_hm12_grackle/'.format( nPoints )
 
 enzoDir = dataDir + 'cosmo_sims/enzo/{0}_cool_uv_50Mpc_HLLC_grav4/h5_files/'.format(nPoints)
-outDir = dev_dir + 'figures/power_cool_tables/'
+outDir = figures_dir + 'power_spectrum/tables_comparison/'
 
 
-fileName = outDir + 'ps_{0}_cool_uv_table_bruno.png'.format( nPoints )
+fileName = outDir + 'ps_{0}_hm12_grackle.png'.format( nPoints )
 # if show_dm: fileName = outDir + 'ps_{0}_cool_uv_dm.png'.format( nPoints )
 
 if rank == 0:create_directory( outDir )
@@ -69,7 +65,8 @@ redshift_list = [ 100, 60, 20, 7,  5, 2, 1, 0.6, 0.3, 0 ]
 # redshift_list = [ 100, 70, 40, 10, 7, 4, 1, 0.6, 0.3, 0 ]
 redshift_list.reverse()
 
-outputs_enzo = np.loadtxt( outputsDir + 'outputs_cool_uv_enzo_256_50Mpc_HLLC_grav4.txt')
+# outputs_enzo = np.loadtxt( outputsDir + 'outputs_cool_uv_enzo_256_50Mpc_HLLC_grav4.txt')
+outputs_enzo = np.loadtxt( outputsDir + 'outputs_cosmo_60.txt')
 z_enzo = 1./(outputs_enzo) - 1
 
 snapshots_enzo = []
@@ -93,9 +90,9 @@ ps_all = np.ones( [n_power_data, n_kSamples] )
 # ps_all *= rank
 
 print " Cholla: ", nSnap
-snapKey = str( nSnap )
+
 # if i not in [9]: continue
-data_cholla = load_snapshot_data( snapKey, chollaDir_0, cool=True )
+data_cholla = load_snapshot_data( nSnap, chollaDir_0, cool=True )
 current_z_ch = data_cholla['current_z']
 dens_dm_cholla = data_cholla['dm']['density'][...]
 dens_gas_cholla = data_cholla['gas']['density'][...]
@@ -114,7 +111,7 @@ ps_all[2] = ps_gas_H_cholla
 # 
 print ' Enzo: ', nSnap
 # data_enzo = load_snapshot_enzo( nSnap, enzoDir, dm=True, cool=True)
-data_enzo = load_snapshot_data( snapKey, chollaDir_1, cool=True )
+data_enzo = load_snapshot_data( nSnap, chollaDir_1, cool=True )
 current_a_enzo = data_enzo['current_a']
 current_z_enzo = data_enzo['current_z']
 dens_dm_enzo = data_enzo['dm']['density'][...]
@@ -321,44 +318,3 @@ ax4.set_xscale('log')
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=300)
 print 'Saved Image: ', fileName
 
-# 
-# 
-# dev_dir = '/home/bruno/Desktop/Dropbox/Developer/'
-# cosmo_tools = dev_dir + 'cosmo_tools/'
-# outDir = cosmo_tools + 'data/power_spectrum/cool_uv/'
-# create_directory(outDir)
-# # 
-# ps_dm_cholla = data_all[:,0]
-# ps_gas_cholla = data_all[:,1]
-# 
-# ps_dm_enzo = data_all[:,2]
-# ps_gas_enzo = data_all[:,3]
-# # 
-# z_array = current_z_all
-# z_array[z_array<0] = 0
-# 
-# n_snapshots = len( z_array)
-# # 
-# data = np.zeros( [n_snapshots, n_kSamples+1])
-# data[:,0] = z_array
-# data[:,1:] = ps_gas_cholla
-# 
-# out_file_name = 'ps_{0}_cool_uv_gas_cholla_enzo.dat'.format( nPoints )
-# np.savetxt( outDir + out_file_name, data )
-# print( "Saved file: {0}".format( outDir + out_file_name ))
-# 
-# data[:,1:] = ps_dm_cholla
-# out_file_name = 'ps_{0}_cool_uv_dm_cholla_enzo.dat'.format( nPoints )
-# np.savetxt( outDir + out_file_name, data )
-# print( "Saved file: {0}".format( outDir + out_file_name ))
-# 
-# data[:,1:] = ps_gas_enzo
-# out_file_name = 'ps_{0}_cool_uv_gas_enzo.dat'.format( nPoints )
-# np.savetxt( outDir + out_file_name, data )
-# print( "Saved file: {0}".format( outDir + out_file_name ))
-# 
-# 
-# data[:,1:] = ps_dm_enzo
-# out_file_name = 'ps_{0}_cool_uv_dm_enzo.dat'.format( nPoints )
-# np.savetxt( outDir + out_file_name, data )
-# print( "Saved file: {0}".format( outDir + out_file_name ))
