@@ -62,6 +62,16 @@ def get_delta_k( dens, nx, ny, nz, dx, dy, dz ):
   return delta_k2, kx, ky, kz
 
 
+L = 50. 
+nx = 2048
+dx = L / nx
+z = 3
+dx /= ( z+ 1)
+kx = 2*np.pi*np.fft.fftfreq( nx, d=dx )
+ky = kx 
+kz = kx
+K_mag = np.sqrt( kx*kx + ky*ky + kz*kz )
+print K_mag.min(), K_mag.max()
 
 def get_power_spectrum(dens, Lbox, nx, ny, nz, dx, dy, dz, n_kSamples=20 ):
   delta_k2, kx, ky, kz = get_delta_k( dens, nx, ny, nz, dx, dy, dz )
