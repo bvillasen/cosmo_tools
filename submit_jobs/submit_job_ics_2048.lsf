@@ -11,10 +11,10 @@
 module load gsl
 module load hdf5
 
-export WORK_DIR=/gpfs/alpine/proj-shared/ast149/cosmo_sims/256_cool_uv_50Mpc
+export WORK_DIR=/ccs/home/bvilasen/cosmo_tools/ics/send_jobs
 export CODE_DIR=/ccs/proj/ast149/code
 cd /gpfs/alpine/proj-shared/ast149/cosmo_sims/cholla
 date
 
 export OMP_NUM_THREADS=7
-CODE_DIR/music/MUSIC ics_2048_dm_enzo_50Mpc.conf > run_output.log |sort 
+CODE_DIR/music/MUSIC /ccs/home/bvilasen/cosmo_tools/ics/music_parameter_files/ics_2048_dm_enzo_50Mpc.conf > WORK_DIR/run_output.log |sort 
