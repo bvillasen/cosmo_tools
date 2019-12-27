@@ -32,7 +32,6 @@ n_data = len( cholla_dir_all )
 
 titles = [ 'HM12 Grackle', 'HM12 Cloudy', 'Puchwein18 Cloudy']
 
-data_all = []
 
 nPoints = 256
 nx = nPoints
@@ -45,7 +44,8 @@ nbins = 1000
 n_snapshots = 60
 for nSnap in range( n_snapshots ):
 
-  min_val, max_val = 1e100, 0
+  data_all = []
+  min_val, max_val = 1e100, -1e100
   for i in range(n_data):
     data_cholla = load_snapshot_data( nSnap, cholla_dir_all[i], single_file=True )
     current_z = data_cholla['current_z'][0]
@@ -54,8 +54,8 @@ for nSnap in range( n_snapshots ):
     temp = data_cholla['gas']['temperature'][...].reshape(ncells)
     x_ch, y_ch, z_ch = get_phase_diagram( dens, temp , nbins, ncells )
     data_all.append([ x_ch, y_ch, z_ch ])
-    min_val = min( min_val, z_ch.min() )
-    max_val = max( max_val, z_ch.max() )
+    min_val = min( min_val, np.min(np.log10(z_ch)) )
+    max_val = max( max_val, np.max(np.log10(z_ch)) )
 
 
 
@@ -64,8 +64,8 @@ for nSnap in range( n_snapshots ):
   ncols = n_data
   fig, ax_l = plt.subplots(nrows=nrows, ncols=ncols, figsize=(9*ncols,8*nrows))
   x_min = -2
-  x_max = 5
-  y_min = -1
+  x_max = 4
+  y_min = 0
   y_max = 8
 
   fig.suptitle(r'$ z \, = \, {0:.2f} $'.format( current_z), fontsize=22, )
@@ -75,7 +75,7 @@ for nSnap in range( n_snapshots ):
 
     x, y, z = data_all[i]
     ax = ax_l[i]
-    im = ax.scatter( y, x, c = np.log10(z), s=1, vmin=min_val, vmax=max_val  )
+    im = ax.scatter( y, x, c = np.log10(z), s=0.5, vmin=min_val, vmax=max_val  )
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
     cb = fig.colorbar( im, cax=cax )
@@ -87,5 +87,5 @@ for nSnap in range( n_snapshots ):
     ax.set_ylim( y_min, y_max)
 
   fileName = output_dir + 'phase_diagram_{0}.png'.format(nSnap)
-  fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=300)
+  fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
   print 'Saved Image: ', fileName
