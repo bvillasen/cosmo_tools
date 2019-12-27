@@ -1,0 +1,20 @@
+#!/bin/bash
+# Begin LSF Directives
+#BSUB -P AST149
+#BSUB -W 0:05
+#BSUB -nnodes 1
+#BSUB -J ics_2048
+#BSUB -o cosmo_2048.o%J
+#BSUB -e cosmo_2048.e%J
+#BSUB -alloc_flags "smt4"
+
+module load gsl
+module load hdf5
+
+export WORK_DIR=/gpfs/alpine/proj-shared/ast149/cosmo_sims/256_cool_uv_50Mpc
+export CODE_DIR=/ccs/proj/ast149/code
+cd /gpfs/alpine/proj-shared/ast149/cosmo_sims/cholla
+date
+
+export OMP_NUM_THREADS=7
+CODE_DIR/music/MUSIC ics_2048_dm_enzo_50Mpc.conf > run_output.log |sort 
