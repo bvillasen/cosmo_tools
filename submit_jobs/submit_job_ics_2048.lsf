@@ -4,8 +4,8 @@
 #BSUB -W 0:05
 #BSUB -nnodes 1
 #BSUB -J ics_2048
-#BSUB -o cosmo_2048.o%J
-#BSUB -e cosmo_2048.e%J
+#BSUB -o ics_2048.o%J
+#BSUB -e ics_2048.e%J
 #BSUB -alloc_flags "smt4"
 
 module load gsl
