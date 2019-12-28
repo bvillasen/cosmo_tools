@@ -16,5 +16,7 @@ export CODE_DIR=/ccs/proj/ast149/code
 cd ccs/home/bvilasen/cosmo_tools/ics/send_jobs
 date
 
-export OMP_NUM_THREADS=48
-/ccs/proj/ast149/code/music/MUSIC /ccs/home/bvilasen/cosmo_tools/ics/music_parameter_files/ics_2048_dm_enzo_50Mpc.conf > run_output.log |sort 
+export OMP_NUM_THREADS=42
+jsrun -n 1 -a 1 -c 42 -r 1 -l CPU-CPU -d packed -b rs /ccs/proj/ast149/code/music/MUSIC /ccs/home/bvilasen/cosmo_tools/ics/music_parameter_files/ics_2048_dm_enzo_50Mpc.conf > run_output.log | sort
+
+|sort 
