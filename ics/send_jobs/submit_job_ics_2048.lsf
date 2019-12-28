@@ -1,7 +1,8 @@
 #!/bin/bash
 # Begin LSF Directives
 #BSUB -P AST149
-#BSUB -W 5:00
+#BSUB -W 8:00
+#BSUB -q killable
 #BSUB -nnodes 1
 #BSUB -J ics_2048
 #BSUB -o ics_2048.o%J
