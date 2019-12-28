@@ -17,4 +17,4 @@ cd /gpfs/alpine/proj-shared/ast149/cosmo_sims/cholla
 date
 
 export OMP_NUM_THREADS=48
-CODE_DIR/music/MUSIC /ccs/home/bvilasen/cosmo_tools/ics/music_parameter_files/ics_2048_dm_enzo_50Mpc.conf > run_output.log |sort 
+/ccs/proj/ast149/code/music/MUSIC /ccs/home/bvilasen/cosmo_tools/ics/music_parameter_files/ics_2048_dm_enzo_50Mpc.conf > run_output.log |sort 
