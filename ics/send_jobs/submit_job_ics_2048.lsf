@@ -13,7 +13,7 @@ module load hdf5
 
 export WORK_DIR=/ccs/home/bvilasen/cosmo_tools/ics/send_jobs
 export CODE_DIR=/ccs/proj/ast149/code
-cd /gpfs/alpine/proj-shared/ast149/cosmo_sims/cholla
+cd ccs/home/bvilasen/cosmo_tools/ics/send_jobs
 date
 
 export OMP_NUM_THREADS=48
