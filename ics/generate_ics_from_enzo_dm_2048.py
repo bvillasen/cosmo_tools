@@ -53,14 +53,29 @@ current_a = 1./(current_z + 1)
 
 
 
+print ' Loading: Particle Mass'
 p_mass = data[('all', 'particle_mass')].in_units('msun')*h
+
+print ' Loading: Position x'
 p_pos_x = data[('all', 'particle_position_x')].in_units('kpc')/current_a*h
+
+print ' Loading: Position y'
 p_pos_y = data[('all', 'particle_position_y')].in_units('kpc')/current_a*h
+
+print ' Loading: Position z'
 p_pos_z = data[('all', 'particle_position_z')].in_units('kpc')/current_a*h
+
+print ' Loading: Velocity x'
 p_vel_x = data[('all', 'particle_velocity_x')].in_units('km/s')
+
+print ' Loading: Velocity y'
 p_vel_y = data[('all', 'particle_velocity_y')].in_units('km/s')
+
+print ' Loading: Velocity z'
 p_vel_z = data[('all', 'particle_velocity_z')].in_units('km/s')
 
+
+print ' Creating Data Directory'
 data_enzo = { 'dm':{}, 'gas':{} }
 data_enzo['current_a'] = current_a
 data_enzo['current_z'] = current_z
@@ -87,6 +102,7 @@ proc_grid = [ 8, 8, 8]
 box_size = [ Lbox, Lbox, Lbox ]
 grid_size = [ 512, 512, 512 ]
 outputBaseName = '{0}_particles.h5'.format(nSnap)
+print ' Generating Particles ICS'
 generate_ics_particles(data_enzo, outputDir, outputBaseName, proc_grid, box_size, grid_size)
 # # 
 # outputBaseName = '{0}.h5'.format(nSnap)
