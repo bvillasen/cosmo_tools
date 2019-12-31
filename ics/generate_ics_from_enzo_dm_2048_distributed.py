@@ -13,17 +13,15 @@ modulesDir =  currentDirectory + '/ics_modules/'
 toolsDirectory = cosmoDir + 'tools/'
 sys.path.extend( [ toolsDirectory, modulesDir ] )
 # from load_data_enzo_old import load_snapshot_enzo, load_snapshot_enzo_yt
-from expand_data_grid import expand_data_grid_to_cholla
-from expand_data_particles import expand_data_particles_to_cholla
-from generate_ics_particles_functions import generate_ics_particles, generate_ics_particles_single_domain
-from expand_data_grid import expand_data_grid_to_cholla
+from generate_ics_particles_functions import *
+from generate_ics_grid_functions import *
 from domain_decomposition import get_domain_block, get_domain_parent
 from tools import create_directory
 
 # dataDir = '/home/bruno/Desktop/data/'
 # dataDir = '/raid/bruno/data/'
-# dataDir = '/gpfs/alpine/proj-shared/ast149/'
-dataDir = '/data/groups/comp-astro/bruno/'
+dataDir = '/gpfs/alpine/proj-shared/ast149/'
+# dataDir = '/data/groups/comp-astro/bruno/'
 enzoDir = dataDir + 'cosmo_sims/enzo/2048_dm_50Mpc/ics/'
 inDir = enzoDir
 outputDir = dataDir + 'cosmo_sims/2048_dm_50Mpc/ics_512/'

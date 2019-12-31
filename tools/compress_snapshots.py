@@ -8,10 +8,10 @@ import numpy as np
 import time
 
 
-# dataDir = '/data/groups/comp-astro/bruno/data/sphere_collapse/'
-dataDir = '/gpfs/alpine/proj-shared/ast149/cosmo_sims/256_cool_uv_50Mpc/'
-inDir = dataDir + 'output_files/'
-outDir = dataDir + 'data_grackle/'
+dataDir = '/data/groups/comp-astro/bruno/'
+# dataDir = '/gpfs/alpine/proj-shared/ast149/cosmo_sims/256_cool_uv_50Mpc/'
+inDir = dataDir + 'cosmo_sims/256_cool_uv_50Mpc/output_files/'
+outDir = dataDir + 'cosmo_sims/256_cool_uv_50Mpc/data_distributed/'
 
 hydro = True
 particles = True
