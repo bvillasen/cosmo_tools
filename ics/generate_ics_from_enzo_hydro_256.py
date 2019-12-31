@@ -11,7 +11,7 @@ currentDirectory = os.getcwd()
 cosmoDir = currentDirectory[: currentDirectory.find('ics')]
 modulesDir =  currentDirectory + '/ics_modules/'
 toolsDirectory = cosmoDir + 'tools/'
-sys.path.append( toolsDirectory, modulesDir )
+sys.path.extend( [ toolsDirectory, modulesDir ] )
 # from load_data_enzo_old import load_snapshot_enzo, load_snapshot_enzo_yt
 from expand_data_grid import expand_data_grid_to_cholla
 from expand_data_particles import expand_data_particles_to_cholla
