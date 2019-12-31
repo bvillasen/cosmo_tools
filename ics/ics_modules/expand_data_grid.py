@@ -2,7 +2,10 @@ import os, sys
 from os import listdir
 from os.path import isfile, join
 import numpy as np
-import h5py
+import h5py as h5
+
+
+
 
 def expand_data_grid_to_cholla( proc_grid, inputData, outputDir, outputBaseName ):
   nProc_z, nProc_y, nProc_x = proc_grid
@@ -24,7 +27,7 @@ def expand_data_grid_to_cholla( proc_grid, inputData, outputDir, outputBaseName 
   outFiles = {}
   for pId in range( nProc ):
     outFileName = '{0}.{1}'.format(outputBaseName, pId)
-    outFiles[pId] = h5py.File( outputDir + outFileName, 'w' )
+    outFiles[pId] = h5.File( outputDir + outFileName, 'w' )
     outFiles[pId].attrs['gamma'] = gamma
     outFiles[pId].attrs['t'] = t
     outFiles[pId].attrs['dt'] = dt

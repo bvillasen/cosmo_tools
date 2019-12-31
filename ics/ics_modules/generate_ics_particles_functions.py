@@ -1,13 +1,100 @@
 import os, sys
 from os import listdir
 from os.path import isfile, join
-import h5py
+import h5py as h5
 import numpy as np
 
-cosmo_dir = '/home/bruno/Desktop/Dropbox/Developer/cosmo_sims/'
-toolsDirectory = cosmo_dir + "tools/"
-sys.path.extend([toolsDirectory ] )
 from domain_decomposition import get_domain_block
+
+  
+def get_yt_field( field, data, current_a, h ):
+  if field == 'mass':  data_field = data[('all', 'particle_mass')].in_units('msun')*h
+  if field == 'pos_x': data_field = data[('all', 'particle_position_x')].in_units('kpc')/current_a*h
+  if field == 'pos_y': data_field = data[('all', 'particle_position_y')].in_units('kpc')/current_a*h
+  if field == 'pos_z': data_field = data[('all', 'particle_position_z')].in_units('kpc')/current_a*h
+  if field == 'vel_x': data_field = data[('all', 'particle_velocity_x')].in_units('km/s')
+  if field == 'vel_y': data_field = data[('all', 'particle_velocity_y')].in_units('km/s')
+  if field == 'vel_z': data_field = data[('all', 'particle_velocity_z')].in_units('km/s')
+  return data_field
+  
+
+
+def Get_PID_Indices( key_pos, domain, ds, data, outputDir  ):
+  
+  keys_domain = { 'pos_x':['x', 'dx'], 'pos_y':['y', 'dy'], 'pos_z':['z', 'dz'] }
+  keys_data = { 'pos_x':'particle_position_x', 'pos_y':'particle_position_y', 'pos_z':'particle_position_z' }
+  
+  key_domain, key_delta = keys_domain[key_pos]
+  delta = domain['global'][key_delta]
+  print ' Getting Indices: {0}'.format(key_domain)
+  
+  # Temporal file to save the indices
+  file_temp_indx = h5.File( outputDir + 'temp_indices_{0}.h5'.format( key_pos ) , 'w')
+
+  key_data = keys_data[key_pos]
+  h = ds.hubble_constant
+  current_z = np.float(ds.current_redshift)
+  current_a = 1./(current_z + 1)
+  pos = data[('all', key_data)].in_units('kpc').v/current_a*h
+
+  type_int = np.int16
+  pid_indxs = ( pos / delta ).astype( type_int )
+  file_temp_indx.create_dataset( 'pid_indxs', data=pid_indxs )
+  file_temp_indx.close()
+  print '  Saved Indices: {0}'.format(key_domain)
+
+
+def generate_ics_particles_distributed( fields, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h ):
+  keys_pos = [ 'pos_x', 'pos_y', 'pos_z' ]
+
+  # Get the PID indices for each direction
+  for key_pos in keys_pos:
+    Get_PID_Indices( key_pos, domain, ds, data, outputDir )
+
+  # Load all indices 
+  index_x = h5.File( outputDir + 'temp_indices_pos_x.h5', 'r' )['pid_indxs'][...]
+  index_y = h5.File( outputDir + 'temp_indices_pos_y.h5', 'r' )['pid_indxs'][...]
+  index_z = h5.File( outputDir + 'temp_indices_pos_z.h5', 'r' )['pid_indxs'][...]
+  indexs = index_x + index_y * proc_grid[0] + index_z*proc_grid[0]*proc_grid[1]
+
+  n_procs = proc_grid[0]*proc_grid[1]*proc_grid[2]
+
+  # Create all hdf5 output files 
+  h5_out_files = []
+  for pId in range(n_procs):
+    file_name = outputDir + outputBaseName + '.{0}'.format(pId)
+    outFile = h5.File( file_name, 'w' )
+    outFile.attrs['current_a'] = current_a
+    outFile.attrs['current_z'] = current_z
+    h5_out_files.append(outFile)
+
+  
+  for field in fields:
+    print "\nSaving Field: ", field
+    data_field = get_yt_field( field, data, current_a, h )
+    if field == 'mass': particle_mass = data_field[0]
+
+    n_local_all = []
+    for pId in range(n_procs):
+      indx = np.where(indexs == pId)[0]
+      n_local = len(indx)
+      n_local_all.append(n_local)
+      # print '  n_local: ', n_local
+      data_local = data_field[indx]
+      outFile = h5_out_files[pId]
+      outFile.create_dataset( field, data = data_local )
+    print "Total Particles Saved: ", sum(n_local_all)
+    
+    
+  # Create all hdf5 output files 
+  for pId in range(n_procs):
+    outFile = h5_out_files[pId]
+    n_local = n_local_all[pId]
+    outFile.attrs['particle_mass'] = particle_mass
+    outFile.attrs['n_particles_local'] = n_local
+    print "Saved File: ", outFile
+    outFile.close()
+  print 'Files Saved: {0}'.format(outputDir)
 
 
 def generate_ics_particles_single_domain( pId, data_in, outDir, outputBaseName,  domain ):
@@ -30,7 +117,7 @@ def generate_ics_particles_single_domain( pId, data_in, outDir, outputBaseName, 
 
   outputFileName = outDir + outputBaseName + ".{0}".format(pId)
   print ' Writing h5 file: ', outputFileName
-  outFile = h5py.File( outputFileName, 'w')
+  outFile = h5.File( outputFileName, 'w')
   # outFile.attrs['box_size'] = box_size
   outFile.attrs['current_a'] = current_a
   outFile.attrs['current_z'] = current_z
@@ -118,7 +205,7 @@ def generate_ics_particles( data_in, outDir, outputBaseName, proc_grid, box_size
 
     outputFileName = outDir + outputBaseName + ".{0}".format(pId)
     print ' Writing h5 file: ', outputFileName
-    outFile = h5py.File( outputFileName, 'w')
+    outFile = h5.File( outputFileName, 'w')
     outFile.attrs['current_a'] = current_a
     outFile.attrs['current_z'] = current_z
     outFile.attrs['particle_mass'] = particle_mass
@@ -174,7 +261,7 @@ def generate_ics_particles( data_in, outDir, outputBaseName, proc_grid, box_size
   #
   #   outputFileName = outDir + outputBaseName + ".{0}".format(pId)
   #   print ' Writing h5 file: ', outputFileName
-  #   outFile = h5py.File( outputFileName, 'w')
+  #   outFile = h5.File( outputFileName, 'w')
   #   # outFile.attrs['box_size'] = box_size
   #   outFile.attrs['current_a'] = current_a
   #   outFile.attrs['current_z'] = current_z
@@ -265,7 +352,7 @@ def generate_ics_particles( data_in, outDir, outputBaseName, proc_grid, box_size
   # s.close()
 #
 # outFileName = outDir + base_name + snapKey + '.h5'
-# outFile = h5py.File( outFileName, 'w')
+# outFile = h5.File( outFileName, 'w')
 # part_type_names = [ 'gas', 'dm' ]
 #
 # # part_type = 1
@@ -297,7 +384,7 @@ def generate_ics_particles( data_in, outDir, outputBaseName, proc_grid, box_size
 #
 # np_type = np.float32
 # partFileName = outDir + base_name + snapKey + '_particles.h5'
-# outFile_p = h5py.File( partFileName, 'w')
+# outFile_p = h5.File( partFileName, 'w')
 #
 #
 # outFile.close()
@@ -344,7 +431,7 @@ def generate_ics_particles( data_in, outDir, outputBaseName, proc_grid, box_size
 #
 #   # output
 #   outFileName = outDir + base_name + snapKey + '.h5'
-#   outFile = h5py.File( outFileName, 'w')
+#   outFile = h5.File( outFileName, 'w')
 #   outFile.create_dataset( 'n_part', data=nPart )
 #   outFile.create_dataset( 'box_size', data=box_size )
 #   outFile.create_dataset( 'current_a', data=current_a )

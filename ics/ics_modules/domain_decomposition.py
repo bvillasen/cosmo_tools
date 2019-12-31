@@ -9,6 +9,10 @@ def get_domain_block( proc_grid, box_size, grid_size ):
 
   nprocs = np_x * np_y * np_z
   domain = {}
+  domain['global'] = {}
+  domain['global']['dx'] = dx
+  domain['global']['dy'] = dy
+  domain['global']['dz'] = dz
   for k in range(np_z):
     for j in range(np_y):
       for i in range(np_x):
