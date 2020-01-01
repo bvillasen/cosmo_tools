@@ -53,9 +53,11 @@ def generate_ics_particles_distributed( fields, domain, proc_grid, data, ds, out
       Get_PID_Indices( key_pos, domain, ds, data, outputDir )
 
   # Load all indices 
+  print 'Loading Indices'
   index_x = h5.File( outputDir + 'temp_indices_pos_x.h5', 'r' )['pid_indxs'][...]
   index_y = h5.File( outputDir + 'temp_indices_pos_y.h5', 'r' )['pid_indxs'][...]
   index_z = h5.File( outputDir + 'temp_indices_pos_z.h5', 'r' )['pid_indxs'][...]
+  print 'Computing Global Indices'
   indexs = index_x + index_y * proc_grid[0] + index_z*proc_grid[0]*proc_grid[1]
 
   #Free the indices memory
@@ -82,6 +84,7 @@ def generate_ics_particles_distributed( fields, domain, proc_grid, data, ds, out
     for pId in range(n_procs):
       indx = np.where(indexs == pId)[0]
       n_local = len(indx)
+      print " pId: {0}   n_local:{1}".format( pId, n_local)
       n_local_all.append(n_local)
       # print '  n_local: ', n_local
       data_local = data_field[indx]
