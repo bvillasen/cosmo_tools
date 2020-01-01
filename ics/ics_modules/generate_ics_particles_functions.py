@@ -107,6 +107,105 @@ def generate_ics_particles_distributed( fields, domain, proc_grid, data, ds, out
   print 'Files Saved: {0}'.format(outputDir)
 
 
+
+def generate_ics_particles_distributed_single_field( field, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h,  get_pid_indices=True ):
+  keys_pos = [ 'pos_x', 'pos_y', 'pos_z' ]
+
+  # Get the PID indices for each direction
+  if get_pid_indices:
+    for key_pos in keys_pos:
+      Get_PID_Indices( key_pos, domain, ds, data, outputDir )
+
+  # Load all indices 
+  print 'Loading Indices'
+  index_x = h5.File( outputDir + 'temp_indices_pos_x.h5', 'r' )['pid_indxs'][...]
+  index_y = h5.File( outputDir + 'temp_indices_pos_y.h5', 'r' )['pid_indxs'][...]
+  index_z = h5.File( outputDir + 'temp_indices_pos_z.h5', 'r' )['pid_indxs'][...]
+  print 'Computing Global Indices'
+  indexs = index_x + index_y * proc_grid[0] + index_z*proc_grid[0]*proc_grid[1]
+
+  #Free the indices memory
+  index_x, index_y, index_z = None, None, None
+  
+  n_procs = proc_grid[0]*proc_grid[1]*proc_grid[2]
+
+  # Create all hdf5 output files 
+  h5_out_files = []
+  for pId in range(n_procs):
+    file_name = outputDir + outputBaseName + '.{0}_{1}'.format(pId, field)
+    outFile = h5.File( file_name, 'w' )
+    outFile.attrs['current_a'] = current_a
+    outFile.attrs['current_z'] = current_z
+    h5_out_files.append(outFile)
+
+
+  print "\nSaving Field: ", field
+  data_field = get_yt_field( field, data, current_a, h )
+  if field == 'mass': particle_mass = data_field[0]
+
+  n_local_all = []
+  for pId in range(n_procs):
+    indx = np.where(indexs == pId)[0]
+    n_local = len(indx)
+    print " pId: {0}   n_local:{1}".format( pId, n_local)
+    n_local_all.append(n_local)
+    # print '  n_local: ', n_local
+    data_local = data_field[indx]
+    outFile = h5_out_files[pId]
+    outFile.create_dataset( field, data = data_local )
+  print "Total Particles Saved: ", sum(n_local_all)
+  
+  #Clear the data that was saved
+  data_field = None
+  
+    
+  # Create all hdf5 output files 
+  for pId in range(n_procs):
+    outFile = h5_out_files[pId]
+    n_local = n_local_all[pId]
+    if field == 'mass': outFile.attrs['particle_mass'] = particle_mass
+    outFile.attrs['n_particles_local'] = n_local
+    print "Saved File: ", outFile
+    outFile.close()
+  print 'Files Saved: {0}'.format(outputDir)
+
+
+def compress_fields_to_single_file( fields, domain, outputDir, outputBaseName ):
+  for pId in domain.keys():
+    if pId == 'global': continue
+    print '\npId: ', pId
+
+    # Create the final output file
+    file_name = outputDir + outputBaseName + '.{0}'.format(pId)
+    outFile = h5.File( file_name, 'w' )
+
+    n_local_all = []
+    # field = 'mass'
+    for field in fields:
+      #Load the field data
+      print ' Loading Field: ', field
+      file_name = outputDir + outputBaseName + '.{0}_{1}'.format(pId, field)
+      inFile = h5.File( file_name, 'r' )
+      data_field = inFile[field][...]
+      n_local = inFile.attrs['n_particles_local']
+      n_local_all.append( n_local )
+
+      if field == 'mass':
+        for key in inFile.attrs.keys():
+          outFile.attrs[key] = inFile.attrs[key]
+        print '  Saved Attrs'
+
+      print '  Writing Field: {0}   n_local: {1}'.format( field, n_local )
+      outFile.create_dataset( field, data=data_field )
+      inFile.close()
+      
+    if np.min(n_local_all) != np.max(n_local_all): 
+      print 'ERROR: n_local mismatch'
+      extit()
+
+    print 'Saved File: ', outFile
+    outFile.close()
+    
 def generate_ics_particles_single_domain( pId, data_in, outDir, outputBaseName,  domain ):
 
   current_a = data_in['current_a']
