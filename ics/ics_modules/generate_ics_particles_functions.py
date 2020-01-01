@@ -44,7 +44,7 @@ def Get_PID_Indices( key_pos, domain, ds, data, outputDir  ):
   print '  Saved Indices: {0}'.format(key_domain)
 
 
-def generate_ics_particles_distributed( fields, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, , get_pid_indices=True ):
+def generate_ics_particles_distributed( fields, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h,  get_pid_indices=True ):
   keys_pos = [ 'pos_x', 'pos_y', 'pos_z' ]
 
   # Get the PID indices for each direction
