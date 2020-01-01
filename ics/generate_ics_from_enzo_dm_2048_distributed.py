@@ -18,6 +18,10 @@ from generate_ics_grid_functions import *
 from domain_decomposition import get_domain_block, get_domain_parent
 from tools import create_directory
 
+if len(sys.argv) == 0: index = 0
+else: index = int(sys.argv[1])
+print 'Index: ', index
+
 # dataDir = '/home/bruno/Desktop/data/'
 # dataDir = '/raid/bruno/data/'
 dataDir = '/gpfs/alpine/proj-shared/ast149/'
@@ -50,8 +54,10 @@ domain =  get_domain_block( proc_grid, box_size, grid_size )
 # Generate Particles ICs
 fields_particles = ['mass', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
 outputBaseName = '{0}_particles.h5'.format(nSnap)
-field = fields_particles[0]
-generate_ics_particles_distributed_single_field( field, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=False )
+if index > 0:
+  field = fields_particles[index-1]
+  generate_ics_particles_distributed_single_field( field, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=False )
 
-# print 'Compressing Fields'
-# compress_fields_to_single_file( fields_particles, domain, outputDir, outputBaseName )
+if index == 0:
+  print 'Compressing Fields'
+  compress_fields_to_single_file( fields_particles, domain, outputDir, outputBaseName )
