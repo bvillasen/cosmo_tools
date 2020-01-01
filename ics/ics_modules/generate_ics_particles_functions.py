@@ -58,6 +58,9 @@ def generate_ics_particles_distributed( fields, domain, proc_grid, data, ds, out
   index_z = h5.File( outputDir + 'temp_indices_pos_z.h5', 'r' )['pid_indxs'][...]
   indexs = index_x + index_y * proc_grid[0] + index_z*proc_grid[0]*proc_grid[1]
 
+  #Free the indices memory
+  index_x, index_y, index_z = None, None, None
+  
   n_procs = proc_grid[0]*proc_grid[1]*proc_grid[2]
 
   # Create all hdf5 output files 
@@ -85,6 +88,9 @@ def generate_ics_particles_distributed( fields, domain, proc_grid, data, ds, out
       outFile = h5_out_files[pId]
       outFile.create_dataset( field, data = data_local )
     print "Total Particles Saved: ", sum(n_local_all)
+    
+    #Clear the data that was saved
+    data_field = None
     
     
   # Create all hdf5 output files 
