@@ -13,7 +13,7 @@ modulesDir =  currentDirectory + '/ics_modules/'
 toolsDirectory = cosmoDir + 'tools/'
 sys.path.extend( [ toolsDirectory, modulesDir ] )
 # from load_data_enzo_old import load_snapshot_enzo, load_snapshot_enzo_yt
-from generate_ics_particles_functions import generate_ics_particles_distributed_single_field
+from generate_ics_particles_functions import generate_ics_particles_distributed_single_field, compress_fields_to_single_file
 from generate_ics_grid_functions import *
 from domain_decomposition import get_domain_block, get_domain_parent
 from tools import create_directory
