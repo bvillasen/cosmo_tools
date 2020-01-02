@@ -60,4 +60,4 @@ if index > 0:
 
 if index == 0:
   print 'Compressing Fields'
-  compress_fields_to_single_file( fields_particles, domain, outputDir, outputBaseName )
+  compress_fields_to_single_file( fields_particles, domain, proc_grid, outputDir, outputBaseName )

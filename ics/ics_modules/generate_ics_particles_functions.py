@@ -170,9 +170,11 @@ def generate_ics_particles_distributed_single_field( field, domain, proc_grid, d
   print 'Files Saved: {0}'.format(outputDir)
 
 
-def compress_fields_to_single_file( fields, domain, outputDir, outputBaseName ):
-  for pId in domain.keys():
-    if pId == 'global': continue
+def compress_fields_to_single_file( fields, domain, proc_grid, outputDir, outputBaseName ):
+  
+  n_procs = proc_grid[0]*proc_grid[1]*proc_grid[2]
+  for pId in range(n_procs):
+    # if pId == 'global': continue
     print '\npId: ', pId
 
     # Create the final output file
@@ -183,8 +185,8 @@ def compress_fields_to_single_file( fields, domain, outputDir, outputBaseName ):
     # field = 'mass'
     for field in fields:
       #Load the field data
-      print ' Loading Field: ', field
       file_name = outputDir + outputBaseName + '.{0}_{1}'.format(pId, field)
+      print ' Loading Field: {0}     File: {1}'.format( field, outputBaseName + '.{0}_{1}'.format(pId, field) )
       inFile = h5.File( file_name, 'r' )
       data_field = inFile[field][...]
       n_local = inFile.attrs['n_particles_local']
