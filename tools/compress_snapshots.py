@@ -35,7 +35,7 @@ else:
 dataFiles = np.sort( dataFiles )
 nFiles = len( dataFiles )
 
-files_names = np.array([ split_name( file_name ) for file_name in dataFiles ])
+files_names = np.array([ split_name( file_name, part=particles ) for file_name in dataFiles ])
 snaps, boxes = files_names.T
 snapshots_all = np.unique( snaps )
 boxes = np.unique( boxes )
