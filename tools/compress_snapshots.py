@@ -27,7 +27,11 @@ print( 'Output Dir: ' + outDir )
 create_directory( outDir )
 print("")
 
-name_base = 'h5'
+if hydro:
+  dataFiles = [f for f in listdir(inDir) if (isfile(join(inDir, f)) and (f.find('.h5.') > 0 ) and ( f.find('_particles') < 0) ) ]
+else:
+  dataFiles = [f for f in listdir(inDir) if (isfile(join(inDir, f)) and ( f.find('_particles') > 0) ) ]
+  
 dataFiles = [f for f in listdir(inDir) if (isfile(join(inDir, f)) and (f.find('.h5.') > 0 ) and ( f.find('_particles') < 0) ) ]
 dataFiles = np.sort( dataFiles )
 nFiles = len( dataFiles )
