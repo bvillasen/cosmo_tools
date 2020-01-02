@@ -8,12 +8,12 @@ import numpy as np
 import time
 
 
-dataDir = '/data/groups/comp-astro/bruno/'
-# dataDir = '/gpfs/alpine/proj-shared/ast149/cosmo_sims/256_cool_uv_50Mpc/'
-inDir = dataDir + 'cosmo_sims/256_cool_uv_50Mpc/output_files/'
-outDir = dataDir + 'cosmo_sims/256_cool_uv_50Mpc/data_distributed/'
+# dataDir = '/data/groups/comp-astro/bruno/'
+dataDir = '/gpfs/alpine/proj-shared/ast149/'
+inDir = dataDir + 'cosmo_sims/2048_dm_50Mpc/output_files/'
+outDir = dataDir + 'cosmo_sims/2048_dm_50Mpc/snapshots/'
 
-hydro = True
+hydro = False
 particles = True
 cosmo = True
 
@@ -68,15 +68,15 @@ precision = np.float64
 # precision = np.float16
 print( "\nPrecision: {0}".format( precision ))
 
-print( "\nCompressing Snapshots..." )
-for nSnap in snapshots_to_compress:
-  start = time.time()
-  if hydro:
-    out_base_name = 'grid_' 
-    compress_grid( nSnap, nBoxes, name_base, out_base_name, inDir, outDir, hydro_fields,  precision=precision )
-  if cosmo or particles:
-    out_base_name = 'particles_' 
-    compress_particles( nSnap, nBoxes, name_base, out_base_name, inDir, outDir, particles_fields, precision=precision )
-  end = time.time()
-  print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
+# print( "\nCompressing Snapshots..." )
+# for nSnap in snapshots_to_compress:
+#   start = time.time()
+#   if hydro:
+#     out_base_name = 'grid_' 
+#     compress_grid( nSnap, nBoxes, name_base, out_base_name, inDir, outDir, hydro_fields,  precision=precision )
+#   if cosmo or particles:
+#     out_base_name = 'particles_' 
+#     compress_particles( nSnap, nBoxes, name_base, out_base_name, inDir, outDir, particles_fields, precision=precision )
+#   end = time.time()
+#   print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
 
