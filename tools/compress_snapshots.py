@@ -17,11 +17,13 @@ hydro = False
 particles = True
 cosmo = True
 
-def split_name( file_name):
-  nSap, name, nBox = file_name.split('.')
-  return [int(nSap), int(nBox)]
-
-
+def split_name( file_name, part=False):
+  nSnapshot, name, nBox = file_name.split('.')
+  if part:
+    indx = nSnapshot.find("_particles")
+    nSnapshot = nSnapshot[:indx]
+  return [int(nSnapshot), int(nBox)]
+  
 print( 'Input Dir: ' + inDir )
 print( 'Output Dir: ' + outDir )
 create_directory( outDir )
