@@ -25,3 +25,6 @@ for i in range(n_ranges):
 
 a_range_arr = np.concatenate( a_range_all )
 delta_a_arr = a_range_arr[1:] - a_range_arr[:-1]
+
+outfile_name = 'outputs_cosmo_2048.txt'
+np.savetxt( outfile_name, a_range_arr )
