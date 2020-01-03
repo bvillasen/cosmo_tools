@@ -54,4 +54,4 @@ def compress_grid( nSnap, nBoxes, name_base, out_base_name,inDir, outDir, fields
     fileSnap.attrs['min_'+ key ] = data_all.min()
     fileSnap.attrs['mean_'+ key ] = data_all.mean()
   fileSnap.close()
-  print ' Saved File: ', outDir+fileName, '\n'
+  print( ' Saved File: {0}\n'.format(outDir+fileName) )
