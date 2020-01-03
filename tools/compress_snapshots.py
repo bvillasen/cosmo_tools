@@ -10,8 +10,8 @@ import time
 
 # dataDir = '/data/groups/comp-astro/bruno/'
 dataDir = '/gpfs/alpine/proj-shared/ast149/'
-inDir = dataDir + 'cosmo_sims/1024_dm_50Mpc/output_files/'
-outDir = dataDir + 'cosmo_sims/1024_dm_50Mpc/snapshots/'
+inDir = dataDir + 'cosmo_sims/2048_dm_50Mpc/output_files/'
+outDir = dataDir + 'cosmo_sims/2048_dm_50Mpc/snapshots/'
 
 hydro = False
 particles = True

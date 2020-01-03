@@ -28,7 +28,7 @@ def compress_particles(  nSnap, nBoxes, name_base, out_base_name,inDir, outDir, 
   fileSnap = h5py.File( outDir + fileName, 'w')
   
   
-  print('Particles:')
+  print('\nParticles:')
   print( ' snap: {0}  {1}'.format( nSnap, keys ))
   if inFile.attrs.get('current_z') is not None: print( ' current_z: {0}'.format( inFile.attrs['current_z'][0] ))
   inFile.close()
