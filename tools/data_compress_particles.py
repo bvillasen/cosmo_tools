@@ -41,11 +41,11 @@ def compress_particles(  nSnap, nBoxes, name_base, out_base_name,inDir, outDir, 
       print(" Availbale keys {0} ".format(keys_all) )
       continue
     print( '  Loading: {0}').format( key )
-    print( '   Creating data array')
+    # print( '   Creating data array')
     data_all = np.zeros( dims_all, dtype=precision )
     data_all_parts = []
     for nBox in range(nBoxes):
-      print( '    Loading File: {0}'.format(nBox) )
+      # print( '    Loading File: {0}'.format(nBox) )
       inFileName = '{0}_particles.{1}.{2}'.format(nSnap, name_base, nBox)
       inFile = h5py.File( inDir + inFileName, 'r')
       head = inFile.attrs
@@ -54,7 +54,7 @@ def compress_particles(  nSnap, nBoxes, name_base, out_base_name,inDir, outDir, 
           if h_key in ['dims', 'dims_local', 'offset', 'bounds', 'domain', 'dx', ]: continue
           # print h_key
           fileSnap.attrs[h_key] = head[h_key][0]
-          print( '     Header: {0} -> {1}'.format( h_key, head[h_key] ))
+          # print( '     Header: {0} -> {1}'.format( h_key, head[h_key] ))
         added_header = True
   
       procStart_z, procStart_y, procStart_x = head['offset']
@@ -67,10 +67,11 @@ def compress_particles(  nSnap, nBoxes, name_base, out_base_name,inDir, outDir, 
         data_all_parts.append(data_local_parts)
       inFile.close()
     if key in keys_grid:
-      fileSnap.create_dataset( key, data=data_all.astype(precision) )
-      fileSnap.attrs['max_'+ key ] = data_all.max()
-      fileSnap.attrs['min_'+ key ] = data_all.min()
-      fileSnap.attrs['mean_'+ key ] = data_all.mean()
+      data_set = fileSnap.create_dataset( key, data=data_all.astype(precision) )
+      data_set.attrs['max'] = data_all.max()
+      data_set.attrs['min'] = data_all.min()
+      data_set.attrs['mean'] = data_all.mean()
+      print( '  {0} [ min  max  mean ] = [ {1}  {2}  {3} ]'.format( key, data_set.attrs['min'], data_set.attrs['max'], data_set.attrs['mean']))
     if key in keys_parts:
       array_parts = np.concatenate(data_all_parts)
       fileSnap.create_dataset( key, data=array_parts.astype(precision) )
