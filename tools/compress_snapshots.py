@@ -58,6 +58,7 @@ print( "Number of files per snapshot: {0}".format(nBoxes) )
 
 #Set wich snapshots to compress
 snapshots_to_compress = snapshots_all
+snapshots_to_compress = snapshots_to_compress[snapshots_to_compress>30]
 n_to_compress = len(snapshots_to_compress)
 print( "\nNumber of snapshots to compres: {0}".format(n_to_compress) )
 
