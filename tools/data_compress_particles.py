@@ -54,6 +54,7 @@ def compress_particles(  nSnap, nBoxes, name_base, out_base_name,inDir, outDir, 
           if h_key in ['dims', 'dims_local', 'offset', 'bounds', 'domain', 'dx', ]: continue
           # print h_key
           fileSnap.attrs[h_key] = head[h_key][0]
+          print( '     Header: {0} -> {1}'.format( h_key, fileSnap.attrs[h_key] ))
         added_header = True
   
       procStart_z, procStart_y, procStart_x = head['offset']
