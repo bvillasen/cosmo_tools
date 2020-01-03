@@ -42,7 +42,7 @@ def get_power_spectrum_1D(signal, Lbox, nx, dx,  n_kSamples=20 ):
 
 def get_delta_k( dens, nx, ny, nz, dx, dy, dz ):
   delta_dens = ( dens - dens.mean() ) / dens.mean()
-  FT = np.fft.fftn( delta_dens )
+  FT = np.fft.fftn( delta_dens,  )
   FT2 = FT.real*FT.real + FT.imag*FT.imag
   FT2 = np.fft.fftshift(FT2)
   fft_kx = 2*np.pi*np.fft.fftfreq( nx, d=dx )
@@ -62,19 +62,25 @@ def get_delta_k( dens, nx, ny, nz, dx, dy, dz ):
   return delta_k2, kx, ky, kz
 
 
-# L = 50. 
-# nx = 2048
-# dx = L / nx
-# z = 3
-# dx /= ( z+ 1)
-# kx = 2*np.pi*np.fft.fftfreq( nx, d=dx )
-# ky = kx 
-# kz = kx
-# K_mag = np.sqrt( kx*kx + ky*ky + kz*kz )
-# print K_mag.min(), K_mag.max()
 
-def get_power_spectrum(dens, Lbox, nx, ny, nz, dx, dy, dz, n_kSamples=20 ):
-  delta_k2, kx, ky, kz = get_delta_k( dens, nx, ny, nz, dx, dy, dz )
+def get_delta_k_memory_save( dens, nx, ny, nz, dx, dy, dz ):
+  dens_mean = dens.mean()
+  dens = ( dens - dens_mean ) / dens_mean
+  FT = np.fft.fftn( delta_dens,  )
+  FT = FT.real*FT.real + FT.imag*FT.imag
+  FT = np.fft.fftshift(FT)
+  fft_kx = 2*np.pi*np.fft.fftfreq( nx, d=dx )
+  fft_ky = 2*np.pi*np.fft.fftfreq( ny, d=dy )
+  fft_kz = 2*np.pi*np.fft.fftfreq( nz, d=dz )
+  kx = np.fft.fftshift( fft_kx )
+  ky = np.fft.fftshift( fft_ky )
+  kz = np.fft.fftshift( fft_kz )
+  return FT, kx, ky, kz
+
+
+def get_power_spectrum(dens, Lbox, nx, ny, nz, dx, dy, dz, n_kSamples=20, n_threads=1 ):
+#   delta_k2, kx, ky, kz = get_delta_k( dens, nx, ny, nz, dx, dy, dz, n_threads=n_threads )
+  delta_k2, kx, ky, kz = get_delta_k_memory_save( dens, nx, ny, nz, dx, dy, dz, )
   Kz, Ky, Kx = np.meshgrid( kz, ky, kx )
   K_mag = np.sqrt( Kz*Kz + Ky*Ky + Kx*Kx )
   K_mag = K_mag.reshape(K_mag.size)
@@ -91,6 +97,21 @@ def get_power_spectrum(dens, Lbox, nx, ny, nz, dx, dy, dz, n_kSamples=20 ):
   power = power / n_in_bin / Lbox**3
   error = power * np.sqrt(n_in_bin)
   return power, bin_centers, n_in_bin
+
+
+
+
+# L = 50. 
+# nx = 2048
+# dx = L / nx
+# z = 3
+# dx /= ( z+ 1)
+# kx = 2*np.pi*np.fft.fftfreq( nx, d=dx )
+# ky = kx 
+# kz = kx
+# K_mag = np.sqrt( kx*kx + ky*ky + kz*kz )
+# print K_mag.min(), K_mag.max()]
+
 
 def get_power_spectrum_interp( dens, nx, ny, nz, dx, dy, dz, k_start, k_end, n_kSamples=50, nSamples=500  ):
   delta_k2, kx, ky, kz  = get_delta_k( dens, nx, ny, nz, dx, dy, dz )
