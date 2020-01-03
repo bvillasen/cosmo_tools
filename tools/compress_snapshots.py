@@ -109,4 +109,6 @@ for nSnap in snapshots_to_compress:
     compress_particles( nSnap, nBoxes, name_base, out_base_name, inDir, outDir, particles_fields, precision=precision )
   end = time.time()
   print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
+  
+  exit()
 # 
