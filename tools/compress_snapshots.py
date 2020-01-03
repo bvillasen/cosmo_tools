@@ -12,6 +12,11 @@ import time
 # rank = comm.Get_rank()
 # nprocs = comm.Get_size()
 
+if len(sys.argv) == 0: index = 0
+else: index = int(sys.argv[1])
+print 'Index: ', index
+
+# dataDir = '/home/bruno/Desktop/da
 
 # dataDir = '/data/groups/comp-astro/bruno/'
 dataDir = '/gpfs/alpine/proj-shared/ast149/'
@@ -58,16 +63,18 @@ print( "Number of files per snapshot: {0}".format(nBoxes) )
 
 #Set wich snapshots to compress
 snapshots_to_compress = snapshots_all
-snapshots_to_compress = snapshots_to_compress[snapshots_to_compress>30]
+n_per_index = 15
+snapshots_to_compress = snapshots_to_compress[index*n_per_index:(index+1)*n_per_index]
 n_to_compress = len(snapshots_to_compress)
 print( "\nNumber of snapshots to compres: {0}".format(n_to_compress) )
+print( ' {0}: {1}'.format( index, snapshots_to_compress ) )
 
 # 
 # n_proc_runs = (n_to_compress-1) // nprocs + 1
 # proc_runs = np.array([ rank + i*nprocs for i in range(n_proc_runs) ])
 # proc_runs = proc_runs[ proc_runs < n_to_compress ]
 # if len(proc_runs) == 0: exit()
-# print( ' {0}: {1}'.format( rank, proc_runs ) )
+print( ' {0}: {1}'.format( rank, proc_runs ) )
 
 
 
