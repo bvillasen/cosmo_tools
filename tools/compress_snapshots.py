@@ -99,6 +99,7 @@ print( "\nPrecision: {0}".format( precision ))
 
 print( "\nCompressing Snapshots..." )
 for nSnap in snapshots_to_compress:
+  if nSnap == 135: continue
   start = time.time()
   if hydro:
     out_base_name = 'grid_' 
