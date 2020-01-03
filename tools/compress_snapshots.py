@@ -61,7 +61,7 @@ snapshots_to_compress = snapshots_all
 n_to_compress = len(snapshots_to_compress)
 print( "\nNumber of snapshots to compres: {0}".format(n_to_compress) )
 
-n_proc_runs = (n_to_compress-1)/nprocs + 1
+n_proc_runs = (n_to_compress-1) // nprocs + 1
 
 proc_runs = np.array([ rank + i*nprocs for i in range(n_proc_runs) ])
 proc_runs = proc_runs[ proc_runs < n_to_compress ]
