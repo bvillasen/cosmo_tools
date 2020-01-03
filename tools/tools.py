@@ -5,15 +5,15 @@ import numpy as np
 
 
 def create_directory( dir ):
-  print "Creating Directory: ", dir
+  print ("Creating Directory: {0}".format(dir) )
   indx = dir[:-1].rfind('/' )
   inDir = dir[:indx]
   dirName = dir[indx:].replace('/','')
   dir_list = next(os.walk(inDir))[1]
-  if dirName in dir_list: print " Directory exists"
+  if dirName in dir_list: print( " Directory exists")
   else:
     os.mkdir( dir )
-    print " Directory created"
+    print( " Directory created")
 
 def get_files_names( fileKey, inDir, type='cholla' ):
   if type=='nyx': dataFiles = [f for f in listdir(inDir) if (f.find(fileKey) >= 0 )  ]
