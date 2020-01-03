@@ -66,9 +66,9 @@ print( "\nNumber of snapshots to compres: {0}".format(n_to_compress) )
 # proc_runs = np.array([ rank + i*nprocs for i in range(n_proc_runs) ])
 # proc_runs = proc_runs[ proc_runs < n_to_compress ]
 # if len(proc_runs) == 0: exit()
+# print( ' {0}: {1}'.format( rank, proc_runs ) )
 
 
-print( ' {0}: {1}'.format( rank, proc_runs ) )
 
 #available Hydro Fields:
 #[ density, momentum_x, momentum_y, momentum_z, Enegy, GasEnergy ]
