@@ -28,7 +28,8 @@ from tools import *
 # rank = comm.Get_rank()
 # nSnap = rank
 # 
-dataDir = '/data/groups/comp-astro/bruno/'
+dataDir = '/gpfs/alpine/proj-shared/ast149/'
+# dataDir = '/data/groups/comp-astro/bruno/'
 # dataDir = '/home/bruno/Desktop/data/'
 # dataDir = '/raid/bruno/data/'
 
