@@ -41,9 +41,11 @@ def compress_particles(  nSnap, nBoxes, name_base, out_base_name,inDir, outDir, 
       print(" Availbale keys {0} ".format(keys_all) )
       continue
     print( '  Loading: {0}').format( key )
+    print( '   Creating data array')
     data_all = np.zeros( dims_all, dtype=precision )
     data_all_parts = []
     for nBox in range(nBoxes):
+      print( '    Loading File: {0}'.format(nBox) )
       inFileName = '{0}_particles.{1}.{2}'.format(nSnap, name_base, nBox)
       inFile = h5py.File( inDir + inFileName, 'r')
       head = inFile.attrs
