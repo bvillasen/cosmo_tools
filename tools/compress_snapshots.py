@@ -68,7 +68,7 @@ proc_runs = proc_runs[ proc_runs < n_to_compress ]
 
 if len(proc_runs) == 0: exit()
 
-print ' {0}: {1}'.format( rank, proc_runs )
+print( ' {0}: {1}'.format( rank, proc_runs ) )
 
 #available Hydro Fields:
 #[ density, momentum_x, momentum_y, momentum_z, Enegy, GasEnergy ]
