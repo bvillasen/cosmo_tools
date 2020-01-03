@@ -6,6 +6,11 @@ from data_compress_particles import compress_particles
 from tools import create_directory
 import numpy as np
 import time
+from mpi4py import MPI
+
+comm = MPI.COMM_WORLD
+rank = comm.Get_rank()
+nprocs = comm.Get_size()
 
 
 # dataDir = '/data/groups/comp-astro/bruno/'
@@ -53,7 +58,17 @@ print( "Number of files per snapshot: {0}".format(nBoxes) )
 
 #Set wich snapshots to compress
 snapshots_to_compress = snapshots_all
-print( "\nNumber of snapshots to compres: {0}".format(len(snapshots_to_compress)) )
+n_to_compress = len(snapshots_to_compress)
+print( "\nNumber of snapshots to compres: {0}".format(n_to_compress) )
+
+n_proc_runs = (n_to_compress-1)/nprocs + 1
+
+proc_runs = np.array([ rank + i*nprocs for i in range(n_proc_runs) ])
+proc_runs = proc_runs[ proc_runs < n_runs ]
+
+if len(proc_runs) == 0: exit()
+
+print ' {0}: {1}'.format( rank, proc_runs )
 
 #available Hydro Fields:
 #[ density, momentum_x, momentum_y, momentum_z, Enegy, GasEnergy ]
@@ -74,15 +89,15 @@ precision = np.float64
 # precision = np.float16
 print( "\nPrecision: {0}".format( precision ))
 
-print( "\nCompressing Snapshots..." )
-for nSnap in snapshots_to_compress:
-  start = time.time()
-  if hydro:
-    out_base_name = 'grid_' 
-    compress_grid( nSnap, nBoxes, name_base, out_base_name, inDir, outDir, hydro_fields,  precision=precision )
-  if cosmo or particles:
-    out_base_name = 'particles_' 
-    compress_particles( nSnap, nBoxes, name_base, out_base_name, inDir, outDir, particles_fields, precision=precision )
-  end = time.time()
-  print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
-
+# print( "\nCompressing Snapshots..." )
+# for nSnap in snapshots_to_compress:
+#   start = time.time()
+#   if hydro:
+#     out_base_name = 'grid_' 
+#     compress_grid( nSnap, nBoxes, name_base, out_base_name, inDir, outDir, hydro_fields,  precision=precision )
+#   if cosmo or particles:
+#     out_base_name = 'particles_' 
+#     compress_particles( nSnap, nBoxes, name_base, out_base_name, inDir, outDir, particles_fields, precision=precision )
+#   end = time.time()
+#   print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
+# 
