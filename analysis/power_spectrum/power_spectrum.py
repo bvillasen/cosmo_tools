@@ -66,7 +66,7 @@ def get_delta_k( dens, nx, ny, nz, dx, dy, dz ):
 def get_delta_k_memory_save( dens, nx, ny, nz, dx, dy, dz ):
   dens_mean = dens.mean()
   dens = ( dens - dens_mean ) / dens_mean
-  FT = np.fft.fftn( delta_dens,  )
+  FT = np.fft.fftn( dens  )
   FT = FT.real*FT.real + FT.imag*FT.imag
   FT = np.fft.fftshift(FT)
   fft_kx = 2*np.pi*np.fft.fftfreq( nx, d=dx )
