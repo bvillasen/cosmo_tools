@@ -78,4 +78,4 @@ def compress_particles(  nSnap, nBoxes, name_base, out_base_name,inDir, outDir, 
       # print 'nParticles: ', len(array_parts)
   
   fileSnap.close()
-  print ' Saved File: ', outDir+fileName
+  print( ' Saved File: {0}'.format( outDir+fileName) )
