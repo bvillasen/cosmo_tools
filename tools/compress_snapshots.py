@@ -66,7 +66,8 @@ snapshots_to_compress = snapshots_all
 n_per_index = 15
 snapshots_to_compress = snapshots_to_compress[index*n_per_index:(index+1)*n_per_index]
 n_to_compress = len(snapshots_to_compress)
-snapshots_to_compress = range(157, 165)
+# snapshots_to_compress = range(157, 165)
+snapshots_to_compress = [55]
 print( "\nNumber of snapshots to compres: {0}".format(n_to_compress) )
 print( ' {0}: {1}'.format( index, snapshots_to_compress ) )
 

@@ -25,6 +25,7 @@ from mpi4py import MPI
 
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
+nprocs = comm.Get_size()
 nSnap = rank
 # 
 dataDir = '/data/groups/comp-astro/bruno/'
@@ -51,7 +52,7 @@ proj_depth = 512
 
 field = 'density'
  
-snapshots = arange(0,170)
+snapshots = np.arange(0,100)
 n_snapshots = len(snapshots)
 
 n_proc_snapshots = (n_snapshots-1)/nprocs + 1
@@ -62,35 +63,35 @@ if len(proc_snapshots) == 0: exit()
 print "{0}: {1}".format( rank, proc_snapshots)
 
 
-# for nSnap in snapshots:
-# 
-#   data_cholla = load_snapshot_data( nSnap, chollaDir, hydro=False, cool=False )
-#   current_z = data_cholla['current_z']
-#   data = data_cholla['dm']
-# 
-#   data_weight = data['density'][proj_offset:proj_offset+proj_depth, :, :]
-#   data_field = data[field][proj_offset:proj_offset+proj_depth, :, :]
-# 
-#   proj = data_field.sum(axis=0) 
-#   proj_weight = ( data_field * data_weight ).sum(axis=0)  / data_weight.sum(axis=0) 
-# 
-#   outputFile_name = outDir + 'projections_{0}.h5'.format( nSnap )
-#   outFile = h5.File( outputFile_name, 'w' )
-# 
-#   group_field = outFile.create_group( field )
-# 
-#   ds = group_field.create_dataset( 'projection', data=proj )
-#   ds.attrs['max'] = proj.max()
-#   ds.attrs['min'] = proj.min()
-#   print " {0}: min={1}  max={2}".format( field , ds.attrs['min'], ds.attrs['max'])
-# 
-#   ds = group_field.create_dataset( 'projection_weighted', data=proj_weight )
-#   ds.attrs['max'] = proj_weight.max()
-#   ds.attrs['min'] = proj_weight.min()
-# 
-#   print " weight {0}: min={1}  max={2}".format( field , ds.attrs['min'], ds.attrs['max'])
-# 
-#   outFile.close()
-#   print "Saved File: {0} \n".format( outputFile_name )
-# 
-# 
+for nSnap in proc_snapshots:
+
+  data_cholla = load_snapshot_data( nSnap, chollaDir, hydro=False, cool=False )
+  current_z = data_cholla['current_z']
+  data = data_cholla['dm']
+
+  data_weight = data['density'][proj_offset:proj_offset+proj_depth, :, :]
+  data_field = data[field][proj_offset:proj_offset+proj_depth, :, :]
+
+  proj = data_field.sum(axis=0) 
+  proj_weight = ( data_field * data_weight ).sum(axis=0)  / data_weight.sum(axis=0) 
+
+  outputFile_name = outDir + 'projections_{0}.h5'.format( nSnap )
+  outFile = h5.File( outputFile_name, 'w' )
+
+  group_field = outFile.create_group( field )
+
+  ds = group_field.create_dataset( 'projection', data=proj )
+  ds.attrs['max'] = proj.max()
+  ds.attrs['min'] = proj.min()
+  print " {0}: min={1}  max={2}".format( field , ds.attrs['min'], ds.attrs['max'])
+
+  ds = group_field.create_dataset( 'projection_weighted', data=proj_weight )
+  ds.attrs['max'] = proj_weight.max()
+  ds.attrs['min'] = proj_weight.min()
+
+  print " weight {0}: min={1}  max={2}".format( field , ds.attrs['min'], ds.attrs['max'])
+
+  outFile.close()
+  print "Saved File: {0} \n".format( outputFile_name )
+
+
