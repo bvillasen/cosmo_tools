@@ -56,13 +56,29 @@ n_kSamples = 26
 
 
 #Get K_mag
-# fft_kx = 2*np.pi*np.fft.fftfreq( nx, d=dx )
-# fft_ky = 2*np.pi*np.fft.fftfreq( ny, d=dy )
-# fft_kz = 2*np.pi*np.fft.fftfreq( nz, d=dz )
-# kx = np.fft.fftshift( fft_kx )
-# ky = np.fft.fftshift( fft_ky )
-# kz = np.fft.fftshift( fft_kz )
- 
+if index == 0
+  print 'Computing kx'
+  kx = 2*np.pi*np.fft.fftfreq( nx, d=dx )
+  print 'Computing kz'
+  ky = 2*np.pi*np.fft.fftfreq( ny, d=dy )
+  print 'Computing kz'
+  kz = 2*np.pi*np.fft.fftfreq( nz, d=dz )
+  print 'Shifting K'
+  kx = np.fft.fftshift( kx )
+  ky = np.fft.fftshift( ky )
+  kz = np.fft.fftshift( kz )
+  print 'Computing k Grid'
+  Kz, Ky, Kx = np.meshgrid( kz, ky, kx )
+  print 'Computing K_mag'
+  K_mag = np.sqrt( Kz*Kz + Ky*Ky + Kx*Kx )
+  print 'Saving K_mag'
+  filename = outDir + 'k_mag.h5'
+  file = h5.File( filename, 'w' )
+  file.create_dataset( 'k_mag', data=K_mag )
+  file.create_dataset( 'kx', data=kx )
+  file.create_dataset( 'ky', data=ky )
+  file.create_dataset( 'kz', data=kz )
+  exit()
  
 if index == 1: snapshots = [ 0, 5, 30 ]
 if index == 2: snapshots = [ 60, 90, 120]
