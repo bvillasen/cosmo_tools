@@ -78,6 +78,7 @@ if index == 0:
   file.create_dataset( 'kx', data=kx )
   file.create_dataset( 'ky', data=ky )
   file.create_dataset( 'kz', data=kz )
+  file.close()
   exit()
  
 if index == 1: snapshots = [ 0, 5, 30 ]
