@@ -37,7 +37,7 @@ nPoints = 2048
 
 
 chollaDir = dataDir + 'cosmo_sims/{0}_dm_50Mpc/snapshots/'.format(nPoints)
-outDir = dataDir + 'cosmo_sims/{0}_dm_50Mpc/power_spectrum/'.format(nPoints)
+outDir = dataDir + 'cosmo_sims/{0}_dm_50Mpc/power_spectrum/fftw_data/'.format(nPoints)
 create_directory( outDir )
 
 # set simulation volume dimentions
@@ -58,7 +58,7 @@ nSnap = 0
 data_cholla = load_snapshot_data( nSnap, chollaDir, hydro=False, cool=False )
 current_z = data_cholla['current_z']
 print ' Loading DM Density'
-dens = data_cholla['dm']['density'][...]
+dens = data_cholla['dm']['density'][...].astype(np.float32)
 
 n_threads = 40
 print ' Computing FFT n_threads:{0}'.format(n_threads)
