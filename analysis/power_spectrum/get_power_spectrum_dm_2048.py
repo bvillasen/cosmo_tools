@@ -1,10 +1,7 @@
 import sys, os, time
 import numpy as np
-import matplotlib.pyplot as plt
 import h5py as h5
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-import matplotlib.transforms as tfrms
-
+import pyfftw
 import matplotlib
 # set some global options
 # matplotlib.font_manager.findSystemFonts(fontpaths=['/home/bruno/Downloads'], fontext='ttf')
@@ -63,10 +60,10 @@ current_z = data_cholla['current_z']
 print ' Loading DM Density'
 dens = data_cholla['dm']['density'][...]
 
-n_threads = 20
-print ' Computing Power Spectrum n_threads:{0}'.format(n_threads)
+n_threads = 40
+print ' Computing FFT n_threads:{0}'.format(n_threads)
 start = time.time()
-power_spectrum, k_vals, count = get_power_spectrum( dens, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples, n_threads=20)
+FT = pyfftw.interfaces.numpy_fft.fftn(dens, overwrite_input=True, threads=n_threads)
 end = time.time()
 print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
 # 

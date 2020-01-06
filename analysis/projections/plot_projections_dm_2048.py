@@ -16,67 +16,144 @@ cosmo_dir = os.path.dirname(os.path.dirname(os.getcwd())) + '/'
 figuresDir = cosmo_dir + 'figures/'
 subDirectories = [x[0] for x in os.walk(cosmo_dir)]
 sys.path.extend(subDirectories)
-from power_spectrum import get_power_spectrum
 from load_data_cholla import load_snapshot_data, load_snapshot_data_particles
-from load_data_ramses import load_snapshot_ramses
-from load_data_nyx import load_snapshot_nyx
-from load_data_enzo import load_snapshot_enzo
 from tools import *
-# 
-# from palettable.cmocean.sequential import Deep_20_r
-# from palettable.cmocean.sequential import Tempo_20_r
-# 
-# 
-# show_labels = False
-# 
-# colormaps = [ 'inferno', Deep_20_r.mpl_colormap, 'cividis', 'gist_heat' ]
-# # colormaps = [ Matter_20_r.mpl_colormap, Deep_20_r.mpl_colormap, 'cividis', 'gist_heat' ]
-# fileName = 'projection_deep_1.pdf'
-# if show_labels: fileName = 'projection_deep_labels.png'
-# 
-# 
-# 
-# outDir = figuresDir + 'projections/'
-# create_directory( outDir )
-# 
+
 # from mpi4py import MPI
 # 
 # comm = MPI.COMM_WORLD
 # rank = comm.Get_rank()
 # nSnap = rank
+
+colormap = 'inferno'
+
+
+# dataDir = '/data/groups/comp-astro/bruno/'
+dataDir = '/home/bruno/Desktop/data/'
+# dataDir = '/raid/bruno/data/'
+
+
+nPoints = 2048
+Lbox = 50.
+inDir_snapshots = dataDir + 'cosmo_sims/{0}_dm_50Mpc/snapshots/'.format(nPoints) 
+inDir = dataDir + 'cosmo_sims/{0}_dm_50Mpc/projections/'.format(nPoints)
+
+outDir = figuresDir + 'projections/2048_dm_50Mpc/'
+create_directory( outDir )
 # 
-# dataDir = '/home/bruno/Desktop/data/'
-# # dataDir = '/raid/bruno/data/'
+
+n_snapshots = 130
+
+
+get_statistics = False
+
+# Get Statistics
+if get_statistics:
+  min_all, max_all = 1e100, -1e100
+  for nSnap in range( n_snapshots):
+    fileName = 'projections_{0}.h5'.format( nSnap )
+    data_proj = h5.File( inDir + fileName , 'r')
+    data_set = data_proj['density']['projection_weighted']
+    max_val = data_set.attrs['max']
+    min_val = data_set.attrs['min']
+    print  ' {0}:  {1}   {2}'.format( nSnap, min_val, max_val )
+    max_all = max( max_all, max_val)
+    min_all = min( min_all, min_val)
+  stats = np.array([ n_snapshots, min_all, max_all])
+  np.savetxt( inDir + 'statistics.txt', stats )
+  print 'Statistics Saved'
+
+
+cbar_labels = [ r'$\log_{10}$ Density  $[ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$' ]
+field_labels = [ r'$\rho_{DM}$' ]
+ticks_list = [ [2.0, 5.5 ]]
+
+
+#Load max and min vals
+n_snapshots, min_global, max_global = np.loadtxt( inDir + 'statistics.txt' ) 
+
+
+nSnap = 0
+snapshots = range( 42, 43 )
+for nSnap in snapshots:
+
+  print "\nSnapshot: {0}".format( nSnap)
+
+  # data_cholla = load_snapshot_data( nSnap, inDir_snapshots, hydro=False )
+  # scale_0 = data_cholla['current_a']
+  fileName = 'projections_{0:03}.h5'.format( nSnap )
+  data_proj = h5.File( inDir + fileName , 'r')
+  current_z = data_proj.attrs['current_z']
+  scale_0 = 1/( current_z + 1 )
+  data_0 = data_proj['density']['projection_weighted'][...]
+
+  delta_snap = 1
+  # data_cholla = load_snapshot_data( nSnap+delta_snap, inDir_snapshots, hydro=False )
+  # scale_1 = data_cholla['current_a']
+  fileName = 'projections_{0:03}.h5'.format( nSnap+delta_snap )
+  data_proj = h5.File( inDir + fileName , 'r')
+  current_z = data_proj.attrs['current_z']
+  scale_1 = 1/( current_z + 1 )
+  data_1 = data_proj['density']['projection_weighted'][...]
+
+
+  data_delta = ( data_1 - data_0 ) / ( scale_1 - scale_0 )
+
+
+  #Interpolate between snapshots
+  n_per_snapshot = 4
+  scale_vals = np.linspace( scale_0, scale_1, n_per_snapshot, endpoint=False)
+  redshift_vals = 1/scale_vals - 1
+
+
+
+
+  for i in range( n_per_snapshot ):
+
+    #Create Figure
+    n_rows = 1
+    n_cols = 1
+    fig, ax_list = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=(10*n_cols,9.2*n_rows))
+
+    n_image = i + n_per_snapshot*nSnap
+    scale_proj = scale_vals[i]
+    z_proj = 1/scale_proj - 1
+    print " Image: {0}     z={1:.2f}".format(n_image, z_proj)
+    delta_scale = scale_proj - scale_0
+    data_proj = data_0 + delta_scale * data_delta
+    
+    proj = np.log10( data_proj )
+
+    ax = ax_list
+    im = ax.imshow( proj, interpolation='bilinear',  vmin=np.log10(min_global), vmax=np.log10(max_global), cmap=colormap, extent=(0,Lbox, 0, Lbox) )
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.05)
+    cb = fig.colorbar( im, cax=cax,  ticks=ticks_list[0] )
+    cb_fs = 25
+    cb.set_label(cbar_labels[0], fontsize=cb_fs ,  labelpad=-20)
+    cb.ax.tick_params(labelsize=17, size=7,)
+    
+    ax.text(0.97, 0.05, field_labels[0] , color='w', alpha=0.7, fontsize=40, horizontalalignment='right', verticalalignment='center', transform=ax.transAxes )
+
+    text = r'$z = {0:.2f}$'.format( z_proj)
+    ax.text(0.3, 0.93, text , color='w', alpha=0.7, fontsize=30, horizontalalignment='right', verticalalignment='center', transform=ax.transAxes )
+
+    
+    #Scale Bar
+    bar_coords = [ [ 37.5, 47.5 ], [45, 45]]
+    ax.errorbar( bar_coords[0], bar_coords[1], yerr=0.75, linewidth=5, color='w', alpha=0.7 )
+    ax.text(0.94, 0.93, '10 Mpc', color='w', alpha=0.7, fontsize=30, horizontalalignment='right', verticalalignment='center', transform=ax.transAxes )
+    
+    
+    fig.tight_layout()
+    fileName = 'projection_{0}.png'.format(n_image)
+    fig.savefig( outDir + fileName,  bbox_inches='tight', dpi=200 )
+    print 'Saved image: ', outDir + fileName
+    ax.clear()
+    
+
+
 # 
-# eta_1 = 0.001
-# eta_2 = 0.040
-# # beta_0 = 0.25
-# # beta_1 = 0.00
-# 
-# n_arg = len(sys.argv)
-# if n_arg > 1:
-#   args = []
-#   for i in range(1 , n_arg):
-#     arg = sys.argv[i]
-#     args.append( float( arg ))
-#   eta_1, eta_2 = args
-#   if rank == 0:
-#     print "Using command arguments"
-#     print args
-# 
-# 
-# print 'eta: {0:.3f}  {1:.3f} /'.format( eta_1, eta_2 )
-# 
-# 
-# nPoints = 256
-# Lbox = 50000.
-# 
-# data_name = 'SIMPLE_PPMP_eta0.035_beta0.00_grav4'
-# chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_cool_uv_50Mpc/'.format(nPoints)
-# chollaDir_uv = chollaDir +  'data_{0}/'.format( data_name )
-# 
-# enzoDir = dataDir + 'cosmo_sims/enzo/'
-# enzoDir_uv = enzoDir + '{0}_cool_uv_50Mpc_HLLC_grav4/h5_files/'.format(nPoints)
 # 
 # 
 # 

@@ -52,7 +52,7 @@ proj_depth = 512
 
 field = 'density'
  
-snapshots = np.arange(0,100)
+snapshots = np.arange(0,170)
 n_snapshots = len(snapshots)
 
 n_proc_snapshots = (n_snapshots-1)/nprocs + 1
@@ -75,8 +75,10 @@ for nSnap in proc_snapshots:
   proj = data_field.sum(axis=0) 
   proj_weight = ( data_field * data_weight ).sum(axis=0)  / data_weight.sum(axis=0) 
 
-  outputFile_name = outDir + 'projections_{0}.h5'.format( nSnap )
+  outputFile_name = outDir + 'projections_{0:03}.h5'.format( nSnap )
   outFile = h5.File( outputFile_name, 'w' )
+  
+  outFile.attrs['current_z'] = current_z
 
   group_field = outFile.create_group( field )
 

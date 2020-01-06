@@ -79,6 +79,7 @@ def generate_ics_particles_distributed( fields, domain, proc_grid, data, ds, out
     print "\nSaving Field: ", field
     data_field = get_yt_field( field, data, current_a, h )
     if field == 'mass': particle_mass = data_field[0]
+    print ' N total: {0} / {1}'.format(len(data_field), 1024**3)
 
     n_local_all = []
     for pId in range(n_procs):
