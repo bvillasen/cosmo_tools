@@ -60,10 +60,26 @@ current_z = data_cholla['current_z']
 print ' Loading DM Density'
 dens = data_cholla['dm']['density'][...].astype(np.float32)
 
-n_threads = 40
+n_threads = 128
 print ' Computing FFT n_threads:{0}'.format(n_threads)
 start = time.time()
 FT = pyfftw.interfaces.numpy_fft.fftn(dens, overwrite_input=True, threads=n_threads)
 end = time.time()
 print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
+
+print '\n Computing FFT Amplitude'.format(n_threads)
+start = time.time()
+FT = FT.real*FT.real + FT.imag*FT.imag
+end = time.time()
+print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
+
+print '\n Saving FFT Amplitude'
+filename = outDir + 'fft_amp_{0}.h5'.format(nSnap)
+file = h5.File( filename, 'w' )
+file.create_dataset( 'fft_amp', data=FT )
+print 'Saved file: ', filename
+
+
+
+
 # 
