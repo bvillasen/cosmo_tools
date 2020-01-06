@@ -75,7 +75,7 @@ for nSnap in snapshots:
   print ' Loading DM Density'
   dens = data_cholla['dm']['density'][...].astype(np.float32)
 
-  n_threads = 48
+  n_threads = 20
   print ' Computing FFT n_threads:{0}'.format(n_threads)
   start = time.time()
   FT = pyfftw.interfaces.numpy_fft.fftn(dens, overwrite_input=True, threads=n_threads)
