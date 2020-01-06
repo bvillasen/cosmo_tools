@@ -18,6 +18,10 @@ from load_data_cholla import load_snapshot_data, load_snapshot_data_particles
 from tools import *
 
 
+if len(sys.argv) == 0: index = 0
+else: index = int(sys.argv[1])
+print 'Index: ', index
+
 # 
 # from mpi4py import MPI
 # 
@@ -49,35 +53,50 @@ Ly = Lbox
 Lz = Lbox
 dx, dy, dz = Lx/(nx), Ly/(ny), Lz/(nz )
 n_kSamples = 26
+
+
+#Get K_mag
+# fft_kx = 2*np.pi*np.fft.fftfreq( nx, d=dx )
+# fft_ky = 2*np.pi*np.fft.fftfreq( ny, d=dy )
+# fft_kz = 2*np.pi*np.fft.fftfreq( nz, d=dz )
+# kx = np.fft.fftshift( fft_kx )
+# ky = np.fft.fftshift( fft_ky )
+# kz = np.fft.fftshift( fft_kz )
  
  
-snapshots = range(23,51)
-nSnap = 0
-# for nSnap in snapshots:
+if index == 1: snapshots = [ 0, 5, 30 ]
+if index == 2: snapshots = [ 60, 90, 120]
+if index == 3: snapshots = [ 150, 169 ]
+# nSnap = 0
+for nSnap in snapshots:
 
-data_cholla = load_snapshot_data( nSnap, chollaDir, hydro=False, cool=False )
-current_z = data_cholla['current_z']
-print ' Loading DM Density'
-dens = data_cholla['dm']['density'][...].astype(np.float32)
+  data_cholla = load_snapshot_data( nSnap, chollaDir, hydro=False, cool=False )
+  current_z = data_cholla['current_z']
+  print ' Loading DM Density'
+  dens = data_cholla['dm']['density'][...].astype(np.float32)
 
-n_threads = 128
-print ' Computing FFT n_threads:{0}'.format(n_threads)
-start = time.time()
-FT = pyfftw.interfaces.numpy_fft.fftn(dens, overwrite_input=True, threads=n_threads)
-end = time.time()
-print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
+  n_threads = 128
+  print ' Computing FFT n_threads:{0}'.format(n_threads)
+  start = time.time()
+  FT = pyfftw.interfaces.numpy_fft.fftn(dens, overwrite_input=True, threads=n_threads)
+  end = time.time()
+  print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
+  
+  print 'Shifting FT'
+  FT = np.fft.fftshift(FT)
 
-print '\n Computing FFT Amplitude'.format(n_threads)
-start = time.time()
-FT = FT.real*FT.real + FT.imag*FT.imag
-end = time.time()
-print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
+  print '\n Computing FFT Amplitude'.format(n_threads)
+  start = time.time()
+  FT = FT.real*FT.real + FT.imag*FT.imag
+  end = time.time()
+  print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
 
-print '\n Saving FFT Amplitude'
-filename = outDir + 'fft_amp_{0}.h5'.format(nSnap)
-file = h5.File( filename, 'w' )
-file.create_dataset( 'fft_amp', data=FT )
-print 'Saved file: ', filename
+  print '\n Saving FFT Amplitude'
+  filename = outDir + 'fft_amp_{0}.h5'.format(nSnap)
+  file = h5.File( filename, 'w' )
+  file.create_dataset( 'fft_amp', data=FT )
+  file.attrs['current_z'] = current_z
+  print 'Saved file: ', filename
 
 
 
