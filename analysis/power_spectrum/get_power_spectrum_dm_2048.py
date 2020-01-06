@@ -56,7 +56,7 @@ n_kSamples = 26
 
 
 #Get K_mag
-if index == 0
+if index == 0:
   print 'Computing kx'
   kx = 2*np.pi*np.fft.fftfreq( nx, d=dx )
   print 'Computing kz'
