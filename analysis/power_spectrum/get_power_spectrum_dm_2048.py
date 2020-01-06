@@ -91,6 +91,9 @@ for nSnap in snapshots:
   current_z = data_cholla['current_z']
   print ' Loading DM Density'
   dens = data_cholla['dm']['density'][...].astype(np.float32)
+  dens_mean = dens.mean()
+  print dens_mean
+  dens = (dens - dens_mean ) / dens_mean
 
   n_threads = 20
   print ' Computing FFT n_threads:{0}'.format(n_threads)
