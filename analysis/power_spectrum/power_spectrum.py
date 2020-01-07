@@ -118,6 +118,7 @@ def get_power_spectrum_fftw(dens, Lbox, nx, ny, nz, dx, dy, dz, n_kSamples=20, n
   k_max = K_mag.max()*0.99
   # print K_mag.max()
   nBins = n_kSamples
+  print '    Computing Power Spectrum'
   intervals = np.logspace(np.log10(k_min), np.log10(k_max), nBins+1)
   power, bin_edges= np.histogram( K_mag, bins=intervals, weights=delta_k2 )
   n_in_bin, bin_edges = np.histogram( K_mag, bins=intervals )
