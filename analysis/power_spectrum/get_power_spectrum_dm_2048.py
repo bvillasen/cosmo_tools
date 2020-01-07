@@ -83,7 +83,7 @@ if index == 0:
   exit()
  
 if index == 1: snapshots = [ 0, 5, 30 ]
-if index == 2: snapshots = [ 60, 90, 120]
+if index == 2: snapshots = [ 60, 90, 120, 150, 169]
 if index == 3: snapshots = [ 150, 169 ]
 # nSnap = 0
 for nSnap in snapshots:
