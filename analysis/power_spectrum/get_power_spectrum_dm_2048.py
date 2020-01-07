@@ -58,10 +58,10 @@ dx, dy, dz = Lx/(nx), Ly/(ny), Lz/(nz )
 n_kSamples = 26
 
  
-# if index == 1: snapshots = [ 0, 5, 30 ]
-if index == 1: snapshots = [ 0, ]
-if index == 2: snapshots = [ 60, 90, 120, 150, 169]
-if index == 3: snapshots = [ 150, 169 ]
+# # if index == 1: snapshots = [ 0, 5, 30 ]
+# if index == 1: snapshots = [ 0, ]
+# if index == 2: snapshots = [ 60, 90, 120, 150, 169]
+# if index == 3: snapshots = [ 150, 169 ]
 
 
 nSnap = 0
