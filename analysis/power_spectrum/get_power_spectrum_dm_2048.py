@@ -95,7 +95,7 @@ for nSnap in snapshots:
   file = h5.File( filename, 'r' )
   delta_dens = file['delta_density'][...]
   current_z = file.attrs['current_z'] 
-  print delta_dens
+  # print delta_dens
 
   # delta_dens = data_cholla['dm']['density'][...].astype(np.float32)
   # dens_mean = dens.mean()
