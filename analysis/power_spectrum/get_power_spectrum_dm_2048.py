@@ -18,9 +18,9 @@ from load_data_cholla import load_snapshot_data, load_snapshot_data_particles
 from tools import *
 
 
-# if len(sys.argv) == 0: index = 0
-# else: index = int(sys.argv[1])
-# print 'Index: ', index
+if len(sys.argv) == 0: index = 0
+else: index = int(sys.argv[1])
+print 'Index: ', index
 
 # 
 # from mpi4py import MPI
@@ -63,9 +63,10 @@ n_kSamples = 26
 # if index == 2: snapshots = [ 60, 90, 120, 150, 169]
 # if index == 3: snapshots = [ 150, 169 ]
 
-snapshots = [  5, 30, 60 ]
-snapshots = [  90, 120, 150 ]
-snapshots = [ 169 ]
+if index == 1: snapshots = [ 5, 30, ]
+if index == 2: snapshots = [ 60, 90 ]
+if index == 3: snapshots = [ 120, 150 ]
+if index == 4: snapshots = [ 169 ]
 # nSnap = 0
 
 for nSnap in snapshots:
