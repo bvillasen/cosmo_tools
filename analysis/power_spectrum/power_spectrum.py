@@ -141,7 +141,9 @@ def get_power_spectrum(dens, Lbox, nx, ny, nz, dx, dy, dz, n_kSamples=20, n_thre
   # print K_mag.max()
   nBins = n_kSamples
   intervals = np.logspace(np.log10(k_min), np.log10(k_max), nBins+1)
+  print '    Computing Histogram 1'
   power, bin_edges= np.histogram( K_mag, bins=intervals, weights=delta_k2 )
+  print '    Computing Histogram 2'
   n_in_bin, bin_edges = np.histogram( K_mag, bins=intervals )
   n_in_bin = n_in_bin.astype('float')
   bin_centers = np.sqrt(bin_edges[1:] * bin_edges[:-1])
