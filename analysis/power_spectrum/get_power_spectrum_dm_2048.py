@@ -101,29 +101,29 @@ print delta_dens
 # dens_mean = dens.mean()
 # print dens_mean
 # dens = (dens - dens_mean ) / dens_mean
-# 
-# n_threads = 20
-# print ' Computing FFT n_threads:{0}'.format(n_threads)
-# start = time.time()
-# FT = pyfftw.interfaces.numpy_fft.fftn(delta_dens, overwrite_input=True, threads=n_threads)
-# end = time.time()
-# print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
-# 
-# print 'Shifting FT'
-# FT = np.fft.fftshift(FT)
-# 
-# print '\n Computing FFT Amplitude'.format(n_threads)
-# start = time.time()
-# FT = FT.real*FT.real + FT.imag*FT.imag
-# end = time.time()
-# print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
-# 
-# print '\n Saving FFT Amplitude'
-# filename = outDir + 'fft_amp_{0}.h5'.format(nSnap)
-# file = h5.File( filename, 'w' )
-# file.create_dataset( 'fft_amp', data=FT )
-# file.attrs['current_z'] = current_z
-# print 'Saved file: ', filename
+
+n_threads = 20
+print ' Computing FFT n_threads:{0}'.format(n_threads)
+start = time.time()
+FT = pyfftw.interfaces.numpy_fft.fftn(delta_dens, overwrite_input=True, threads=n_threads)
+end = time.time()
+print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
+
+print 'Shifting FT'
+FT = np.fft.fftshift(FT)
+
+print '\n Computing FFT Amplitude'.format(n_threads)
+start = time.time()
+FT = FT.real*FT.real + FT.imag*FT.imag
+end = time.time()
+print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
+
+print '\n Saving FFT Amplitude'
+filename = outDir + 'fft_amp_{0}.h5'.format(nSnap)
+file = h5.File( filename, 'w' )
+file.create_dataset( 'fft_amp', data=FT )
+file.attrs['current_z'] = current_z
+print 'Saved file: ', filename
 
 
 
