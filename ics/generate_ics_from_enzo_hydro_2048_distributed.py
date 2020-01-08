@@ -51,7 +51,7 @@ grid_size = [ 2048, 2048, 2048 ]
 # Get the domain decomposition
 domain =  get_domain_block( proc_grid, box_size, grid_size )
 
-Generate Particles ICs
+#Generate Particles ICs
 print 'N Cells: {0}'.format(grid_size[0]*grid_size[1]*grid_size[2])
 fields_particles = ['mass', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
 outputBaseName = '{0}_particles.h5'.format(nSnap)
