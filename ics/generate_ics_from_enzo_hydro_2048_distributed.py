@@ -55,7 +55,7 @@ domain =  get_domain_block( proc_grid, box_size, grid_size )
 print 'N Cells: {0}'.format(grid_size[0]*grid_size[1]*grid_size[2])
 fields_particles = ['mass', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
 outputBaseName = '{0}_particles.h5'.format(nSnap)
-generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=False)
+generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True)
 
 # Generate Hydro Ics
 # data_grid = ds.covering_grid( level=0, left_edge=ds.domain_left_edge, dims=ds.domain_dimensions )

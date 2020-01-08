@@ -36,6 +36,8 @@ def Get_PID_Indices( key_pos, domain, ds, data, outputDir  ):
   current_z = np.float(ds.current_redshift)
   current_a = 1./(current_z + 1)
   pos = data[('all', key_data)].in_units('kpc').v/current_a*h
+  n_total = len(pos)
+  print ' N total: {0}'.format(n_total)
 
   type_int = np.int16
   pid_indxs = ( pos / delta ).astype( type_int )
