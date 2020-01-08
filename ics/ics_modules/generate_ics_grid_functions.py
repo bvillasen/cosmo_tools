@@ -50,6 +50,7 @@ def generate_ics_grid_distributed( fields, domain, proc_grid, data_grid, ds, out
 
   data_fields = {}
   for field in fields:
+    start = time.time()
     print '\nLoading field: {0} '.format(field)
     data = get_yt_field_hydro( field, data_grid, data_fields, current_a, h )
     print ' Writing field: {0}  {1}'.format(field, data.shape)
@@ -66,7 +67,8 @@ def generate_ics_grid_distributed( fields, domain, proc_grid, data_grid, ds, out
           data_local = data[zStr:zEnd, yStr:yEnd, xStr:xEnd ]
           print ' File: {0}   {1}'.format(pId, data_local.shape)
           outFiles[pId].create_dataset( field , data=data_local.astype(np.float64) )
-
+    end = time.time()
+    print( 'Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
   for pId in range( nProc ):
     print 'Saved File: ', outFiles[pId]
     outFiles[pId].close()
