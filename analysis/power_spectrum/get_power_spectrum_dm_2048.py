@@ -64,9 +64,9 @@ n_kSamples = 26
 # if index == 3: snapshots = [ 150, 169 ]
 
 if index == 1: snapshots = [ 5, 30, ]
-if index == 2: snapshots = [ 60, 90 ]
-if index == 3: snapshots = [ 120, 150 ]
-if index == 4: snapshots = [ 169 ]
+if index == 2: snapshots = [ 60,  ]
+if index == 3: snapshots = [ 90, 120 ]
+if index == 4: snapshots = [ 150, 169 ]
 # nSnap = 0
 
 for nSnap in snapshots:
