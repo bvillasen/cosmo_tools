@@ -13,7 +13,7 @@ modulesDir =  currentDirectory + '/ics_modules/'
 toolsDirectory = cosmoDir + 'tools/'
 sys.path.extend( [ toolsDirectory, modulesDir ] )
 # from load_data_enzo_old import load_snapshot_enzo, load_snapshot_enzo_yt
-from generate_ics_particles_functions import generate_ics_particles_distributed, compress_fields_to_single_file
+from generate_ics_particles_functions import generate_ics_particles_distributed, generate_ics_particles_distributed_single_field, compress_fields_to_single_file
 from generate_ics_grid_functions import *
 from domain_decomposition import get_domain_block, get_domain_parent
 from tools import create_directory
@@ -55,7 +55,14 @@ domain =  get_domain_block( proc_grid, box_size, grid_size )
 print 'N Cells: {0}'.format(grid_size[0]*grid_size[1]*grid_size[2])
 fields_particles = ['mass', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
 outputBaseName = '{0}_particles.h5'.format(nSnap)
-generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True)
+# generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True)
+for field in fields_particles:
+  generate_ics_particles_distributed_single_field( field, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=False )
+
+if index == 0:
+  print 'Compressing Fields'
+  compress_fields_to_single_file( fields_particles, domain, proc_grid, outputDir, outputBaseName )
+
 
 # Generate Hydro Ics
 # data_grid = ds.covering_grid( level=0, left_edge=ds.domain_left_edge, dims=ds.domain_dimensions )
