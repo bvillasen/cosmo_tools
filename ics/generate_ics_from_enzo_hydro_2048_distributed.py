@@ -51,25 +51,26 @@ grid_size = [ 2048, 2048, 2048 ]
 # Get the domain decomposition
 domain =  get_domain_block( proc_grid, box_size, grid_size )
 
-# Generate Particles ICs
-# print 'N Cells: {0}'.format(grid_size[0]*grid_size[1]*grid_size[2])
-# fields_particles = ['mass', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
-# outputBaseName = '{0}_particles.h5'.format(nSnap)
-# # generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True)
-# # for field in fields_particles:
-# field = fields_particles[0]
-# generate_ics_particles_distributed_single_field( field, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True )
-# 
-# if index == 0:
-#   print 'Compressing Fields'
-#   compress_fields_to_single_file( fields_particles, domain, proc_grid, outputDir, outputBaseName )
+Generate Particles ICs
+print 'N Cells: {0}'.format(grid_size[0]*grid_size[1]*grid_size[2])
+fields_particles = ['mass', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
+outputBaseName = '{0}_particles.h5'.format(nSnap)
+# generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True)
+get_pid_indices = True
+for field in fields_particles:
+  generate_ics_particles_distributed_single_field( field, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=get_pid_indices )
+  get_pid_indices = False
+  
+if index == 0:
+  print 'Compressing Fields'
+  compress_fields_to_single_file( fields_particles, domain, proc_grid, outputDir, outputBaseName )
 
 
-# Generate Hydro Ics
-data_grid = ds.covering_grid( level=0, left_edge=ds.domain_left_edge, dims=ds.domain_dimensions )
-fields_hydro = [ 'density', 'momentum_x', 'momentum_y', 'momentum_z', 'GasEnergy', 'Energy'] #It has to be in this order
-outputBaseName = '{0}.h5'.format(nSnap)
-generate_ics_grid_distributed( fields_hydro, domain, proc_grid, data_grid, ds, outputDir, outputBaseName, current_a, current_z, h )
+# # Generate Hydro Ics
+# data_grid = ds.covering_grid( level=0, left_edge=ds.domain_left_edge, dims=ds.domain_dimensions )
+# fields_hydro = [ 'density', 'momentum_x', 'momentum_y', 'momentum_z', 'GasEnergy', 'Energy'] #It has to be in this order
+# outputBaseName = '{0}.h5'.format(nSnap)
+# generate_ics_grid_distributed( fields_hydro, domain, proc_grid, data_grid, ds, outputDir, outputBaseName, current_a, current_z, h )
 
 
 
