@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, time
 from os import listdir
 from os.path import isfile, join
 import h5py as h5
