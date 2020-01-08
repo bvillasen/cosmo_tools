@@ -42,7 +42,7 @@ h = ds.hubble_constant
 current_z = np.float(ds.current_redshift)
 current_a = 1./(current_z + 1)
 
-Lbox = 50000
+Lbox = 50000.
 
 proc_grid = [ 8, 8, 8]
 box_size = [ Lbox, Lbox, Lbox ]
@@ -51,18 +51,18 @@ grid_size = [ 2048, 2048, 2048 ]
 # Get the domain decomposition
 domain =  get_domain_block( proc_grid, box_size, grid_size )
 
-# Generate Particles ICs
-fields_particles = ['mass', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
-outputBaseName = '{0}_particles.h5'.format(nSnap)
-if index > 0:
-  field = fields_particles[index-1]
-  print 'N Cells: {0}'.format(grid_size[0]*grid_size[1]*grid_size[2])
-  generate_ics_particles_distributed_single_field( field, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=False )
+# # Generate Particles ICs
+# fields_particles = ['mass', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
+# outputBaseName = '{0}_particles.h5'.format(nSnap)
+# if index > 0:
+#   field = fields_particles[index-1]
+#   print 'N Cells: {0}'.format(grid_size[0]*grid_size[1]*grid_size[2])
+#   generate_ics_particles_distributed_single_field( field, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=False )
 
-if index == 0:
-  print 'Compressing Fields'
-  compress_fields_to_single_file( fields_particles, domain, proc_grid, outputDir, outputBaseName )
-  
+# if index == 0:
+#   print 'Compressing Fields'
+#   compress_fields_to_single_file( fields_particles, domain, proc_grid, outputDir, outputBaseName )
+# 
 # Generate Hydro Ics
 data_grid = ds.covering_grid( level=0, left_edge=ds.domain_left_edge, dims=ds.domain_dimensions )
 fields_hydro = [ 'density', 'momentum_x', 'momentum_y', 'momentum_z', 'GasEnergy', 'Energy'] #It has to be in this order
