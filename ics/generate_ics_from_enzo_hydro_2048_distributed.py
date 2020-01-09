@@ -57,11 +57,11 @@ print 'N Cells: {0}'.format(grid_size[0]*grid_size[1]*grid_size[2])
 fields_particles = ['pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
 outputBaseName = '{0}_particles.h5'.format(nSnap)
 # generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True)
-get_pid_indices = False
-for field in fields_particles:
-  generate_ics_particles_distributed_single_field( field, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=get_pid_indices )
-  get_pid_indices = False
-  
+# get_pid_indices = False
+# for field in fields_particles:
+#   generate_ics_particles_distributed_single_field( field, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=get_pid_indices )
+#   get_pid_indices = False
+# 
 if index == 0:
   print 'Compressing Fields'
   compress_fields_to_single_file( fields_particles, domain, proc_grid, outputDir, outputBaseName )
