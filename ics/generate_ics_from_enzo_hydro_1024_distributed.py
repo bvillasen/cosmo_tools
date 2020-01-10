@@ -28,7 +28,7 @@ from tools import create_directory
 dataDir = '/data/groups/comp-astro/bruno/'
 enzoDir = dataDir + 'cosmo_sims/enzo/1024_hydro_50Mpc/ics/'
 inDir = enzoDir
-outputDir = dataDir + 'cosmo_sims/1024_cool_uv_50Mpc/ics_48/'
+outputDir = dataDir + 'cosmo_sims/1024_hydro_50Mpc/ics_32/'
 create_directory( outputDir )
 
 nSnap = 0
@@ -44,7 +44,7 @@ current_a = 1./(current_z + 1)
 
 Lbox = 50000.0
 
-proc_grid = [ 4, 4, 3]
+proc_grid = [ 4, 4, 2]
 box_size = [ Lbox, Lbox, Lbox ]
 grid_size = [ 1024, 1024, 1024 ]
 
@@ -54,13 +54,13 @@ domain =  get_domain_block( proc_grid, box_size, grid_size )
 # Generate Particles ICs
 fields_particles = ['mass', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
 outputBaseName = '{0}_particles.h5'.format(nSnap)
-generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=False)
+generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True)
 
 
 # Get Hydro ICs
-data_grid = ds.covering_grid( level=0, left_edge=ds.domain_left_edge, dims=ds.domain_dimensions )
-fields_hydro = [ 'density', 'momentum_x', 'momentum_y', 'momentum_z', 'GasEnergy', 'Energy'] #It has to be in this order
-outputBaseName = '{0}.h5'.format(nSnap)
-generate_ics_grid_distributed( fields_hydro, domain, proc_grid, data_grid, ds, outputDir, outputBaseName, current_a, current_z, h )
+# data_grid = ds.covering_grid( level=0, left_edge=ds.domain_left_edge, dims=ds.domain_dimensions )
+# fields_hydro = [ 'density', 'momentum_x', 'momentum_y', 'momentum_z', 'GasEnergy', 'Energy'] #It has to be in this order
+# outputBaseName = '{0}.h5'.format(nSnap)
+# generate_ics_grid_distributed( fields_hydro, domain, proc_grid, data_grid, ds, outputDir, outputBaseName, current_a, current_z, h )
 
 

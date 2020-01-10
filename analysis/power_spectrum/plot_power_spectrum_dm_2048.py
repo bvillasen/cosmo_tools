@@ -10,12 +10,9 @@ dataDir =  cosmo_dir + 'data/'
 figuresDir = cosmo_dir + 'figures/'
 subDirectories = [x[0] for x in os.walk(cosmo_dir)]
 sys.path.extend(subDirectories)
+from load_data_cholla import load_snapshot_data
 from tools import *
 
-from mpi4py import MPI
-comm = MPI.COMM_WORLD
-rank = comm.Get_rank()
-nprocs = comm.Get_size()
 
 import matplotlib
 # 
@@ -29,14 +26,14 @@ dataDir = '/data/groups/comp-astro/bruno/'
 # dataDir = '/home/bruno/Desktop/data/'
 # dataDir = '/raid/bruno/data/'
 
-
+out_file_name = 'power_spectrum_dm_2048.png'
 
 Lbox = 50.0   #Mpc/h
 nPoints = 2048
 
 chollaDir = dataDir + 'cosmo_sims/{0}_dm_50Mpc/snapshots/'.format(nPoints)
-inDir = dataDir + 'cosmo_sims/{0}_dm_50Mpc/power_spectrum/fftw_data/'.format(nPoints)
-outDir = dataDir + 'cosmo_sims/{0}_dm_50Mpc/power_spectrum/'.format(nPoints)
+inDir = dataDir + 'cosmo_sims/{0}_dm_50Mpc/power_spectrum/'.format(nPoints)
+outDir = dataDir + 'cosmo_sims/{0}_dm_50Mpc/power_spectrum/figures/'.format(nPoints)
 create_directory( outDir )
 
 # set simulation volume dimentions
@@ -49,37 +46,45 @@ Lz = Lbox
 dx, dy, dz = Lx/(nx), Ly/(ny), Lz/(nz )
 n_kSamples = 26
 
-# nSnap = 0
+box_text = {}
+box_text[0] = {}
+box_text[0]['text'] = r'Dark Matter Power Spectrum 2048$^3$ Simulation'
+box_text[0]['pos'] = (0.96, 0.93)
+
+
+n_plots = 1
+fig = plt.figure(0)
+fig.set_size_inches(10*n_plots,10)
+fig.clf()
+ax = plt.gca()
+
+nSnap = 0
 snapshots = [ 0, 5, 30, 60, 90, 120, 150, 169 ]
-# for nSnap in snapshots:
+snapshots.reverse()
+for nSnap in snapshots:
 
-nSnap = snapshots[rank]
+  #Load the power spectrum data
+  data_cholla = load_snapshot_data( nSnap, chollaDir, hydro=False )
+  current_z = data_cholla['current_z']
+  data = np.loadtxt( inDir + 'power_spectrum_{0}.dat'.format(nSnap))
+  k_vals = data[0]
+  ps = data[1]
 
-print 'Loading K_mag'
-filename = inDir + 'k_mag.h5'
-file = h5.File( filename, 'r' )
-K_mag = file['k_mag'][...].astype(np.float32)
-K_mag = K_mag.reshape(K_mag.size)
-k_min = (K_mag[np.where(K_mag>0)]).min() * 0.99
-k_max = K_mag.max()*0.99
+  label = 'z = {0:.1f}'.format(current_z)
+  ax.plot( k_vals, ps,  linewidth=2, label=label, )
 
 
-filename = inDir + 'fft_amp_{0}.h5'.format(nSnap)
-file = h5.File( filename, 'r' )
-current_z = file.attrs['current_z'] 
-print 'nSnap: {0}   current_z:{1}'.format(nSnap, current_z)
-delta_k2 = file['fft_amp'][...]
-delta_k2 = delta_k2.reshape(delta_k2.size)
+ax.set_xscale('log')
+ax.set_yscale('log')
+ax.set_xlabel( r'$k \, \, \, \,[h \mathrm{Mpc}^{-1}]$', fontsize=17)
+ax.set_ylabel( r'$P(k)$   $[h^3$Mpc$^{-3}]$', fontsize=17)
 
-nBins = n_kSamples
-intervals = np.logspace(np.log10(k_min), np.log10(k_max), nBins+1)
-power, bin_edges= np.histogram( K_mag, bins=intervals, weights=delta_k2 )
-n_in_bin, bin_edges = np.histogram( K_mag, bins=intervals )
-n_in_bin = n_in_bin.astype('float')
-bin_centers = np.sqrt(bin_edges[1:] * bin_edges[:-1])
-power = power / n_in_bin / Lbox**3
+ax.legend( loc=3, fontsize=12, frameon=False)
 
-data = np.array([ bin_centers, power])
-outfile_name = outDir+'power_spectrum_{0}.dat'.format(nSnap)
-np.savetxt( outfile_name, data)
-print 'Saved File: ', outfile_name
+text = box_text[0]
+ax.text(text['pos'][0], text['pos'][1], text['text'], fontsize=17, horizontalalignment='right', verticalalignment='center', transform=ax.transAxes )
+
+
+fileName = outDir + out_file_name
+fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=300)
+print 'Saved Image: ', fileName
