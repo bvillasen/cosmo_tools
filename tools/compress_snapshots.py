@@ -63,7 +63,7 @@ print( "Number of files per snapshot: {0}".format(nBoxes) )
 
 #Set wich snapshots to compress
 snapshots_to_compress = snapshots_all
-n_per_index = 1
+n_per_index = 10
 snapshots_to_compress = snapshots_to_compress[index*n_per_index:(index+1)*n_per_index]
 n_to_compress = len(snapshots_to_compress)
 
@@ -83,7 +83,7 @@ print( ' {0}: {1}'.format( index, snapshots_to_compress ) )
 #[ density, momentum_x, momentum_y, momentum_z, Enegy, GasEnergy ]
 #[ HI_density, HI_density, HeI_density, HeII_density, HeIII_density, e_density, metal_density, temperature, potential ]
 # hydro_fields = 'all'
-hydro_fields = ['density' , 'HI_density', 'temperature']
+hydro_fields = ['density' , 'momentum_x', 'HI_density', 'temperature']
 print( "\nHydro fields: {0}".format(hydro_fields))
 
 #available Particles Fields:
