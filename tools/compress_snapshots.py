@@ -23,8 +23,8 @@ dataDir = '/gpfs/alpine/proj-shared/ast149/'
 inDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/output_files_hm12/'
 outDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/snapshots_hm12/'
 
-hydro = False
-particles = True
+hydro = True
+particles = False
 cosmo = True
 
 def split_name( file_name, part=False):
