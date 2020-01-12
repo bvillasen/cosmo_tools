@@ -25,7 +25,6 @@ outDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/snapshots_hm12/'
 
 hydro = True
 particles = False
-cosmo = True
 
 def split_name( file_name, part=False):
   nSnapshot, name, nBox = file_name.split('.')
@@ -104,7 +103,7 @@ for nSnap in snapshots_to_compress:
   if hydro:
     out_base_name = 'grid_' 
     compress_grid( nSnap, nBoxes, name_base, out_base_name, inDir, outDir, hydro_fields,  precision=precision )
-  if cosmo or particles:
+  if particles:
     out_base_name = 'particles_' 
     compress_particles( nSnap, nBoxes, name_base, out_base_name, inDir, outDir, particles_fields, precision=precision )
   end = time.time()
