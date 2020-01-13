@@ -109,5 +109,5 @@ for nSnap in snapshots_to_compress:
   end = time.time()
   print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
   
-  # exit()
+  exit()
 # 
