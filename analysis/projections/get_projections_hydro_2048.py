@@ -82,6 +82,7 @@ for type in fields.keys():
   group_type = outFile.create_group( type )
   
   for field in fields[type]:
+    pass
 
     # data_weight = data['density'][proj_offset:proj_offset+proj_depth, :, :]
     # data_field = data[field][proj_offset:proj_offset+proj_depth, :, :]
