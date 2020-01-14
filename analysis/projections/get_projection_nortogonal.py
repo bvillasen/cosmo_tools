@@ -1,78 +1,68 @@
-os
+import sys, os
 import numpy as np
 import matplotlib.pyplot as plt
 import h5py as h5
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib.transforms as tfrms
-
 import matplotlib
-# set some global options
-# matplotlib.font_manager.findSystemFonts(fontpaths=['/home/bruno/Downloads'], fontext='ttf')
-# matplotlib.rcParams['font.sans-serif'] = "Helvetica"
-# matplotlib.rcParams['font.family'] = "sans-serif"
-
 
 cosmo_dir = os.path.dirname(os.path.dirname(os.getcwd())) + '/'
 dataDir = cosmo_dir + 'data/'
 subDirectories = [x[0] for x in os.walk(cosmo_dir)]
 sys.path.extend(subDirectories)
-from load_data_cholla import load_snapshot_data, load_snapshot_data_particles
+from load_data_cholla import load_snapshot_data, load_snapshot_data_distributed
 from tools import *
 
 
+cosmo_dir = os.path.dirname(os.path.dirname(os.getcwd())) + '/'
+subDirectories = [x[0] for x in os.walk(cosmo_dir)]
+sys.path.extend(subDirectories)
 
-from mpi4py import MPI
+from domain_decomposition import get_domain_block
 
-comm = MPI.COMM_WORLD
-rank = comm.Get_rank()
-nprocs = comm.Get_size()
-nSnap = rank
-# 
-dataDir = '/gpfs/alpine/proj-shared/ast149/'
+
+
+
+
+
+
+
 # dataDir = '/data/groups/comp-astro/bruno/'
-# dataDir = '/home/bruno/Desktop/data/'
-# dataDir = '/raid/bruno/data/'
-
-
+dataDir = '/gpfs/alpine/proj-shared/ast149/'
 
 nPoints = 2048
-Lbox = 50000.
 
+inDir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/output_files_hm12/'.format(nPoints)
 chollaDir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/snapshots_hm12/'.format(nPoints)
-outDir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/snapshots_hm12/projections/'.format(nPoints)
-create_directory( outDir )
-
-nx = nPoints
-ny = nPoints
-nz = nPoints
-dv = (Lbox/nPoints)**3
-
- 
-proj_offset = 0
-proj_depth = 512
-
-field = 'density'
- 
-snapshots = np.arange(0,170)
-n_snapshots = len(snapshots)
-
-n_proc_snapshots = (n_snapshots-1)/nprocs + 1
-proc_snapshots = np.array([ rank + i*nprocs for i in range(n_proc_snapshots) ])
-proc_snapshots = proc_snapshots[ proc_snapshots < n_snapshots ]
-if len(proc_snapshots) == 0: exit()
-
-print "{0}: {1}".format( rank, proc_snapshots)
-
-fields = {'dm':['density'], 'gas':['density, HI_density, temperature'] }
 
 nSnap = 0
-# 
-# for nSnap in proc_snapshots:
 
+
+
+Lbox = 50000
+proc_grid = [ 8, 8, 8]
+box_size = [ Lbox, Lbox, Lbox ]
+grid_size = [ 2048, 2048, 2048 ]
+
+domain = get_domain_block( proc_grid, box_size, grid_size )
+
+subgrid_x = [ 257, 512 ]
+subgrid_y = [ 0, 512 ]
+subgrid_z = [ 0, 512 ]
+subgrid = [ subgrid_x, subgrid_y, subgrid_z ]
+precision = np.float64
+
+data_type = 'particles'
+
+field = 'density'
+
+
+data = load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, domain, precision, proc_grid )
+
+# Load Full snapshot 
 data_cholla = load_snapshot_data( nSnap, chollaDir, hydro=False, cool=False )
 current_z = data_cholla['current_z']
+data_1 = data_cholla['dm']['density'][subgrid_x[0]:subgrid_x[1], subgrid_y[0]:subgrid_y[1], subgrid_z[0]:subgrid_z[1] ]
 
-outputFile_name = outDir + 'projections_{0:03}.h5'.format( nSnap )
-outFile = h5.File( outputFile_name, 'w' )
-
-outFile.attrs['current_z'] = current_z
+diff = data_1- data
+print diff.max(), diff.min()

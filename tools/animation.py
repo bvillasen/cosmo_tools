@@ -18,7 +18,8 @@ eta_2  = .050
 # inDir = dev_dir + 'figures/spectra/'
 # inDir = dev_dir + 'figures/sphere_collapse/data_vl_hllc_ppmp/'
 # inDir = dev_dir + 'cosmo_tools/figures/phase_diagram/uvb_comparison/'
-inDir = dev_dir + 'cosmo_tools/figures/projections/2048_dm_50Mpc/'
+# inDir = dev_dir + 'cosmo_tools/figures/projections/2048_dm_50Mpc/'
+inDir = '/home/bruno/Desktop/turbulence/'
 
 # inDir = '/home/bruno/Desktop/namrata/'
 # inDir = '/home/bruno/Desktop/Dropbox/Developer/cooling_tools/figures/uvHM_metals/'
@@ -37,21 +38,23 @@ outDir = '/home/bruno/Desktop/'
 # image_name = 'spectra'
 # image_name = 'projection'
 # image_name = 'collapse'
-image_name = 'projection'
+# image_name = 'projection'
+image_name = 'image'
 
 # out_anim_name = 'chemistry_128_difference'.format(eta_2)
 # out_anim_name = 'phase_diagram_256_cool_grav4'
 # out_anim_name = 'zeldovich_eta0.01_beta0.05_grav4'
-out_anim_name = 'dm_projection_50Mpc_2048'
+# out_anim_name = 'dm_projection_50Mpc_2048'
 # out_anim_name = 'spec_animation'
 # out_anim_name = 'spherical_collapse'
 # out_anim_name = 'phase_diagram_uvb_comparison'
+out_anim_name = 'quantum_turbulence_2'
 
-cmd = 'ffmpeg -framerate 12  '
+cmd = 'ffmpeg -framerate 16  '
 # cmd += ' -start_number 45'
 cmd += ' -i {0}{1}_%d.png '.format( inDir, image_name )
-# cmd += '-pix_fmt yuv420p '
-cmd += ' -vcodec libx264 '
+cmd += '-pix_fmt yuv420p '
+# cmd += ' -vcodec libx264 '
 # cmd += '-b 50000k '
 cmd += '{0}{1}.mp4'.format( outDir, out_anim_name )
 cmd += ' -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2"'
