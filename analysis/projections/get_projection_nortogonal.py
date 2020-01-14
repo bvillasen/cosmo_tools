@@ -46,9 +46,9 @@ grid_size = [ 2048, 2048, 2048 ]
 
 domain = get_domain_block( proc_grid, box_size, grid_size )
 
-subgrid_x = [ 257, 512 ]
-subgrid_y = [ 0, 512 ]
-subgrid_z = [ 0, 512 ]
+subgrid_x = [ 17, 512 ]
+subgrid_y = [ 19, 512 ]
+subgrid_z = [ 267, 512 ]
 subgrid = [ subgrid_x, subgrid_y, subgrid_z ]
 precision = np.float64
 
@@ -64,5 +64,5 @@ data_cholla = load_snapshot_data( nSnap, chollaDir, hydro=False, cool=False )
 current_z = data_cholla['current_z']
 data_1 = data_cholla['dm']['density'][subgrid_x[0]:subgrid_x[1], subgrid_y[0]:subgrid_y[1], subgrid_z[0]:subgrid_z[1] ]
 
-diff = data_1- data
+diff = data_1 - data
 print diff.max(), diff.min()
