@@ -44,6 +44,7 @@ def load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, dom
   # Find the ids to load 
   ids_to_load = select_ids_to_load( subgrid, domain, proc_grid )
 
+  print "Loading Snapshot: {0}".format(nSnap)
   #Find the boundaries of the volume to load
   domains = { 'x':{'l':[], 'r':[]}, 'y':{'l':[], 'r':[]}, 'z':{'l':[], 'r':[]}, }
   for id in ids_to_load:
@@ -67,8 +68,8 @@ def load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, dom
   data_all = np.zeros( dims_all, dtype=precision )
 
   added_header = False
-
-  for nBox in ids_to_load:
+  n_to_load = len(ids_to_load)
+  for i, nBox in enumerate(ids_to_load):
     name_base = 'h5'
     if data_type == 'particles': inFileName = '{0}_particles.{1}.{2}'.format(nSnap, name_base, nBox)
     if data_type == 'hydro': inFileName = '{0}.{1}.{2}'.format(nSnap, name_base, nBox)
@@ -79,11 +80,16 @@ def load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, dom
       for h_key in head.keys():
         if h_key in ['dims', 'dims_local', 'offset', 'bounds', 'domain', 'dx', ]: continue
         data_out[h_key] = head[h_key][0]
+        if h_key == 'current_z': print ' current_z: {0}'.format( data_out[h_key])
       added_header = True
+      
+    terminalString  = '\r Loading File: {0}/{1}'.format(i, n_to_load)
+    sys.stdout. write(terminalString)
+    sys.stdout.flush() 
 
     procStart_x, procStart_y, procStart_z = head['offset']
     procEnd_x, procEnd_y, procEnd_z = head['offset'] + head['dims_local']
-    print( '    Loading File: {0}   [ {1} {2} ]  [ {3} {4} ]  [ {5} {6} ]'.format(nBox, procStart_x, procEnd_x, procStart_y, procEnd_y, procStart_z, procEnd_z) )
+    # print( '    Loading File: {0}   [ {1} {2} ]  [ {3} {4} ]  [ {5} {6} ]'.format(nBox, procStart_x, procEnd_x, procStart_y, procEnd_y, procStart_z, procEnd_z) )
     # Substract the offsets
     procStart_x -= boundaries['x'][0]
     procEnd_x   -= boundaries['x'][0]
