@@ -62,7 +62,7 @@ dataDir = '/data/groups/comp-astro/bruno/'
 nPoints = 2048
 
 # size_front = 5120
-size_front = 2048 * 5
+size_front = 2048 
 size_back = 2048
 
 inDir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/output_files_hm12/'.format(nPoints)
@@ -165,7 +165,9 @@ for indx_start in index_start_range:
   
   
   
-  size_output = np.array([2160, 3840 ])
+  # size_output = np.array([2160, 3840 ])
+  size_output = np.array([2048, 2048 ])
+  
   # projection = np.zeros( size_output )
   projection_color = np.zeros( size_output )
   projection_alpha = np.zeros( size_output )
@@ -178,7 +180,8 @@ for indx_start in index_start_range:
     size_slice = size_all[indx_x]
   
   
-    slice_rescaled = get_rescaled_image( slice_original, size_slice, size_output )
+    # slice_rescaled = get_rescaled_image( slice_original, size_slice, size_output )
+    slice_rescaled = slice_original
     
     transparency_factor = 1
     transparency_factor = get_transparency_factor_linear( indx_x, 0.0, 1.0, 0.0, 0, 32, 128, n_depth)

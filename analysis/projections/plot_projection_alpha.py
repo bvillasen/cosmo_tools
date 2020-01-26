@@ -54,13 +54,13 @@ dataDir = '/data/groups/comp-astro/bruno/'
 # dataDir = '/gpfs/alpine/proj-shared/ast149/'
 
 nPoints = 2048
-size_front = 2048 * 5
+size_front = 2048 
 
 inDir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/output_files_hm12/'.format(nPoints)
 chollaDir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/snapshots_hm12/'.format(nPoints)
 input_dir = '/home/brvillas/cosmo_sims/2048_hydro_50Mpc/projections_hm12/projections_{1}_alpha/'.format(nPoints, size_front)
 output_dir = '/home/brvillas/cosmo_sims/2048_hydro_50Mpc/projections_hm12/projections_{1}_alpha/figures/'.format(nPoints, size_front)
-
+create_directory( output_dir )
 
 nSnap = 169
 
@@ -92,7 +92,7 @@ else:
 
 # dataFiles = [f for f in listdir(input_dir) if ( isfile(join(input_dir, f)) and (f.find('projection') == 0 )  ) ]
 # n_index_total = len(dataFiles)
-n_index_total = 150 * 1
+n_index_total = 2048
 n_proc_snaps= (n_index_total-1) // nprocs + 1
 index_start_range = np.array([ rank + i*nprocs for i in range(n_proc_snaps) ])
 index_start_range = index_start_range[ index_start_range < n_index_total ]
@@ -134,8 +134,8 @@ if get_statistics:
 
 
 
-normalize = 'global'
-# normalize = 'local'
+# normalize = 'global'
+normalize = 'local'
 
 
 # Load statistics
@@ -146,6 +146,9 @@ if normalize == 'global':
 
 
 if not use_mpi: index_start_range = [269]
+
+save_background = True
+
 
 for indx_start in index_start_range:
 
@@ -202,6 +205,7 @@ for indx_start in index_start_range:
 
   #Set Transparency 
   rgba_data[:,:,3] = alpha_values
+
   #Make Image brighter 
   rgba_data[:,:,:3] *= 1.3
   rgba_data[:,:,:3][ rgba_data[:,:,:3] > 1.0 ] = 1.0 
@@ -218,7 +222,22 @@ for indx_start in index_start_range:
   out_file_name = output_dir + 'proj_alpha_{0}.png'.format( indx_start )
   img_alpha.save( out_file_name )
   # print "Saved Image: ", out_file_name 
+  
+  if rank == 0 and save_background:
+    #Make Black Image
+    colorMap = 'inferno'
+    norm = cl.Normalize(vmin=0, vmax=1, clip=False)
+    cmap = cm.ScalarMappable( norm=norm, cmap=colorMap )
+    data_black = np.zeros_like( data_color )
+    rgba_black = cmap.to_rgba( data_black )
+    rgba_black_bytes = to_bytes( rgba_black )
+    img_black = Image.fromarray( rgba_black_bytes )
 
+    out_file_name = output_dir + 'img_background.png'.format(indx_start)
+    img_black.save( out_file_name )
+    print "Saved Image: ", out_file_name
+  save_background = False 
+  if use_mpi: comm.Barrier()
 
 
   #Convine Image Using ImageMagick
@@ -241,20 +260,12 @@ for indx_start in index_start_range:
 
 
 
-# colorMap = 'inferno'
-# #Make Black Image
-# norm = cl.Normalize(vmin=0, vmax=1, clip=False)
-# cmap = cm.ScalarMappable( norm=norm, cmap=colorMap )
-# data_black = np.zeros_like( data_color )
-# rgba_black = cmap.to_rgba( data_black )
-# rgba_black_bytes = to_bytes( rgba_black )
-# img_black = Image.fromarray( rgba_black_bytes )
 # 
-# img_combined = Image.alpha_composite(img_black, img_alpha)
-# out_file_name = output_dir + 'figures/proj_{0}.png'.format(indx_start)
-# img_combined.save( out_file_name )
-# print "Saved Image: ", out_file_name 
-# 
+img_combined = Image.alpha_composite(img_black, img_alpha)
+out_file_name = output_dir + 'figures/proj_{0}.png'.format(indx_start)
+img_combined.save( out_file_name )
+print "Saved Image: ", out_file_name 
+
 
 
 

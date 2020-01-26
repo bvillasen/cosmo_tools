@@ -12,7 +12,7 @@ import time
 # rank = comm.Get_rank()
 # nprocs = comm.Get_size()
 
-if len(sys.argv) == 0: index = 0
+if len(sys.argv) == 1: index = 0
 else: index = int(sys.argv[1])
 print 'Index: ', index
 
@@ -20,11 +20,11 @@ print 'Index: ', index
 
 # dataDir = '/data/groups/comp-astro/bruno/'
 dataDir = '/gpfs/alpine/proj-shared/ast149/'
-inDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/output_files_hm12/'
-outDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/snapshots_hm12/'
+inDir = dataDir + 'cosmo_sims/1024_hydro_50Mpc/output_files_pchw18/'
+outDir = dataDir + 'cosmo_sims/1024_hydro_50Mpc/snapshots_pchw18/'
 
-hydro = True
-particles = False
+hydro = False
+particles = True
 
 def split_name( file_name, part=False):
   nSnapshot, name, nBox = file_name.split('.')
@@ -92,8 +92,8 @@ particles_fields = ['density', ]
 print( "\nParticles fields: {0}".format(particles_fields))
 
 
-precision = np.float64
-# precision = np.float32
+# precision = np.float64
+precision = np.float32
 # precision = np.float16
 print( "\nPrecision: {0}".format( precision ))
 

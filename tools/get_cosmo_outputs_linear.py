@@ -2,7 +2,7 @@ import sys, os, time
 import numpy as np
 import matplotlib.pyplot as plt
 
-n_total = 200
+n_total = 400
 
 z_start = 100.
 z_end = 0.
@@ -12,7 +12,7 @@ a_end = 1./(z_end+1)
 
 a_vals = np.linspace( a_start, a_end, n_total)
 
-np.savetxt( 'outputs_cosmo_aLin_200.txt', a_vals)
+np.savetxt( 'outputs_cosmo_aLin_400.txt', a_vals)
 
 # a_str = ''
 # for a in a_vals:
