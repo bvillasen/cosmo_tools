@@ -2,6 +2,53 @@ import os, sys
 from os import listdir
 from os.path import isfile, join
 import numpy as np
+import h5py as h5
+
+
+
+
+def get_field_min_max( nSnap, inDir, outDir, name_base, nBoxes, type, fields, print_out=True ):
+  
+
+  out_file_name = 'statistics_{0}_{1}.txt'.format( type, nSnap )
+  outFile = file( outDir + out_file_name, 'w' )
+
+
+  for field in fields:
+  
+    print " nSnap: {0}    Field:{1}".format( nSnap, fields )
+
+    min_all, max_all = np.Inf, -np.Inf
+
+    for nBox in range( nBoxes ):
+      inFileName = '{0}_particles.{1}.{2}'.format(nSnap, name_base, nBox)
+      inFile = h5.File( inDir + inFileName, 'r')
+      head = inFile.attrs
+      dims_all = head['dims']
+      dims_local = head['dims_local']
+      nz, ny, nx = dims_all
+      keys_all = inFile.keys()
+
+      data_set = inFile[field][...]
+      max_box = data_set.max()
+      min_box = data_set.min()
+
+      min_all = min( min_box, min_all )
+      max_all = max( max_box, max_all )
+
+      line = ' Field: {0},  box: {1}/{2}   min:{3}/{4}   max:{5}/{6}'.format( field, nBox, nBoxes, min_box, min_all, max_box, max_all)
+      if print_out: print_line_flush(line)
+    line = '{0} {1} {2}\n'.format( field, min_all, max_all)
+    outFile.write(line)
+  outFile.close()
+  print "Saved File: ", outDir + out_file_name
+  # 
+
+def print_line_flush( terminalString ):
+  terminalString = '\r' + terminalString
+  sys.stdout. write(terminalString)
+  sys.stdout.flush() 
+
 
 
 def create_directory( dir ):

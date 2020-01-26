@@ -28,14 +28,32 @@ sys.path.extend(subDirectories)
 from domain_decomposition import get_domain_block
 from projection_functions import rescale_image, get_rescaled_image
 
+def get_distance_factor( index, index_front, index_middle, index_b, middle_point):
+  index_rescaled = (index) - index_middle
+  middle_point = np.float(middle_point)
+  slope = ( middle_point ) / index_middle - index_front
+  if index_rescaled <= index_middle: index_rescaled = index_front + slope*index
+  else: index_rescaled = index - index_middle + middle_point 
+  index_rescaled = np.float( index_rescaled)
+  if index_rescaled < 1: index_rescaled = 1   
+  return index_rescaled**(-0.8)
   
+def get_distance_factor_linear( index, index_front, index_b, value_back):
+  value_front = 1.0
+  slope = ( value_back - value_front ) / (index_b - index_front)
+  distance_factor = value_front + slope * index
+  return distance_factor  
 
-
-if len(sys.argv) == 1: index = 0
-else: index = int(sys.argv[1])
-print 'Index: ', index
-
-
+def get_transparency_factor_linear( indx,   val_f, val_m, val_b, indx_f, indx_m0, indx_m1, indx_b, ):
+  if indx <= indx_m0:
+    slope = float(val_m - val_f) / ( indx_m0 - indx_f )
+    factor = val_f + slope*indx
+  elif indx <= indx_m1:
+    factor = val_m
+  else:
+    slope = float(val_b - val_m) / ( indx_b - indx_m1 )
+    factor = val_m + slope* (indx - indx_m1)
+  return factor
 
 
 dataDir = '/data/groups/comp-astro/bruno/'
@@ -44,20 +62,23 @@ dataDir = '/data/groups/comp-astro/bruno/'
 nPoints = 2048
 
 # size_front = 5120
-size_front = 2048 * 4
+size_front = 2048 * 5
 size_back = 2048
 
 inDir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/output_files_hm12/'.format(nPoints)
 chollaDir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/snapshots_hm12/'.format(nPoints)
-output_dir = '/home/brvillas/cosmo_sims/2048_hydro_50Mpc/projections_hm12/projections_{1}_linear/'.format(nPoints,size_front)
+output_dir = '/home/brvillas/cosmo_sims/2048_hydro_50Mpc/projections_hm12/projections_{1}_alpha/'.format(nPoints,size_front)
 
+use_mpi = True
 
-from mpi4py import MPI
-comm = MPI.COMM_WORLD
-rank = comm.Get_rank()
-nprocs = comm.Get_size()
-# rank = 0
-# nprocs = 1
+if use_mpi :
+  from mpi4py import MPI
+  comm = MPI.COMM_WORLD
+  rank = comm.Get_rank()
+  nprocs = comm.Get_size()
+else:
+  rank = 0
+  nprocs = 1
 
 
 
@@ -91,10 +112,11 @@ index_start_range = index_start_range[ index_start_range < n_index_total ]
 if len(index_start_range) == 0: exit()
 print 'Generating: {0} {1}\n'.format( rank, index_start_range) 
 
-# indx_start = 0
-# indx_start = 1790
-for indx_start in index_start_range: 
 
+if not use_mpi:
+  index_start_range = [0]
+
+for indx_start in index_start_range: 
   print "Index: {0}".format(indx_start)
 
 
@@ -130,73 +152,58 @@ for indx_start in index_start_range:
   else:
     data_snapshot = load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, domain, precision, proc_grid,  show_progess=show_progess )
 
-
-
-
-
-
-
   current_z = data_snapshot['current_z']
   data = data_snapshot[data_type][field]
-  
-  
   if show_progess: print ''
   
   
+  
+  
   size_original = ( nPoints, nPoints )
-  
-  
   size_all = np.linspace( size_front, size_back, n_depth).astype(np.int)
   
   
+  
+  
   size_output = np.array([2160, 3840 ])
-  
-  projection = np.zeros( size_output )
-  projection_back = np.zeros( size_output )
-  
-  def get_distance_factor( index, index_front, index_middle, index_b, middle_point):
-    index_rescaled = (index) - index_middle
-    middle_point = np.float(middle_point)
-    slope = ( middle_point ) / index_middle - index_front
-    if index_rescaled <= index_middle: index_rescaled = index_front + slope*index
-    else: index_rescaled = index - index_middle + middle_point 
-    index_rescaled = np.float( index_rescaled)
-    if index_rescaled < 1: index_rescaled = 1   
-    return index_rescaled**(-0.8)
+  # projection = np.zeros( size_output )
+  projection_color = np.zeros( size_output )
+  projection_alpha = np.zeros( size_output )
     
-  def get_distance_factor_linear( index, index_front, index_b, value_back):
-    value_front = 1.0
-    slope = ( value_back - value_front ) / (index_b - index_front)
-    distance_factor = value_front + slope * index
-    return distance_factor  
-  
-  
   distance_factor_list = []
   for indx_x in range(n_depth):
   
   
     slice_original = data[indx_x]
-  
     size_slice = size_all[indx_x]
   
+  
     slice_rescaled = get_rescaled_image( slice_original, size_slice, size_output )
-    # slice_rescaled[ slice_rescaled<1e-8] = 1e-8
-  
-  
-  
-    # distance_factor = (indx_x+1)**(-1)
-    # distance_factor = get_distance_factor( indx_x, 0, 64, 512, 32 )
-    distance_factor = get_distance_factor_linear( indx_x, 0, 512, 1e-4 )
     
-    slice_rescaled *= distance_factor
-    projection += slice_rescaled
+    transparency_factor = 1
+    transparency_factor = get_transparency_factor_linear( indx_x, 0.0, 1.0, 0.0, 0, 32, 128, n_depth)
+    slice_masked = slice_rescaled.copy()
+    min_dens_mask = 1
+    slice_masked[slice_masked<min_dens_mask] = min_dens_mask
+    # slice_rescaled_log = np.log10(slice_rescaled)
+    # slice_rescaled_log[slice_rescaled_log < 0] = 0     
+    projection_alpha +=  np.log10(slice_masked) * transparency_factor
+    # projection_alpha += slice_rescaled * transparency_factor
+    
+    
+    # distance_factor = (indx_x+1)**(-1)
+    # distance_factor = get_distance_factor_linear( indx_x, 0, 512, 1e-4 )
+    # distance_factor = get_distance_factor( indx_x, 0, 64, n_depth, 16 )
+    distance_factor = 1
+    projection_color += slice_rescaled * distance_factor
+    
+    
   
     distance_factor_list.append(distance_factor)
   
-    if indx_x > n_depth - 64: projection_back += slice_rescaled 
-  
+    
     if show_progess:
-      terminalString  = '\r Slice: {0}/{1}   distance_factor:{2}'.format(indx_x, n_depth, distance_factor )
+      terminalString  = '\r Slice: {0}/{1}   distance_factor:{2}  transparecy:{3}'.format(indx_x, n_depth, distance_factor, transparency_factor )
       sys.stdout. write(terminalString)
       sys.stdout.flush() 
   
@@ -206,19 +213,31 @@ for indx_start in index_start_range:
   out_file = h5.File( out_file_name, 'w')
   out_file.attrs['current_z'] = current_z
   group_type = out_file.create_group( data_type )
-  data_set = group_type.create_dataset( field, data=projection )
-  data_set.attrs['max'] = projection.max()
-  data_set.attrs['min'] = projection.min()
-  data_set = group_type.create_dataset( field+'back', data=projection_back )
+  
+   
+  group_field = group_type.create_group( field )
+  
+  # data_set = group_field.create_dataset( 'projection', data=projection )
+  # data_set.attrs['max'] = projection.max()
+  # data_set.attrs['min'] = projection.min()
+  # 
+  data_set = group_field.create_dataset( 'color', data= projection_color )
+  data_set.attrs['max'] = projection_color.max()
+  data_set.attrs['min'] = projection_color.min()
+  
+  data_set = group_field.create_dataset( 'alpha', data= projection_alpha )
+  data_set.attrs['max'] = projection_alpha.max()
+  data_set.attrs['min'] = projection_alpha.min()
+  
   out_file.close()
   print "Saved File: {0}\n".format( out_file_name )
   
   
   
-  if rank == 0:
-    distance_factor_list = np.array( distance_factor_list )
-    np.savetxt( 'distance_factor.dat', distance_factor_list)  
-  
+  # if rank == 0:
+  #   distance_factor_list = np.array( distance_factor_list )
+  #   np.savetxt( 'distance_factor.dat', distance_factor_list)  
+  # 
   # exit(-1)
 
   

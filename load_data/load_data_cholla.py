@@ -40,7 +40,7 @@ def select_ids_to_load( subgrid, domain, proc_grid ):
   return list(set_ids)
 
 
-def load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, domain, precision, proc_grid ):
+def load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, domain, precision, proc_grid, show_progess=True ):
   # Find the ids to load 
   ids_to_load = select_ids_to_load( subgrid, domain, proc_grid )
 
@@ -64,6 +64,7 @@ def load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, dom
   dims_all = [ nx, ny, nz ]
 
   data_out = {}
+  data_out[data_type] = {}
 
   data_all = np.zeros( dims_all, dtype=precision )
 
@@ -83,9 +84,10 @@ def load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, dom
         if h_key == 'current_z': print ' current_z: {0}'.format( data_out[h_key])
       added_header = True
       
-    terminalString  = '\r Loading File: {0}/{1}'.format(i, n_to_load)
-    sys.stdout. write(terminalString)
-    sys.stdout.flush() 
+    if show_progess:
+      terminalString  = '\r Loading File: {0}/{1}'.format(i, n_to_load)
+      sys.stdout. write(terminalString)
+      sys.stdout.flush() 
 
     procStart_x, procStart_y, procStart_z = head['offset']
     procEnd_x, procEnd_y, procEnd_z = head['offset'] + head['dims_local']
@@ -108,7 +110,8 @@ def load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, dom
   trim_y_r = boundaries['y'][1] - subgrid[1][1]  
   trim_z_l = subgrid[2][0] - boundaries['z'][0]
   trim_z_r = boundaries['z'][1] - subgrid[2][1]  
-  data_out = data_all[trim_x_l:nx-trim_x_r, trim_y_l:ny-trim_y_r, trim_z_l:nz-trim_z_r,  ]
+  data_output = data_all[trim_x_l:nx-trim_x_r, trim_y_l:ny-trim_y_r, trim_z_l:nz-trim_z_r,  ]
+  data_out[data_type][field] = data_output
   return data_out
 
 

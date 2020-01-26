@@ -19,7 +19,7 @@ def get_yt_field( field, data, current_a, h ):
   
 
 
-def Get_PID_Indices( key_pos, domain, ds, data, outputDir  ):
+def Get_PID_Indices( key_pos, domain, ds, data, outputDir, save_pid_indices=True  ):
   
   keys_domain = { 'pos_x':['x', 'dx'], 'pos_y':['y', 'dy'], 'pos_z':['z', 'dz'] }
   keys_data = { 'pos_x':'particle_position_x', 'pos_y':'particle_position_y', 'pos_z':'particle_position_z' }
@@ -28,8 +28,6 @@ def Get_PID_Indices( key_pos, domain, ds, data, outputDir  ):
   delta = domain['global'][key_delta]
   print ' Getting Indices: {0}'.format(key_domain)
   
-  # Temporal file to save the indices
-  file_temp_indx = h5.File( outputDir + 'temp_indices_{0}.h5'.format( key_pos ) , 'w')
 
   key_data = keys_data[key_pos]
   h = ds.hubble_constant
@@ -41,24 +39,35 @@ def Get_PID_Indices( key_pos, domain, ds, data, outputDir  ):
 
   type_int = np.int16
   pid_indxs = ( pos / delta ).astype( type_int )
-  file_temp_indx.create_dataset( 'pid_indxs', data=pid_indxs )
-  file_temp_indx.close()
-  print '  Saved Indices: {0}'.format(key_domain)
+  
+  if save_pid_indices:
+    # Temporal file to save the indices
+    file_temp_indx = h5.File( outputDir + 'temp_indices_{0}.h5'.format( key_pos ) , 'w')
+    file_temp_indx.create_dataset( 'pid_indxs', data=pid_indxs )
+    file_temp_indx.close()
+    print '  Saved Indices: {0}'.format(key_domain)
+  else:
+    return pid_indxs
 
-
-def generate_ics_particles_distributed( fields, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h,  get_pid_indices=True ):
+def generate_ics_particles_distributed( fields, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h,  get_pid_indices=True, save_pid_indices=False ):
   keys_pos = [ 'pos_x', 'pos_y', 'pos_z' ]
-
+  indices = {}
   # Get the PID indices for each direction
   if get_pid_indices:
     for key_pos in keys_pos:
-      Get_PID_Indices( key_pos, domain, ds, data, outputDir )
-
+      if save_pid_indices:  Get_PID_Indices( key_pos, domain, ds, data, outputDir, save_pid_indices=True )
+      else: indices[key_pos] = Get_PID_Indices( key_pos, domain, ds, data, outputDir, save_pid_indices = False )
   # Load all indices 
-  print 'Loading Indices'
-  index_x = h5.File( outputDir + 'temp_indices_pos_x.h5', 'r' )['pid_indxs'][...]
-  index_y = h5.File( outputDir + 'temp_indices_pos_y.h5', 'r' )['pid_indxs'][...]
-  index_z = h5.File( outputDir + 'temp_indices_pos_z.h5', 'r' )['pid_indxs'][...]
+  if save_pid_indices:
+    print 'Loading Indices'
+    index_x = h5.File( outputDir + 'temp_indices_pos_x.h5', 'r' )['pid_indxs'][...]
+    index_y = h5.File( outputDir + 'temp_indices_pos_y.h5', 'r' )['pid_indxs'][...]
+    index_z = h5.File( outputDir + 'temp_indices_pos_z.h5', 'r' )['pid_indxs'][...]
+  else:
+    index_x = indices['pos_x']
+    index_y = indices['pos_y']
+    index_z = indices['pos_z']
+  
   print 'Computing Global Indices'
   indexs = index_x + index_y * proc_grid[0] + index_z*proc_grid[0]*proc_grid[1]
 
