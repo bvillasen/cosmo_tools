@@ -18,7 +18,7 @@ homeDir = '/home/brvillas/'
 dataDir = '/data/groups/comp-astro/bruno/'
 # dataDir = '/gpfs/alpine/proj-shared/ast149/'
 inDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/output_files_hm12/'
-outDir = homeDir + 'cosmo_sims/2048_hydro_50Mpc/output_files_hm12/'
+outDir = homeDir + 'cosmo_sims/2048_hydro_50Mpc/output_files_hm12/statistics/'
 
 hydro = True
 particles = False
@@ -70,12 +70,15 @@ time.sleep(1)
 comm.Barrier()
 
 
-type = 'particles'
-fields_particles = [ 'density' ]
+# type = 'particles'
+# fields_particles = [ 'density' ]
+
+type = 'hydro'
+fields_hydro = [ 'density', 'temperature', 'HI_density' ]
+
 
 for nSnap in proc_snaps:
-  get_field_min_max( nSnap, inDir, outDir, name_base, nBoxes, type, fields_particles, print_out=False )
-
+  get_field_min_max( nSnap, inDir, outDir, name_base, nBoxes, type, fields_hydro, print_out=False )
 
 
 

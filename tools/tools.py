@@ -5,6 +5,27 @@ import numpy as np
 import h5py as h5
 
 
+def load_statistics( n_snapshots, stats_dir, data_type ):
+  statistics = {}
+  for i in range( n_snapshots ):
+    file_name = stats_dir + 'statistics_{0}_{1}.txt'.format(data_type, i)
+    file = open( file_name, 'r')
+    for line in file.readlines():
+      line = line.split()
+      field, min_val, max_val = line
+      min_val, max_val = float(min_val), float( max_val )
+      if statistics.get(field) == None: 
+        statistics[field] = {}
+        statistics[field]['min'] = []
+        statistics[field]['max'] = []
+      statistics[field]['min'].append( min_val)
+      statistics[field]['max'].append( max_val)
+    file.close()
+  for field in statistics.keys():
+    statistics[field]['min'] = np.array(statistics[field]['min'])
+    statistics[field]['max'] = np.array(statistics[field]['max'])
+  return statistics
+
 
 
 def get_field_min_max( nSnap, inDir, outDir, name_base, nBoxes, type, fields, print_out=True ):
@@ -16,12 +37,13 @@ def get_field_min_max( nSnap, inDir, outDir, name_base, nBoxes, type, fields, pr
 
   for field in fields:
   
-    print " nSnap: {0}    Field:{1}".format( nSnap, fields )
+    print " nSnap: {0}    Field:{1}".format( nSnap, field )
 
     min_all, max_all = np.Inf, -np.Inf
 
     for nBox in range( nBoxes ):
-      inFileName = '{0}_particles.{1}.{2}'.format(nSnap, name_base, nBox)
+      if type == 'particles': inFileName = '{0}_particles.{1}.{2}'.format(nSnap, name_base, nBox)
+      if type == 'hydro': inFileName = '{0}.{1}.{2}'.format(nSnap, name_base, nBox)
       inFile = h5.File( inDir + inFileName, 'r')
       head = inFile.attrs
       dims_all = head['dims']

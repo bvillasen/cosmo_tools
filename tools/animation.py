@@ -18,7 +18,7 @@ eta_2  = .050
 # inDir = dev_dir + 'figures/spectra/'
 # inDir = dev_dir + 'figures/sphere_collapse/data_vl_hllc_ppmp/'
 # inDir = dev_dir + 'cosmo_tools/figures/phase_diagram/uvb_comparison/'
-inDir = '/home/bruno/Desktop/projections_10240_alpha/figures/'
+inDir = '/home/bruno/Desktop/projections_2048_alpha/figures/'
 # inDir = '/home/bruno/Desktop/turbulence/'
 
 # inDir = '/home/bruno/Desktop/namrata/'
@@ -50,7 +50,7 @@ image_name = 'proj'
 # out_anim_name = 'spherical_collapse'
 # out_anim_name = 'phase_diagram_uvb_comparison'
 # out_anim_name = 'quantum_turbulence_2'
-out_anim_name = 'cosmo_fly_4k_10240'
+out_anim_name = 'cosmo_fly_4k_2048_alpha'
 
 cmd = 'ffmpeg -framerate 30  '
 # cmd += ' -start_number 45'

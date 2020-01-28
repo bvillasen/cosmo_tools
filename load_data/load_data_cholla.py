@@ -4,8 +4,29 @@ from os.path import isfile, join
 import h5py as h5
 import numpy as np
 
-
-
+def load_snapshot_data_distributed_periodix_x(  nSnap, inDir, data_type, field, subgrid, domain, precision, proc_grid, grid_complete_size, show_progess=True ):
+  subgrid_x, subgrid_y, subgrid_z = subgrid  
+  if subgrid_x[1] >= grid_complete_size[0]:
+    subgrid_x_0  = subgrid_x[:]
+    subgrid_x_0[1] = grid_complete_size[0]
+    subgrid_0 = [ subgrid_x_0, subgrid_y, subgrid_z ]
+    size_0 = subgrid_x_0[1] - subgrid_x_0[0]
+    data_snapshot_0 = load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid_0, domain, precision, proc_grid,  show_progess=show_progess ) 
+    subgrid_x_1  = subgrid_x[:]
+    subgrid_x_1[0] = 0
+    subgrid_x_1[1] = subgrid_x[1] - grid_complete_size[0]
+    subgrid_1 = [ subgrid_x_1, subgrid_y, subgrid_z ]
+    size_1 = subgrid_x_1[1] - subgrid_x_1[0]
+    data_snapshot_1 = load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid_1, domain, precision, proc_grid,  show_progess=show_progess ) 
+    size_complete = [ subgrid_x[1] - subgrid_x[0], subgrid_y[1] - subgrid_y[0], subgrid_z[1] - subgrid_z[0] ]
+    data_complete = np.zeros( size_complete ) 
+    data_complete[:size_0,:,:] = data_snapshot_0[data_type][field]
+    data_complete[size_0:size_0+size_1,:,:] = data_snapshot_1[data_type][field]
+    data_snapshot = data_snapshot_0
+    data_snapshot[data_type][field] = data_complete
+  else:
+    data_snapshot = load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, domain, precision, proc_grid,  show_progess=show_progess )
+  return data_snapshot
 
 def select_procid( proc_id, subgrid, domain, ids, ax ):
   domain_l, domain_r = domain
@@ -85,7 +106,7 @@ def load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, dom
       added_header = True
       
     if show_progess:
-      terminalString  = '\r Loading File: {0}/{1}'.format(i, n_to_load)
+      terminalString  = '\r Loading File: {0}/{1}   {2}'.format(i, n_to_load, field)
       sys.stdout. write(terminalString)
       sys.stdout.flush() 
 
@@ -112,6 +133,7 @@ def load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, dom
   trim_z_r = boundaries['z'][1] - subgrid[2][1]  
   data_output = data_all[trim_x_l:nx-trim_x_r, trim_y_l:ny-trim_y_r, trim_z_l:nz-trim_z_r,  ]
   data_out[data_type][field] = data_output
+  if show_progess: print("")
   return data_out
 
 
