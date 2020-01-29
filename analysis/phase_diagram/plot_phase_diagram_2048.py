@@ -22,7 +22,7 @@ ny = nPoints
 nz = nPoints
 ncells = nx * ny * nz
 
-nSnap = 0
+nSnap = 169
 
 
 inFileName = input_dir + 'phase_diagram_data_{0}.h5'.format(nSnap)
@@ -38,14 +38,6 @@ temp_points, dens_points = np.meshgrid( centers_temp, centers_dens )
 temp_points = temp_points.flatten()
 dens_points = dens_points.flatten()
 phase = phase.flatten() / ncells
-
-# dens_grid, temp_grid = np.meshgrid( centers_dens, centers_temp )
-# dens_points = dens_grid.flatten()
-# temp_points = temp_grid.flatten()
-# phase = phase.flatten()
-
-# dens_points = centers_dens
-# temp_points = centers_temp
 
 indices = np.where(phase > 0 )
 phase = phase[indices]
@@ -71,8 +63,9 @@ cax = divider.append_axes("right", size="5%", pad=0.05)
 cb = fig.colorbar( im, cax=cax )
 ax.set_ylabel(r'Log Temperature $[K]$', fontsize=15 )
 ax.set_xlabel(r'Log Gas Overdensity', fontsize=15 )
-# title = titles[i]
-# ax.set_title( title, fontsize=17)
+
+title = r'$z = {0:.2f}$'.format( current_z ) 
+ax.set_title( title, fontsize=17)
 ax.set_xlim(x_min, x_max)
 ax.set_ylim( y_min, y_max)
 
