@@ -37,7 +37,7 @@ def get_field_min_max( nSnap, inDir, outDir, name_base, nBoxes, type, fields, pr
 
   for field in fields:
   
-    print " nSnap: {0}    Field:{1}".format( nSnap, field )
+    print( " nSnap: {0}    Field:{1}".format( nSnap, field ))
 
     min_all, max_all = np.Inf, -np.Inf
 
@@ -63,7 +63,7 @@ def get_field_min_max( nSnap, inDir, outDir, name_base, nBoxes, type, fields, pr
     line = '{0} {1} {2}\n'.format( field, min_all, max_all)
     outFile.write(line)
   outFile.close()
-  print "Saved File: ", outDir + out_file_name
+  print( "Saved File: ", outDir + out_file_name)
   # 
 
 def print_line_flush( terminalString ):

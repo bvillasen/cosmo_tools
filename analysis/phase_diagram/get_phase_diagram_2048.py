@@ -12,6 +12,9 @@ from domain_decomposition import get_domain_block
 from phase_diagram import get_phase_diagram_bins
 from tools import *
 
+if len(sys.argv) == 1: terminal_param = 0
+else: terminal_param = int(sys.argv[1])
+
 use_mpi = True
 
 if use_mpi :
@@ -85,67 +88,68 @@ subgrid = [ subgrid_x, subgrid_y, subgrid_z ]
 precision = np.float64
 
 
-nSnap = 169
-for nSnap in range(170):
+nSnap = terminal_param
 
-  field = 'density'
-  data_snapshot = load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, domain, precision, proc_grid,  show_progess=show_progess )
-  current_z = data_snapshot['Current_z']
-  density = data_snapshot[data_type][field].flatten()
+field = 'density'
+data_snapshot = load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, domain, precision, proc_grid,  show_progess=show_progess )
+current_z = data_snapshot['Current_z']
+density = data_snapshot[data_type][field].flatten()
 
-  # Get Global Mean Density
-  # Dens Mean = 13.7959026793
-  dens_mean_local = np.mean( density )
-  if use_mpi:
-    dens_mean_all = comm.allgather( dens_mean_local )
-    dens_mean_global = np.mean( dens_mean_all)
-  else:
-    dens_mean_global = dens_mean_local
-  if rank == 0: print 'Dens Mean = {0}'.format(dens_mean_global) 
+# Get Global Mean Density
+# Dens Mean = 13.7959026793
+dens_mean_local = np.mean( density )
+if use_mpi:
+  dens_mean_all = comm.allgather( dens_mean_local )
+  dens_mean_global = np.mean( dens_mean_all)
+else:
+  dens_mean_global = dens_mean_local
+if rank == 0: print 'Dens Mean = {0}'.format(dens_mean_global) 
 
-  #Get Overdensity
-  density = density / dens_mean_global
-  dens_start = np.log10( min_dens/dens_mean_global * 0.999 )
-  dens_end   = np.log10( max_dens/dens_mean_global * 1.001 ) 
-
+#Get Overdensity
+density = density / dens_mean_global
+dens_start = np.log10( min_dens/dens_mean_global * 0.999 )
+dens_end   = np.log10( max_dens/dens_mean_global * 1.001 ) 
 
 
-  field = 'temperature'
-  data_snapshot = load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, domain, precision, proc_grid,  show_progess=show_progess )
-  temperature = data_snapshot[data_type][field].flatten()
-  temp_start = np.log10( min_temp * 0.999 )
-  temp_end   = np.log10( max_temp * 1.001 )
+
+field = 'temperature'
+data_snapshot = load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, domain, precision, proc_grid,  show_progess=show_progess )
+temperature = data_snapshot[data_type][field].flatten()
+temp_start = np.log10( min_temp * 0.999 )
+temp_end   = np.log10( max_temp * 1.001 )
 
 
-  #Get Bin Egdes for the histogram
-  nbins = 2000
-  bins_dens = np.logspace( dens_start, dens_end, nbins, base=10 )
-  bins_temp = np.logspace( temp_start, temp_end, nbins, base=10 )
+#Get Bin Egdes for the histogram
+nbins = 2000
+bins_dens = np.logspace( dens_start, dens_end, nbins, base=10 )
+bins_temp = np.logspace( temp_start, temp_end, nbins, base=10 )
 
-  #Get the phase diagram
-  if rank == 0: print " Generating Phase Diagram,   n_bins:{0}".format(nbins)
-  centers_dens, centers_temp, phase = get_phase_diagram_bins( density, temperature, bins_dens, bins_temp, nbins, ncells )
+#Get the phase diagram
+if rank == 0: print " Generating Phase Diagram,   n_bins:{0}".format(nbins)
+centers_dens, centers_temp, phase = get_phase_diagram_bins( density, temperature, bins_dens, bins_temp, nbins, ncells )
 
-  #Send the phase diagram to root process
-  phase_all = comm.gather( phase, root=0 )
+#Send the phase diagram to root process
+phase_all = comm.gather( phase, root=0 )
 
-  if rank == 0: 
+if rank == 0: 
 
-    phase_sum = np.zeros_like( phase )
-    for phase_local in phase_all:
-      phase_sum += phase_local
+  phase_sum = np.zeros_like( phase )
+  for phase_local in phase_all:
+    phase_sum += phase_local
 
-    print "Phase sum: {0} / {1}".format(phase_sum.sum(), ncells)
+  print "Phase sum: {0} / {1}".format(phase_sum.sum(), ncells)
 
-    #Write the data to a file
-    outFileName = output_dir + 'phase_diagram_data_{0}.h5'.format(nSnap)
-    outFile = h5.File( outFileName, 'w' )
-    outFile.attrs['current_z'] = current_z
-    outFile.create_dataset( 'phase', data = phase_sum )
-    outFile.create_dataset( 'centers_dens', data = centers_dens )
-    outFile.create_dataset( 'centers_temp', data = centers_temp )
-    outFile.close()
-    print "Saved File: ", outFileName
+  #Write the data to a file
+  outFileName = output_dir + 'phase_diagram_data_{0}.h5'.format(nSnap)
+  outFile = h5.File( outFileName, 'w' )
+  outFile.attrs['current_z'] = current_z
+  data_set = outFile.create_dataset( 'phase', data = phase_sum )
+  data_set.attrs['min'] = phase_sum.min()
+  data_set.attrs['max'] = phase_sum.max()
+  outFile.create_dataset( 'centers_dens', data = centers_dens )
+  outFile.create_dataset( 'centers_temp', data = centers_temp )
+  outFile.close()
+  print "Saved File: ", outFileName
 
-
+comm.Barrier()
 
