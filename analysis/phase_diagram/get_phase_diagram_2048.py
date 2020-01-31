@@ -32,8 +32,8 @@ if rank == 0: show_progess = True
 
 
 homeDir = '/home/brvillas/'
-dataDir = '/data/groups/comp-astro/bruno/'
-# dataDir = '/gpfs/alpine/proj-shared/ast149/'
+# dataDir = '/data/groups/comp-astro/bruno/'
+dataDir = '/gpfs/alpine/proj-shared/ast149/'
 
 nPoints = 2048
 nx = nPoints
@@ -41,8 +41,9 @@ ny = nPoints
 nz = nPoints
 ncells = nx * ny * nz
 
-inDir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/output_files_hm12/'.format(nPoints)
-output_dir = '/home/brvillas/cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/'
+inDir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/output_files_pchw18/'.format(nPoints)
+output_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/phase_diagram_pchw18/'.format(nPoints)
+# output_dir = '/home/brvillas/cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/'
 if rank == 0: create_directory( output_dir )
 
 
