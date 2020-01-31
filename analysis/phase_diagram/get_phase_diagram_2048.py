@@ -15,7 +15,7 @@ from tools import *
 if len(sys.argv) == 1: terminal_param = 0
 else: terminal_param = int(sys.argv[1])
 
-use_mpi = True
+use_mpi = False
 
 if use_mpi :
   from mpi4py import MPI
@@ -129,15 +129,21 @@ bins_temp = np.logspace( temp_start, temp_end, nbins, base=10 )
 if rank == 0: print " Generating Phase Diagram,   n_bins:{0}".format(nbins)
 centers_dens, centers_temp, phase = get_phase_diagram_bins( density, temperature, bins_dens, bins_temp, nbins, ncells )
 
-#Send the phase diagram to root process
-phase_all = comm.gather( phase, root=0 )
+if use_mpi:
+  #Send the phase diagram to root process
+  phase_all = comm.gather( phase, root=0 )
+else:
+  phase_all = phase
 
 if rank == 0: 
 
-  phase_sum = np.zeros_like( phase )
-  for phase_local in phase_all:
-    phase_sum += phase_local
-
+  if use_mpi:
+    phase_sum = np.zeros_like( phase )
+    for phase_local in phase_all:
+      phase_sum += phase_local
+  else:
+    phase_sum = phase_all
+  
   print "Phase sum: {0} / {1}".format(phase_sum.sum(), ncells)
 
   #Write the data to a file
@@ -152,5 +158,5 @@ if rank == 0:
   outFile.close()
   print "Saved File: ", outFileName
 
-comm.Barrier()
+if use_mpi:comm.Barrier()
 
