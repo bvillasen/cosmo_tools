@@ -23,8 +23,8 @@ dataDir = '/gpfs/alpine/proj-shared/ast149/'
 inDir = dataDir + 'cosmo_sims/1024_hydro_50Mpc/output_files_pchw18/'
 outDir = dataDir + 'cosmo_sims/1024_hydro_50Mpc/snapshots_pchw18/'
 
-hydro = False
-particles = True
+hydro = True
+particles = False
 
 def split_name( file_name, part=False):
   nSnapshot, name, nBox = file_name.split('.')
@@ -82,6 +82,7 @@ print( ' {0}: {1}'.format( index, snapshots_to_compress ) )
 #[ density, momentum_x, momentum_y, momentum_z, Enegy, GasEnergy ]
 #[ HI_density, HI_density, HeI_density, HeII_density, HeIII_density, e_density, metal_density, temperature, potential ]
 # hydro_fields = 'all'
+# hydro_fields = ['density' , 'momentum_x', 'HI_density', 'temperature']
 hydro_fields = ['density' , 'momentum_x', 'HI_density', 'temperature']
 print( "\nHydro fields: {0}".format(hydro_fields))
 
