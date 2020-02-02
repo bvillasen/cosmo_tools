@@ -21,7 +21,7 @@ print 'Index: ', index
 # dataDir = '/data/groups/comp-astro/bruno/'
 dataDir = '/gpfs/alpine/proj-shared/ast149/'
 inDir = dataDir + 'cosmo_sims/1024_hydro_50Mpc/output_files_pchw18/'
-outDir = dataDir + 'cosmo_sims/1024_hydro_50Mpc/snapshots_pchw18/'
+outDir = dataDir + 'cosmo_sims/1024_hydro_50Mpc/snapshots_pchw18/hydro_density/'
 
 hydro = True
 particles = False
@@ -83,7 +83,7 @@ print( ' {0}: {1}'.format( index, snapshots_to_compress ) )
 #[ HI_density, HI_density, HeI_density, HeII_density, HeIII_density, e_density, metal_density, temperature, potential ]
 # hydro_fields = 'all'
 # hydro_fields = ['density' , 'momentum_x', 'HI_density', 'temperature']
-hydro_fields = ['density' , 'momentum_x', 'HI_density', 'temperature']
+hydro_fields = ['density' ]
 print( "\nHydro fields: {0}".format(hydro_fields))
 
 #available Particles Fields:
