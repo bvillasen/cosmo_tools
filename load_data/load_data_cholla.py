@@ -156,6 +156,8 @@ def load_snapshot_data_grid( nSnap, inFileName ):
     if key in inputKeys: grid_keys.append( key )
   for key in grid_keys:
     data_grid[key] = snapFile[key]
+    data_grid['min_'+key] = snapFile.attrs['min_'+key]
+    data_grid['max_'+key] = snapFile.attrs['max_'+key]
   return data_grid
 
 # dataDir = '/home/bruno/Desktop/data/'

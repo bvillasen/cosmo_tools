@@ -141,12 +141,12 @@ if fit_type == 'mcmc':
 
 # input_dir = '/home/brvillas/cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/'
 # output_dir = '/home/brvillas/cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/fit_scipy/'
-input_dir = '/home/bruno/Desktop/ssd_0/cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/'
+input_dir = '/home/bruno/Desktop/ssd_0/cosmo_sims/2048_hydro_50Mpc/phase_diagram_pchw18/'
 # input_dir = '/home/bruno/Desktop/phase_diagram_hm12/'
-if fit_type == 'scipy': output_dir = '/home/bruno/Desktop/ssd_0/cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/fit_scipy/'
-if fit_type == 'mcmc': output_dir = '/home/bruno/Desktop/ssd_0/cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/fit_mcmc/'
+if fit_type == 'scipy': output_dir = '/home/bruno/Desktop/ssd_0/cosmo_sims/2048_hydro_50Mpc/phase_diagram_pchw18/fit_scipy/'
+if fit_type == 'mcmc': output_dir = '/home/bruno/Desktop/ssd_0/cosmo_sims/2048_hydro_50Mpc/phase_diagram_pchw18/fit_mcmc/'
 
-# create_directory( output_dir )
+create_directory( output_dir )
 
 
 nPoints = 2048
