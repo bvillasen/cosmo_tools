@@ -18,7 +18,7 @@ from load_data_cholla import load_snapshot_data, load_snapshot_data_particles
 from tools import *
 
 
-if len(sys.argv) == 0: index = 0
+if len(sys.argv) == 1: index = 0
 else: index = int(sys.argv[1])
 print 'Index: ', index
 
@@ -68,6 +68,7 @@ if index == 2: snapshots = [ 60,  ]
 if index == 3: snapshots = [ 90, 120 ]
 if index == 4: snapshots = [ 150, 169 ]
 # nSnap = 0
+snapshots = [0]
 
 for nSnap in snapshots:
 
