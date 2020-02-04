@@ -40,10 +40,10 @@ Lbox = 50.0   #Mpc/h
 nPoints = 2048
 
 
-chollaDir = dataDir + 'cosmo_sims/{0}_dm_50Mpc/snapshots/'.format(nPoints)
-inDir = dataDir + 'cosmo_sims/{0}_dm_50Mpc/power_spectrum/delta_density/'.format(nPoints)
-outDir = dataDir + 'cosmo_sims/{0}_dm_50Mpc/power_spectrum/fftw_data_double/'.format(nPoints)
-powerDir = dataDir + 'cosmo_sims/{0}_dm_50Mpc/power_spectrum/'.format(nPoints)
+chollaDir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/snapshots_hm12/'.format(nPoints)
+inDir = chollaDir
+outDir =   dataDir + 'cosmo_sims/{0}_hydro_50Mpc/snapshots_hm12/power_spectrum/'.format(nPoints)
+powerDir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/snapshots_hm12/power_spectrum/'.format(nPoints)
 
 create_directory( outDir )
 
