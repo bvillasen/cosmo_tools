@@ -3,7 +3,14 @@ from os import listdir
 from os.path import isfile, join
 import numpy as np
 import h5py as h5
+import time
 
+
+def print_mpi( text, rank, size,  mpi_comm):
+  for i in range(size):
+    if rank == i: print( text )
+    time.sleep( 0.01 )
+    mpi_comm.Barrier()
 
 def load_statistics( n_snapshots, stats_dir, data_type ):
   statistics = {}

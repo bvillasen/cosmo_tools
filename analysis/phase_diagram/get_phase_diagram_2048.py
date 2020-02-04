@@ -15,7 +15,7 @@ from tools import *
 if len(sys.argv) == 1: terminal_param = 0
 else: terminal_param = int(sys.argv[1])
 
-use_mpi = False
+use_mpi = True
 
 if use_mpi :
   from mpi4py import MPI
@@ -32,8 +32,9 @@ if rank == 0: show_progess = True
 
 
 homeDir = '/home/brvillas/'
+dataDir = homeDir
 # dataDir = '/data/groups/comp-astro/bruno/'
-dataDir = '/gpfs/alpine/proj-shared/ast149/'
+# dataDir = '/gpfs/alpine/proj-shared/ast149/'
 
 nPoints = 2048
 nx = nPoints
@@ -52,7 +53,7 @@ data_type = 'hydro'
 
 #Load statistics
 n_snapshots = 170
-stats_dir = homeDir + 'cosmo_sims/{0}_hydro_50Mpc/output_files_hm12/statistics/'.format(nPoints)
+stats_dir = homeDir + 'cosmo_sims/{0}_hydro_50Mpc/output_files_pchw18/statistics/'.format(nPoints)
 statistics = load_statistics( n_snapshots, stats_dir, data_type )
 
 

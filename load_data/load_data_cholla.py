@@ -61,11 +61,10 @@ def select_ids_to_load( subgrid, domain, proc_grid ):
   return list(set_ids)
 
 
-def load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, domain, precision, proc_grid, show_progess=True ):
+def load_snapshot_data_distributed( nSnap, inDir, data_type, fields, subgrid, domain, precision, proc_grid, show_progess=True ):
   # Find the ids to load 
   ids_to_load = select_ids_to_load( subgrid, domain, proc_grid )
 
-  print "Loading Snapshot: {0}".format(nSnap)
   #Find the boundaries of the volume to load
   domains = { 'x':{'l':[], 'r':[]}, 'y':{'l':[], 'r':[]}, 'z':{'l':[], 'r':[]}, }
   for id in ids_to_load:
@@ -86,54 +85,60 @@ def load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, dom
 
   data_out = {}
   data_out[data_type] = {}
-
-  data_all = np.zeros( dims_all, dtype=precision )
+  
+  if type(fields) != list: fields = [fields]
+  print "Loading Snapshot: {0}  ->  {1}".format(nSnap, fields)
 
   added_header = False
   n_to_load = len(ids_to_load)
-  for i, nBox in enumerate(ids_to_load):
-    name_base = 'h5'
-    if data_type == 'particles': inFileName = '{0}_particles.{1}.{2}'.format(nSnap, name_base, nBox)
-    if data_type == 'hydro': inFileName = '{0}.{1}.{2}'.format(nSnap, name_base, nBox)
-    
-    inFile = h5.File( inDir + inFileName, 'r')
-    head = inFile.attrs
-    if added_header == False:
-      for h_key in head.keys():
-        if h_key in ['dims', 'dims_local', 'offset', 'bounds', 'domain', 'dx', ]: continue
-        data_out[h_key] = head[h_key][0]
-        if h_key == 'current_z': print ' current_z: {0}'.format( data_out[h_key])
-      added_header = True
+  
+  for field in fields:
+    data_all = np.zeros( dims_all, dtype=precision )
+    for i, nBox in enumerate(ids_to_load):
+      name_base = 'h5'
+      if data_type == 'particles': inFileName = '{0}_particles.{1}.{2}'.format(nSnap, name_base, nBox)
+      if data_type == 'hydro':     inFileName = '{0}.{1}.{2}'.format(nSnap, name_base, nBox)
+      if data_type == 'fft':       inFileName ='{0}_data_fft.{1}.{2}'.format(nSnap, name_base, nBox)
       
-    if show_progess:
-      terminalString  = '\r Loading File: {0}/{1}   {2}'.format(i, n_to_load, field)
-      sys.stdout. write(terminalString)
-      sys.stdout.flush() 
+      inFile = h5.File( inDir + inFileName, 'r')
+      head = inFile.attrs
+      if added_header == False:
+        for h_key in head.keys():
+          if h_key in ['dims', 'dims_local', 'offset', 'bounds', 'domain', 'dx', ]: continue
+          data_out[h_key] = head[h_key][0]
+          if h_key == 'current_z': print ' current_z: {0}'.format( data_out[h_key])
+        added_header = True
+        
+      if show_progess:
+        terminalString  = '\r Loading File: {0}/{1}   {2}'.format(i, n_to_load, field)
+        sys.stdout. write(terminalString)
+        sys.stdout.flush() 
 
-    procStart_x, procStart_y, procStart_z = head['offset']
-    procEnd_x, procEnd_y, procEnd_z = head['offset'] + head['dims_local']
-    # print( '    Loading File: {0}   [ {1} {2} ]  [ {3} {4} ]  [ {5} {6} ]'.format(nBox, procStart_x, procEnd_x, procStart_y, procEnd_y, procStart_z, procEnd_z) )
-    # Substract the offsets
-    procStart_x -= boundaries['x'][0]
-    procEnd_x   -= boundaries['x'][0]
-    procStart_y -= boundaries['y'][0]
-    procEnd_y   -= boundaries['y'][0]
-    procStart_z -= boundaries['z'][0]
-    procEnd_z   -= boundaries['z'][0]
-    data_local = inFile[field][...]
-    # print data_local.min(), data_local.max()
-    data_all[ procStart_x:procEnd_x, procStart_y:procEnd_y, procStart_z:procEnd_z] = data_local
+      procStart_x, procStart_y, procStart_z = head['offset']
+      procEnd_x, procEnd_y, procEnd_z = head['offset'] + head['dims_local']
+      # print( '    Loading File: {0}   [ {1} {2} ]  [ {3} {4} ]  [ {5} {6} ]'.format(nBox, procStart_x, procEnd_x, procStart_y, procEnd_y, procStart_z, procEnd_z) )
+      # Substract the offsets
+      procStart_x -= boundaries['x'][0]
+      procEnd_x   -= boundaries['x'][0]
+      procStart_y -= boundaries['y'][0]
+      procEnd_y   -= boundaries['y'][0]
+      procStart_z -= boundaries['z'][0]
+      procEnd_z   -= boundaries['z'][0]
+      data_local = inFile[field][...]
+      # print data_local.min(), data_local.max()
+      data_all[ procStart_x:procEnd_x, procStart_y:procEnd_y, procStart_z:procEnd_z] = data_local
 
-  # Trim off the excess data on the boundaries:
-  trim_x_l = subgrid[0][0] - boundaries['x'][0]
-  trim_x_r = boundaries['x'][1] - subgrid[0][1]  
-  trim_y_l = subgrid[1][0] - boundaries['y'][0]
-  trim_y_r = boundaries['y'][1] - subgrid[1][1]  
-  trim_z_l = subgrid[2][0] - boundaries['z'][0]
-  trim_z_r = boundaries['z'][1] - subgrid[2][1]  
-  data_output = data_all[trim_x_l:nx-trim_x_r, trim_y_l:ny-trim_y_r, trim_z_l:nz-trim_z_r,  ]
-  data_out[data_type][field] = data_output
-  if show_progess: print("")
+    # Trim off the excess data on the boundaries:
+    trim_x_l = subgrid[0][0] - boundaries['x'][0]
+    trim_x_r = boundaries['x'][1] - subgrid[0][1]  
+    trim_y_l = subgrid[1][0] - boundaries['y'][0]
+    trim_y_r = boundaries['y'][1] - subgrid[1][1]  
+    trim_z_l = subgrid[2][0] - boundaries['z'][0]
+    trim_z_r = boundaries['z'][1] - subgrid[2][1]  
+    data_output = data_all[trim_x_l:nx-trim_x_r, trim_y_l:ny-trim_y_r, trim_z_l:nz-trim_z_r,  ]
+    data_out[data_type][field] = data_output
+    if show_progess: print("")
+    
   return data_out
 
 

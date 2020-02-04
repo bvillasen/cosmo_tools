@@ -15,8 +15,9 @@ nprocs = comm.Get_size()
 
 # dataDir = '/home/bruno/Desktop/da
 homeDir = '/home/brvillas/'
+dataDir = homeDir
 # dataDir = '/data/groups/comp-astro/bruno/'
-dataDir = '/gpfs/alpine/proj-shared/ast149/'
+# dataDir = '/gpfs/alpine/proj-shared/ast149/'
 inDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/output_files_pchw18/'
 outDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/output_files_pchw18/statistics/'
 

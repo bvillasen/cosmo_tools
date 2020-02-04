@@ -20,11 +20,11 @@ print 'Index: ', index
 
 # dataDir = '/data/groups/comp-astro/bruno/'
 dataDir = '/gpfs/alpine/proj-shared/ast149/'
-inDir = dataDir + 'cosmo_sims/1024_hydro_50Mpc/output_files_pchw18/'
-outDir = dataDir + 'cosmo_sims/1024_hydro_50Mpc/snapshots_pchw18/hydro_density/'
+inDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/output_files_hm12/'
+outDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/snapshots_hm12/'
 
-hydro = True
-particles = False
+hydro = False
+particles = True
 
 def split_name( file_name, part=False):
   nSnapshot, name, nBox = file_name.split('.')
@@ -65,6 +65,8 @@ snapshots_to_compress = snapshots_all
 n_per_index = 10
 snapshots_to_compress = snapshots_to_compress[index*n_per_index:(index+1)*n_per_index]
 n_to_compress = len(snapshots_to_compress)
+
+snapshots_to_compress = [0]
 
 print( "\nNumber of snapshots to compres: {0}".format(n_to_compress) )
 print( ' {0}: {1}'.format( index, snapshots_to_compress ) )
