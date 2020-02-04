@@ -139,12 +139,13 @@ if fit_type == 'mcmc':
 #   return line_prod 
 # 
 
+dataDir = '/home/bruno/Desktop/ssd_0/data/'
 # input_dir = '/home/brvillas/cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/'
 # output_dir = '/home/brvillas/cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/fit_scipy/'
-input_dir = '/home/bruno/Desktop/ssd_0/cosmo_sims/2048_hydro_50Mpc/phase_diagram_pchw18/'
 # input_dir = '/home/bruno/Desktop/phase_diagram_hm12/'
-if fit_type == 'scipy': output_dir = '/home/bruno/Desktop/ssd_0/cosmo_sims/2048_hydro_50Mpc/phase_diagram_pchw18/fit_scipy/'
-if fit_type == 'mcmc': output_dir = '/home/bruno/Desktop/ssd_0/cosmo_sims/2048_hydro_50Mpc/phase_diagram_pchw18/fit_mcmc/'
+input_dir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/phase_diagram_pchw18/'
+if fit_type == 'scipy': output_dir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/phase_diagram_pchw18/fit_scipy/'
+if fit_type == 'mcmc': output_dir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/phase_diagram_pchw18/fit_mcmc/'
 
 create_directory( output_dir )
 
@@ -227,61 +228,61 @@ for nSnap in range(170):
   outFileName = output_dir + 'mean_phase_region_{0}.txt'.format(nSnap)
   np.savetxt(outFileName, data_out)
   print "Saved File: ", outFileName
+  
+  #Linear Regresion
+  def linear_model( x, T0, gamma ):
+    return T0 + gamma * x
+  
+  x_data = overdensity_values
+  y_data = temp_mean_values
+  y_error = temp_sigma_values
+  
+  params_0 = [ 3, 0.0 ]
+  fit_params, fit_pcov = curve_fit( linear_model, x_data, y_data, p0=params_0, sigma=y_error   )
+  fit_T0, fit_gamma = fit_params
+  fit_T0_sigma, fit_gamma_sigma = np.sqrt(np.diag(fit_pcov))
+  # Save fit to file 
+  h = "T0, gamma, T_0_sigma, gamma_sigma, delta_left, delta_right"
+  data = np.array([ fit_T0, fit_gamma, fit_T0_sigma, fit_gamma_sigma, dens_line_l, dens_line_r])
+  outFileName = output_dir + 'fit_linear_regresion_{0}.txt'.format(nSnap)
+  np.savetxt( outFileName, data, header=h )
+  print "Saved File: ", outFileName
+  
   # 
-  # #Linear Regresion
-  # def linear_model( x, T0, gamma ):
-  #   return T0 + gamma * x
-  # 
-  # x_data = overdensity_values
-  # y_data = temp_mean_values
-  # y_error = temp_sigma_values
-  # 
-  # params_0 = [ 3, 0.0 ]
-  # fit_params, fit_pcov = curve_fit( linear_model, x_data, y_data, p0=params_0, sigma=y_error   )
-  # fit_T0, fit_gamma = fit_params
-  # fit_T0_sigma, fit_gamma_sigma = np.sqrt(np.diag(fit_pcov))
-  # # Save fit to file 
-  # h = "T0, gamma, T_0_sigma, gamma_sigma, delta_left, delta_right"
-  # data = np.array([ fit_T0, fit_gamma, fit_T0_sigma, fit_gamma_sigma, dens_line_l, dens_line_r])
-  # outFileName = output_dir + 'fit_linear_regresion_{0}.txt'.format(nSnap)
-  # np.savetxt( outFileName, data, header=h )
-  # print "Saved File: ", outFileName
-  # 
-  # 
-  # 
-  #  # Fit Using MCMC
-  #  # if fit == 'mcmc':
-  # def linear_model( overdensity_line, temp_mean, temp_sigma ):
-  #   T0_mc  = pymc.Uniform('T0', 0, 5, value=3 )
-  #   gamma_mc    = pymc.Uniform('gamma', -1, 1, value=0  )
-  #   @pymc.deterministic( plot=False )
-  #   def linear_model( overdensity_line= overdensity_line, T0=T0_mc, gamma=gamma_mc,   ):
-  #    temperature_line  = T0 + gamma*overdensity_line
-  #    return temperature_line
-  #   densObsrv = pymc.Normal('line', mu=linear_model, tau=1./(temp_sigma**2), value=temp_mean, observed=True)
-  #   return locals()
-  # 
-  # 
-  # nIter = 100000
-  # nBurn = nIter / 5
-  # nThin = 1
-  # 
-  # model = linear_model( overdensity_values, temp_mean_values, temp_sigma_values )
-  # linear_MDL = pymc.MCMC( model )
-  # linear_MDL.sample( iter=nIter, burn=nBurn, thin=nThin )
-  # mean_T0 = linear_MDL.stats()['T0']['mean']
-  # sigma_T0 = linear_MDL.stats()['T0']['standard deviation']
-  # mean_gamma = linear_MDL.stats()['gamma']['mean']
-  # sigma_gamma = linear_MDL.stats()['gamma']['standard deviation']
-  # print ""
-  # print "Fit:   T0: {0} {1}      gamma:{2} {3}".format( mean_T0, sigma_T0, mean_gamma, sigma_gamma)
-  # 
+  
+   # Fit Using MCMC
+   # if fit == 'mcmc':
+  def linear_model( overdensity_line, temp_mean, temp_sigma ):
+    T0_mc  = pymc.Uniform('T0', 0, 5, value=3 )
+    gamma_mc    = pymc.Uniform('gamma', -1, 1, value=0  )
+    @pymc.deterministic( plot=False )
+    def linear_model( overdensity_line= overdensity_line, T0=T0_mc, gamma=gamma_mc,   ):
+     temperature_line  = T0 + gamma*overdensity_line
+     return temperature_line
+    densObsrv = pymc.Normal('line', mu=linear_model, tau=1./(temp_sigma**2), value=temp_mean, observed=True)
+    return locals()
+  
+  
+  nIter = 100000
+  nBurn = nIter / 5
+  nThin = 1
+  
+  model = linear_model( overdensity_values, temp_mean_values, temp_sigma_values )
+  linear_MDL = pymc.MCMC( model )
+  linear_MDL.sample( iter=nIter, burn=nBurn, thin=nThin )
+  mean_T0 = linear_MDL.stats()['T0']['mean']
+  sigma_T0 = linear_MDL.stats()['T0']['standard deviation']
+  mean_gamma = linear_MDL.stats()['gamma']['mean']
+  sigma_gamma = linear_MDL.stats()['gamma']['standard deviation']
+  print ""
+  print "Fit:   T0: {0} {1}      gamma:{2} {3}".format( mean_T0, sigma_T0, mean_gamma, sigma_gamma)
+  
   # plot(linear_MDL)
-  # 
-  # outFileName = output_dir + 'fit_mcmc_{0}.pkl'.format(nSnap)
-  # f = open( outFileName, "wb")
-  # pickle.dump( linear_MDL.stats(), f)
-  # print "Saved File: ", outFileName
+  
+  outFileName = output_dir + 'fit_mcmc_{0}.pkl'.format(nSnap)
+  f = open( outFileName, "wb")
+  pickle.dump( linear_MDL.stats(), f)
+  print "Saved File: ", outFileName
 
 
 

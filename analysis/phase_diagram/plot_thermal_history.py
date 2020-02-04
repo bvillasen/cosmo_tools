@@ -17,10 +17,10 @@ from tools import *
 # fit_scipy_dir = '/home/brvillas/cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/fit_scipy/'
 # fit_mcmc_dir = '/home/brvillas/cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/fit_mcmc/'
 
-
-input_dir = '/home/bruno/Desktop/ssd_0/cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/'
-fit_scipy_dir = '/home/bruno/Desktop/ssd_0/cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/fit_scipy/'
-fit_mcmc_dir = '/home/bruno/Desktop/ssd_0/cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/fit_mcmc/'
+dataDir = '/home/bruno/Desktop/ssd_0/data/'
+input_dir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/'
+fit_scipy_dir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/fit_scipy/'
+fit_mcmc_dir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/fit_mcmc/'
 output_dir = fit_mcmc_dir + 'figures/thermal_history/'
 create_directory( output_dir )
 
