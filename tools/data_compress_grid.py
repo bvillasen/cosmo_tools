@@ -49,9 +49,12 @@ def compress_grid( nSnap, nBoxes, name_base, out_base_name,inDir, outDir, fields
       data_local = inFile[key][...]
       data_all[ procStart_z:procEnd_z, procStart_y:procEnd_y, procStart_x:procEnd_x] = data_local
       inFile.close()
-    fileSnap.create_dataset( key, data=data_all.astype(precision) )
-    fileSnap.attrs['max_'+ key ] = data_all.max()
-    fileSnap.attrs['min_'+ key ] = data_all.min()
-    fileSnap.attrs['mean_'+ key ] = data_all.mean()
+    data_set = fileSnap.create_dataset( key, data=data_all.astype(precision) )
+    data_set = fileSnap.create_dataset( key, data=data_all.astype(precision) )
+    data_set.attrs['max'] = data_all.max()
+    data_set.attrs['min'] = data_all.min()
+    data_set.attrs['mean'] = data_all.mean()
+    print( '  {0} [ min  max  mean ] = [ {1}  {2}  {3} ]'.format( key, data_set.attrs['min'], data_set.attrs['max'], data_set.attrs['mean']))
+
   fileSnap.close()
   print( ' Saved File: {0}\n'.format(outDir+fileName) )
