@@ -22,27 +22,25 @@ import matplotlib
 # matplotlib.rcParams['font.family'] = "sans-serif"
 
 # dataDir = '/gpfs/alpine/proj-shared/ast149/'
-dataDir = '/data/groups/comp-astro/bruno/'
 # dataDir = '/home/bruno/Desktop/data/'
 # dataDir = '/raid/bruno/data/'
 
-out_file_name = 'power_spectrum_dm_2048.png'
 
 Lbox = 50.0   #Mpc/h
 nPoints = 2048
 
-chollaDir = dataDir + 'cosmo_sims/{0}_dm_50Mpc/snapshots/'.format(nPoints)
-inDir = dataDir + 'cosmo_sims/{0}_dm_50Mpc/power_spectrum/'.format(nPoints)
-outDir = dataDir + 'cosmo_sims/{0}_dm_50Mpc/power_spectrum/figures/'.format(nPoints)
+
+
+
+dataDir = '/home/brvillas/'
+inDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/'
+powerDir = inDir + 'power_spectrum_hm12/'
+outDir = powerDir + 'figures/'
 create_directory( outDir )
 
+out_file_name = 'power_spectrum_dm_2048.png'
 
-# dataDir = '/home/brvillas/'
-# inDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/snapshots_hm12/'
-# fftDir = inDir + 'power_spectrum/data_fft_summit/'
-# powerDir = inDir + 'power_spectrum/'
-# inDir = powerDir
-# outDir = powerDir
+
 
 # set simulation volume dimentions
 nz, ny, nx = nPoints, nPoints, nPoints
@@ -69,17 +67,16 @@ ax = plt.gca()
 nSnap = 0
 snapshots = [ 0, 5, 30, 60, 90, 120, 150, 169 ]
 snapshots.reverse()
-for nSnap in snapshots:
+# for nSnap in snapshots:
 
-  #Load the power spectrum data
-  data_cholla = load_snapshot_data( nSnap, chollaDir, hydro=False )
-  current_z = data_cholla['current_z']
-  data = np.loadtxt( inDir + 'power_spectrum_{0}.dat'.format(nSnap))
-  k_vals = data[0]
-  ps = data[1]
+#Load the power spectrum data
+current_z = 100
+data = np.loadtxt( powerDir + 'power_spectrum_{0}.dat'.format(nSnap))
+k_vals = data[0]
+ps = data[1]
 
-  label = 'z = {0:.1f}'.format(current_z)
-  ax.plot( k_vals, ps,  linewidth=2, label=label, )
+label = 'z = {0:.1f}'.format(current_z)
+ax.plot( k_vals, ps,  linewidth=2, label=label, )
 
 
 ax.set_xscale('log')

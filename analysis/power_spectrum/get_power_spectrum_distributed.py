@@ -23,12 +23,19 @@ else:
 
 Lbox = 50.0   #Mpc/h
 
-nPoints = 256
+nPoints = 2048
 
-dataDir = '/home/bruno/Desktop/ssd_0/data/'
-inDir = dataDir + 'cosmo_sims/{0}_dm_50Mpc/output_files/'.format(nPoints)
-fftDir = dataDir + 'cosmo_sims/{0}_dm_50Mpc/output_files/data_fft/'.format(nPoints)
-powerDir = fftDir + 'power_spectrum/'.format(nPoints)
+# dataDir = '/home/bruno/Desktop/ssd_0/data/'
+# inDir = dataDir + 'cosmo_sims/{0}_dm_50Mpc/output_files/'.format(nPoints)
+# fftDir = dataDir + 'cosmo_sims/{0}_dm_50Mpc/output_files/data_fft/'.format(nPoints)
+# powerDir = fftDir + 'power_spectrum/'.format(nPoints)
+
+dataDir = '/home/brvillas/'
+inDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/'
+fftDir = inDir + 'power_spectrum_hm12/data_fft/'
+powerDir = inDir + 'power_spectrum_hm12/'
+
+
 if rank == 0: create_directory( powerDir)
 
 
@@ -39,13 +46,23 @@ if rank == 0 : print( "Snapshot: {0}".format(nSnap))
 
 # Load FFT data
 fft_file_name = fftDir + '{0}_data_fft.h5.{1}'.format( nSnap, rank )  
-print_mpi( ' Loading File: {0}'.format(fft_file_name), rank, nprocs, comm )
-
+if rank == 0: print 'Loading File: {0}'.format(fft_file_name)
 fft_file = h5.File(  fft_file_name, 'r' )
 fft_amp2 = fft_file['fft_amp2'][...]
-k_mag = fft_file['k_mag'][...]
-k_mag_min_local = fft_file.attrs['k_mag_min']
-k_mag_max_local = fft_file.attrs['k_mag_max']
+fft_file.close()
+
+# Load FFT data
+kmag_file_name = fftDir + '{0}_k_magnitude.h5.{1}'.format( nSnap, rank )  
+if rank == 0: print 'Loading File: {0}'.format(kmag_file_name)
+kmag_file = h5.File(  kmag_file_name, 'r' )
+k_mag = kmag_file['k_mag'][...]
+k_mag_min_local = kmag_file.attrs['k_mag_min']
+k_mag_max_local = kmag_file.attrs['k_mag_max']
+kmag_file.close()
+
+
+comm.Barrier()
+if rank == 0: print 'Loaded File: {0}'.format(fft_file_name)
 
 #Find global max min
 k_mag_min = comm.allreduce(k_mag_min_local, op=MPI.MIN)[0]
@@ -58,9 +75,9 @@ size = k_mag.size
 fft_amp2 = fft_amp2.reshape( size )
 k_mag = k_mag.reshape( size )
 
-n_kSamples = 20
+n_kSamples = 26
 if rank == 0: print( '\nComputing Power Spectrum   nSamples: {0}'.format(n_kSamples) )
-intervals = np.logspace(np.log10(k_mag_min*0.999), np.log10(k_mag_max*1.001), n_kSamples+1)
+intervals = np.logspace(np.log10(k_mag_min*0.99), np.log10(k_mag_max*0.99), n_kSamples+1)
 power, bin_edges= np.histogram( k_mag, bins=intervals, weights=fft_amp2 )
 n_in_bin, bin_edges = np.histogram( k_mag, bins=intervals )
 n_in_bin = n_in_bin.astype('float')
@@ -89,15 +106,15 @@ if rank == 0:
 
   #Write the data to file
   data = np.array([ k_vals, power_spectrum])
-  outfile_name = powerDir + 'power_spectrum_{0}.dat'.format(nSnap)
+  outfile_name = powerDir + 'power_spectrum_distributed_{0}.dat'.format(nSnap)
   np.savetxt( outfile_name, data)
   print 'Saved File: ', outfile_name
   
-  import matplotlib.pyplot as plt
-  plt.plot( k_vals, power_spectrum)
-  plt.xscale('log')
-  plt.yscale('log')
-  plt.savefig( powerDir + 'power.png')
+  # import matplotlib.pyplot as plt
+  # plt.plot( k_vals, power_spectrum)
+  # plt.xscale('log')
+  # plt.yscale('log')
+  # plt.savefig( powerDir + 'power.png')
 
 
 # 
