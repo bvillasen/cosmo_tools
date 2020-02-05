@@ -66,7 +66,7 @@ n_per_index = 10
 snapshots_to_compress = snapshots_to_compress[index*n_per_index:(index+1)*n_per_index]
 n_to_compress = len(snapshots_to_compress)
 
-snapshots_to_compress = [0]
+# snapshots_to_compress = [0]
 
 print( "\nNumber of snapshots to compres: {0}".format(n_to_compress) )
 print( ' {0}: {1}'.format( index, snapshots_to_compress ) )
