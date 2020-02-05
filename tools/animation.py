@@ -41,7 +41,7 @@ image_name = 'phase_diagram'
 # image_name = 'projection'
 # image_name = 'collapse'
 # image_name = 'projection'
-# image_name = 'image'
+image_name = 'image'
 # image_name = 'proj'
 
 # out_anim_name = 'chemistry_128_difference'.format(eta_2)
