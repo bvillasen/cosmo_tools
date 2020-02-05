@@ -20,11 +20,11 @@ print 'Index: ', index
 
 # dataDir = '/data/groups/comp-astro/bruno/'
 dataDir = '/gpfs/alpine/proj-shared/ast149/'
-inDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/output_files_hm12/'
-outDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/snapshots_hm12/'
+inDir = dataDir + 'cosmo_sims/1024_hydro_50Mpc/output_files_pchw18/'
+outDir = dataDir + 'cosmo_sims/1024_hydro_50Mpc/snapshots_pchw18/hydro_temperature/'
 
-hydro = False
-particles = True
+hydro = True
+particles = False
 
 def split_name( file_name, part=False):
   nSnapshot, name, nBox = file_name.split('.')
