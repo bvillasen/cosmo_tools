@@ -18,6 +18,24 @@ OmegaM_s8 = np.array([ [ 0.282131, 0.79138 ],
                        [ 0.317786, 0.849052 ],
                        [ 0.320623, 0.853588 ] ])
                        
+OmegaM_s8 = np.array([ [ 0.283656, 0.789168 ],
+                       [ 0.286701, 0.793314 ],
+                       [ 0.288934, 0.796504 ],
+                       [ 0.29116,  0.800977  ],
+                       [ 0.293797, 0.805127 ],
+                       [ 0.295619, 0.808641 ],
+                       [ 0.299279, 0.81246  ],
+                       [ 0.301912, 0.817251 ],
+                       [ 0.303936, 0.821406 ],
+                       [ 0.306568, 0.826518 ],
+                       [ 0.308798, 0.830029 ],
+                       [ 0.311438, 0.833536 ],
+                       [ 0.314271, 0.839288 ],
+                       [ 0.316091, 0.843445 ],
+                       [ 0.31893,  0.847913  ],
+                       [ 0.320962, 0.850142 ] ])
+
+                       
 OmegaM_s8_line_params = np.polyfit( OmegaM_s8[:,0], OmegaM_s8[:,1], 1)
 
 OmegaM_vals = OmegaM_h[:,0]
@@ -25,4 +43,8 @@ h_vals = OmegaM_h[:,1]
 s8_vals = OmegaM_s8_line_params[1] + OmegaM_vals*OmegaM_s8_line_params[0]
 
 alpha = 0.45
-sigma8_vals = s8_vals / ( OmegaM_vals / 0.3 )**alpha
+sigma8_vals = s8_vals / ( OmegaM_vals / 0.3 )**alpha  - 0.009
+
+H0_vals = h_vals * 100
+OmegaL_vals = 1 - OmegaM_vals
+cosmologies = np.array( [ OmegaM_vals, OmegaL_vals, H0_vals, sigma8_vals ] ).T.round(4)
