@@ -21,13 +21,14 @@ def get_delta_k_1D( signal, nx,  dx  ):
   delta_k2 = FT2
   return delta_k2, kx
 
-def get_power_spectrum_1D(signal, Lbox, nx, dx,  n_kSamples=20 ):
+def get_power_spectrum_1D(signal, Lbox, nx, dx,  n_kSamples=20, binning='log' ):
   delta_k2, kx = get_delta_k_1D( signal, nx, dx,  )
   k_min = kx.min()
   k_max = kx.max()
   # print K_mag.max()
   nBins = n_kSamples
   intervals = np.logspace(k_min, k_max, nBins+1)
+  if binning == 'linear': intervals = np.linspace(k_min, k_max, nBins+1)
   power, bin_edges= np.histogram( kx, bins=intervals, weights=delta_k2 )
   n_in_bin, bin_edges = np.histogram( kx, bins=intervals )
   n_in_bin = n_in_bin.astype('float')

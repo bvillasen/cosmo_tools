@@ -11,6 +11,7 @@ dataDir = cosmo_dir + 'data/'
 subDirectories = [x[0] for x in os.walk(cosmo_dir)]
 sys.path.extend(subDirectories)
 from tools import *
+from data_thermal_history import *
 
 # input_dir = '/home/brvillas/cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/'
 # output_dir = '/home/brvillas/cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/figures/'
@@ -87,6 +88,9 @@ delta_T0_pchw18 =  T0_pchw18 * np.log(10) * sigma_T0_pchw18
 gamma_hm12 = gamma_hm12 + 1
 gamma_pchw18 = gamma_pchw18 + 1 
 
+# data_sets = [ data_thermal_history_Hiss_2018, data_thermal_history_Lidz_2010, data_thermal_history_Bolton_2014 ]
+data_sets = [   data_thermal_history_Hiss_2018,  data_thermal_history_Bolton_2014, data_thermal_history_Walther_2019, data_thermal_history_Boera_2019 ]
+data_formats = [ 'ko', 'go', 'bo', 'ro']
 
 nrows = 1
 ncols = 2
@@ -96,23 +100,43 @@ fs = 17
 
 ax = ax_l[0]
 alpha = 0.7
-ax.fill_between( z_list, T0_hm12 + delta_T0_hm12, T0_hm12 - delta_T0_hm12, alpha=alpha, label='UVB=HM12')
-ax.fill_between( z_list, T0_pchw18 + delta_T0_pchw18, T0_pchw18 - delta_T0_pchw18, alpha=alpha, label='UVB=Puchwein18' )
-ax.set_ylabel( r'$T_0$  [K]', fontsize=fs )
+for i,data_set in enumerate(data_sets):
+  data_x = data_set['z']
+  data_mean = data_set['T0'].astype(np.float) / 10**4
+  data_error_p = data_set['T0_sigma_plus']
+  data_error_m = data_set['T0_sigma_minus']
+  data_error = np.array([ data_error_m, data_error_p ]).astype(np.float) / 10**4
+  data_name = data_set['name']
+  data_fmt = data_formats[i]
+  if i == 2: print data_x.shape, data_mean.shape, data_error.shape
+  ax.errorbar( data_x, data_mean, yerr=data_error, fmt=data_fmt, label=data_name, alpha=0.5)
+ax.fill_between( z_list, (T0_hm12 + delta_T0_hm12)/10**4, (T0_hm12 - delta_T0_hm12)/10**4, alpha=alpha, label='UVB=HM12')
+ax.fill_between( z_list, (T0_pchw18 + delta_T0_pchw18)/10**4, (T0_pchw18 - delta_T0_pchw18)/10**4, alpha=alpha, label='UVB=Puchwein18' )
+ax.set_ylabel( r'$T_0$  [$10^4$ K]', fontsize=fs )
 ax.set_xlabel( 'Redshift', fontsize=fs )
-ax.set_xlim( 2, 6)
+ax.set_xlim( 1.9, 6.1)
 ax.legend(loc=3)
 
 
 ax = ax_l[1]
+for i,data_set in enumerate(data_sets):
+  data_x = data_set['z']
+  data_mean = data_set['gamma']
+  data_error_p = data_set['gamma_sigma_plus']
+  data_error_m = data_set['gamma_sigma_minus']
+  data_error = np.array([ data_error_m, data_error_p ])
+  data_name = data_set['name']
+  data_fmt = data_formats[i]
+  ax.errorbar( data_x, data_mean, yerr=data_error, fmt=data_fmt, label=data_name, alpha=0.5)
 ax.fill_between( z_list, gamma_hm12 + sigma_gamma_hm12, gamma_hm12-sigma_gamma_hm12, alpha=alpha, label='UVB=HM12')
 ax.fill_between( z_list, gamma_pchw18 + sigma_gamma_pchw18, gamma_pchw18-sigma_gamma_pchw18, alpha=alpha, label='UVB=Puchwein18')
 ax.set_ylabel( r'$\gamma$ ', fontsize=fs )
 ax.set_xlabel( 'Redshift', fontsize=fs )
-ax.set_xlim( 2, 6)
+ax.set_xlabel( 'Redshift', fontsize=fs )
+ax.set_xlim( 1.9, 6.1)
 ax.legend(loc=3)
 
-fileName = output_dir + 'thermal_history_data.png'.format(nSnap)
+fileName = output_dir + 'thermal_history_data+walther.png'.format(nSnap)
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
 print 'Saved Image: ', fileName
 
@@ -125,10 +149,9 @@ fig, ax_l = plt.subplots(nrows=nrows, ncols=ncols, figsize=(8*ncols,6*nrows))
 fs = 17
 
 ax = ax_l[0]
-ax.plot( z_list, T0_hm12, label='UVB=HM12')
-# ax.fill_between( z_list, T0_hm12 + delta_T0_hm12, T0_hm12 - delta_T0_hm12)
-ax.plot( z_list, T0_pchw18, label='UVB=Puchwein18')
-ax.set_ylabel( r'$T_0$  [K]', fontsize=fs )
+ax.plot( z_list, T0_hm12/10**4, label='UVB=HM12')
+ax.plot( z_list, T0_pchw18/10**4, label='UVB=Puchwein18')
+ax.set_ylabel( r'$T_0$  [$10^4$ K]', fontsize=fs )
 ax.set_xlabel( 'Redshift', fontsize=fs )
 ax.set_xlim( 2, 18)
 ax.legend(loc=3)
@@ -137,7 +160,7 @@ ax.legend(loc=3)
 ax = ax_l[1]
 ax.plot( z_list, gamma_hm12, label='UVB=HM12')
 ax.plot( z_list, gamma_pchw18, label='UVB=Puchwein18')
-ax.set_ylabel( r'$\gamma - 1$ ', fontsize=fs )
+ax.set_ylabel( r'$\gamma $ ', fontsize=fs )
 ax.set_xlabel( 'Redshift', fontsize=fs )
 ax.set_xlim( 2, 18)
 ax.legend(loc=3)

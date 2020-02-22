@@ -164,7 +164,7 @@ def load_snapshot_data_grid( nSnap, inFileName ):
 # inputDir = dataDir + 'cholla_hydro/collapse_3D/'
 # nSnap = 0
 def load_snapshot_data_particles( nSnap, inputDir, single_file=False ):
-  inFileName = 'particles_{0}.h5'.format(nSnap)
+  inFileName = 'particles_{0:03}.h5'.format(nSnap)
   
   if single_file:
     inFileName = '{0}_particles.h5'.format(nSnap)

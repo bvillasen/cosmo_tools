@@ -7,7 +7,7 @@
   "deleteLocal": false,
   "hostname": "lux.ucsc.edu",
   "port": "22",
-  "target": "/home/brvillas/cosmo_tools",
+  "target": "/data/groups/comp-astro/bruno/cosmo_tools",
   "ignore": [
     ".remote-sync.json",
     ".git/**"
