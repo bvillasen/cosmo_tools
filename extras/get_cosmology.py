@@ -35,8 +35,39 @@ OmegaM_s8 = np.array([ [ 0.283656, 0.789168 ],
                        [ 0.31893,  0.847913  ],
                        [ 0.320962, 0.850142 ] ])
 
+OmegaB_H0 = np.array([ [ 0.02199537, 65.9385 ],
+          [ 0.02203882, 66.108 ],
+          [ 0.02209472, 66.293 ],
+          [ 0.02216301, 66.5549 ],
+          [ 0.02221266, 66.7859 ],
+          [ 0.02226541, 67.0322 ],
+          [ 0.0223182, 67.1865 ],
+          [ 0.02238338, 67.4637 ],
+          [ 0.02244546, 67.7102 ],
+          [ 0.02251066, 67.9413 ],
+          [ 0.02259139, 68.2034 ],
+          [ 0.02264725, 68.4498 ],
+          [ 0.02269069, 68.65 ] ])
+          
+ns_H0 = np.array([ [ 0.954388, 65.8564 ],
+                [ 0.95626, 66.1348 ],
+                [ 0.957923, 66.3823 ],
+                [ 0.959379, 66.5834 ],
+                [ 0.961147, 66.8618 ],
+                [ 0.963645, 67.1098 ],
+                [ 0.96562,  67.4345  ],
+                [ 0.967494, 67.6359 ],
+                [ 0.969158, 67.8834 ],
+                [ 0.971134, 68.1311 ],
+                [ 0.973215, 68.4097 ],
+                [0.974567,  68.6108 ] ])
                        
+# 
+# 
 OmegaM_s8_line_params = np.polyfit( OmegaM_s8[:,0], OmegaM_s8[:,1], 1)
+OmegaB_H0_line_params = np.polyfit( OmegaB_H0[:,1], OmegaB_H0[:,0], 1)
+ns_H0_line_params = np.polyfit( ns_H0[:,1], ns_H0[:,0], 1)
+
 
 OmegaM_vals = OmegaM_h[:,0]
 h_vals = OmegaM_h[:,1]
@@ -45,6 +76,19 @@ s8_vals = OmegaM_s8_line_params[1] + OmegaM_vals*OmegaM_s8_line_params[0]
 alpha = 0.45
 sigma8_vals = s8_vals / ( OmegaM_vals / 0.3 )**alpha  - 0.009
 
+
 H0_vals = h_vals * 100
+
+omegaBh2_vals = OmegaB_H0_line_params[1] + H0_vals*OmegaB_H0_line_params[0]
+omegaB_vals = omegaBh2_vals  / h_vals**2 
+
+
+ns_vals = ns_H0_line_params[1] + H0_vals*ns_H0_line_params[0] - 0.0005
+
+
 OmegaL_vals = 1 - OmegaM_vals
-cosmologies = np.array( [ OmegaM_vals, OmegaL_vals, H0_vals, sigma8_vals ] ).T.round(4)
+
+
+
+
+cosmologies = np.array( [ OmegaM_vals, OmegaL_vals, H0_vals, sigma8_vals, omegaB_vals, ns_vals ] ).T.round(4)
