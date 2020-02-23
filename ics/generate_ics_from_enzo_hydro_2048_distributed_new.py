@@ -26,9 +26,9 @@ print 'Index: ', index
 # dataDir = '/raid/bruno/data/'
 dataDir = '/gpfs/alpine/proj-shared/ast149/'
 # dataDir = '/data/groups/comp-astro/bruno/'
-enzoDir = dataDir + 'cosmo_sims/enzo/2048_hydro_50Mpc_cosmo_1/'
+enzoDir = dataDir + 'cosmo_sims/enzo/2048_hydro_50Mpc_cosmo_{0}/'.format(index)
 inDir = enzoDir
-outputDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc_cosmo_1/ics_512/'
+outputDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc_cosmo_{0}/ics_512/'.format(index)
 create_directory( outputDir )
 
 nSnap = 0
