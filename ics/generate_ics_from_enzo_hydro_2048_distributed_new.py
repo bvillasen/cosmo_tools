@@ -18,17 +18,23 @@ from generate_ics_grid_functions import *
 from domain_decomposition import get_domain_block, get_domain_parent
 from tools import create_directory
 
-if len(sys.argv) == 1: index = 0
-else: index = int(sys.argv[1])
+if len(sys.argv) == 1: cosmo_index, index, type = 0, 0, 'particles'
+else: 
+  cosmo_index = int(sys.argv[1])
+  index = int(sys.argv[2])
+  type = sys.argv[3]
+  
+print 'Cosmo Index: ', cosmo_index
 print 'Index: ', index
+print 'Type: ', type
 
 # dataDir = '/home/bruno/Desktop/data/'
 # dataDir = '/raid/bruno/data/'
 dataDir = '/gpfs/alpine/proj-shared/ast149/'
 # dataDir = '/data/groups/comp-astro/bruno/'
-enzoDir = dataDir + 'cosmo_sims/enzo/2048_hydro_50Mpc_cosmo_{0}/'.format(index)
+enzoDir = dataDir + 'cosmo_sims/enzo/2048_hydro_50Mpc_cosmo_{0}/'.format(cosmo_index)
 inDir = enzoDir
-outputDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc_cosmo_{0}/ics_512/'.format(index)
+outputDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc_cosmo_{0}/ics_512/'.format(cosmo_index)
 create_directory( outputDir )
 
 nSnap = 0
@@ -50,31 +56,33 @@ grid_size = [ 2048, 2048, 2048 ]
 
 # Get the domain decomposition
 domain =  get_domain_block( proc_grid, box_size, grid_size )
+print 'N Cells: {0}'.format(grid_size[0]*grid_size[1]*grid_size[2])
 
 #Generate Particles ICs
-print 'N Cells: {0}'.format(grid_size[0]*grid_size[1]*grid_size[2])
-fields_particles = ['pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
-# Generate Particles ICs
-fields_particles = ['mass', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
-outputBaseName = '{0}_particles.h5'.format(nSnap)
-generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True, save_pid_indices=True)
+if type == 'particles':
+  # fields_particles = ['mass', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
+  fields_particles = [ ['mass'], ['pos_x', 'pos_y'], ['pos_z', 'vel_x'], ['vel_y', 'vel_z']  ]
+  outputBaseName = '{0}_particles.h5'.format(nSnap)
+  # generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True, save_pid_indices=True)
 
-# generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True)
-# get_pid_indices = False
-# for field in fields_particles:
-#   generate_ics_particles_distributed_single_field( field, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=get_pid_indices )
-#   get_pid_indices = False
-# 
-# if index == 0:
-#   print 'Compressing Fields'
-#   compress_fields_to_single_file( fields_particles, domain, proc_grid, outputDir, outputBaseName )
-# 
+  # generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True)
+  get_pid_indices = False
+  fields = fields_particles[index-1]
+  if index == 1: get_pid_indices = True
+  print fields
+  for field in fields:
+    generate_ics_particles_distributed_single_field( field, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=get_pid_indices, save_pid_indices=get_pid_indices )
+  
+  if index == 0:
+    print 'Compressing Fields'
+    compress_fields_to_single_file( fields_particles, domain, proc_grid, outputDir, outputBaseName )
 
 # Generate Hydro Ics
-data_grid = ds.covering_grid( level=0, left_edge=ds.domain_left_edge, dims=ds.domain_dimensions )
-fields_hydro = [ 'density', 'momentum_x', 'momentum_y', 'momentum_z', 'GasEnergy', 'Energy'] #It has to be in this order
-outputBaseName = '{0}.h5'.format(nSnap)
-generate_ics_grid_distributed( fields_hydro, domain, proc_grid, data_grid, ds, outputDir, outputBaseName, current_a, current_z, h )
+if type == 'hydro':
+  data_grid = ds.covering_grid( level=0, left_edge=ds.domain_left_edge, dims=ds.domain_dimensions )
+  fields_hydro = [ 'density', 'momentum_x', 'momentum_y', 'momentum_z', 'GasEnergy', 'Energy'] #It has to be in this order
+  outputBaseName = '{0}.h5'.format(nSnap)
+  generate_ics_grid_distributed( fields_hydro, domain, proc_grid, data_grid, ds, outputDir, outputBaseName, current_a, current_z, h )
 
 
 
