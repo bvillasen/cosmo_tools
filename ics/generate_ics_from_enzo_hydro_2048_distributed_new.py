@@ -54,7 +54,7 @@ domain =  get_domain_block( proc_grid, box_size, grid_size )
 #Generate Particles ICs
 print 'N Cells: {0}'.format(grid_size[0]*grid_size[1]*grid_size[2])
 fields_particles = ['pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
-Generate Particles ICs
+# Generate Particles ICs
 fields_particles = ['mass', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
 outputBaseName = '{0}_particles.h5'.format(nSnap)
 generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True, save_pid_indices=True)
