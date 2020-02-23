@@ -18,7 +18,7 @@ from generate_ics_grid_functions import *
 from domain_decomposition import get_domain_block, get_domain_parent
 from tools import create_directory
 
-if len(sys.argv) == 0: index = 0
+if len(sys.argv) == 1: index = 0
 else: index = int(sys.argv[1])
 print 'Index: ', index
 
