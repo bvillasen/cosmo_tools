@@ -60,14 +60,17 @@ print 'N Cells: {0}'.format(grid_size[0]*grid_size[1]*grid_size[2])
 
 #Generate Particles ICs
 if type == 'particles':
-  fields_particles = [ ['mass'], ['pos_x', 'pos_y'], ['pos_z', 'vel_x'], ['vel_y', 'vel_z']  ]
   outputBaseName = '{0}_particles.h5'.format(nSnap)
-  # generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True, save_pid_indices=True)
-
+  if index < 0:
+    fields_particles = ['mass', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
+    print fields_particles
+    generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True, save_pid_indices=True)
+    
   # generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True)
   get_pid_indices = False
   fields = fields_particles[index-1]
   if index > 0:
+    fields_particles = [ ['mass'], ['pos_x', 'pos_y'], ['pos_z', 'vel_x'], ['vel_y', 'vel_z']  ]
     if index == 1: get_pid_indices = True
     print fields
     for field in fields:
