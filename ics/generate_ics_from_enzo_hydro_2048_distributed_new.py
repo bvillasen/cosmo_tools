@@ -68,10 +68,11 @@ if type == 'particles':
   # generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True)
   get_pid_indices = False
   fields = fields_particles[index-1]
-  if index == 1: get_pid_indices = True
-  print fields
-  for field in fields:
-    generate_ics_particles_distributed_single_field( field, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=get_pid_indices )
+  if index > 0:
+    if index == 1: get_pid_indices = True
+    print fields
+    for field in fields:
+      generate_ics_particles_distributed_single_field( field, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=get_pid_indices )
   
   if index == 0:
     print 'Compressing Fields'
