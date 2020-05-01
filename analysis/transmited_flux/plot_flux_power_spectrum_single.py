@@ -57,6 +57,7 @@ skewer_axis = 'x'
 
 snapshots_indices = [83, 90,  96, 102, 106, 110, 114, 119, 124, 130, 136, 143, 151, 159, 169, 169 ]
 snapshots_indices.reverse()
+
 # 
 
 nrows = 4
@@ -108,7 +109,7 @@ power_plus = []
 for i in range(n_kSamples ):
 # i = 0
   p_vals = power_all[:,i]
-  delta_power = p_vals * k_vals[i]
+  delta_power = p_vals * k_vals[i] / np.pi
   delta_power[ delta_power< 1e-8] = 1e-8
   
   power_mean.append( delta_power.mean() )
@@ -195,7 +196,7 @@ ax.set_xscale('log')
 
 
 
-fileName = output_dir + 'flux_power_spectrum_{0}_{3}_bins{1}{2}_normalized.png'.format(nSnap, binning, n_bins, uvb)
+fileName = output_dir + 'flux_power_spectrum_{0}_{3}_bins{1}{2}.png'.format(nSnap, binning, n_bins, uvb)
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
 print 'Saved Image: ', fileName
 

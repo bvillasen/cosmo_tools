@@ -2,6 +2,7 @@ import sys, os
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+import palettable
 
 cosmo_dir = os.path.dirname(os.path.dirname(os.getcwd())) + '/'
 dataDir = cosmo_dir + 'data/'
@@ -13,7 +14,7 @@ from tools import *
 from matplotlib import rc, font_manager
 rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
 # rc('font',**{'family':'Helvetica'})
-rc('text', usetex=True)
+# rc('text', usetex=True)
 hfont = {'fontname':'Helvetica'}
 
 outDir = '/home/bruno/Desktop/'
@@ -35,6 +36,14 @@ for l in lambda_vals:
 signal = components[0] + components[1] + components[2]
 
 
+colors = palettable.cmocean.sequential.Haline_10_r.mpl_colors
+colors_1 = palettable.colorbrewer.sequential.GnBu_9.mpl_colors
+purples = palettable.colorbrewer.sequential.Purples_9.mpl_colors
+yellows = palettable.colorbrewer.sequential.YlOrRd_9.mpl_colors 
+
+
+c_0 = 'C0'
+c_1 = colors[3]
 
 
 # power, bin_centers, n_in_bin =  get_power_spectrum_1D(signal, L, nPoints, dx,  n_kSamples=20, binning='linear' )
@@ -88,8 +97,8 @@ for ax in axes:
 fs = 22        
 
 ax0.set_ylim( -3.2, 3.2 )
-ax0.axhline(0, linestyle='--', c="C3")
-ax0.plot(x, signal, color='C1')
+ax0.axhline(0, linestyle='--', c="C1")
+ax0.plot(x, signal, color=c_1)
 ax0.set_ylabel('Signal', fontsize=fs, color=text_color )
 ax0.set_xlim(0, 2*np.pi)
 ax0.set_title( 'Signal = C1 + C2 + C3', fontsize=fs, color=text_color )
@@ -144,10 +153,10 @@ ax4.text(0.85, 0.90, 'C3', color=text_color, alpha=1, fontsize=20, horizontalali
 # ax4.text(0.17, 0.20, 'Large Scales', color='C1', alpha=1, fontsize=20, horizontalalignment='center', verticalalignment='center', transform=ax4.transAxes,rotation=90 )
 # ax4.text(0.84, 0.20, 'Small Scales', color='C1', alpha=1, fontsize=20, horizontalalignment='center', verticalalignment='center', transform=ax4.transAxes,rotation=90 )
 
-ax4.text(0.18, 0.04, 'Large Scales', color='C1', alpha=1, fontsize=17, horizontalalignment='center', verticalalignment='center', transform=ax4.transAxes, )
-ax4.text(0.84, 0.04, 'Small Scales', color='C1', alpha=1, fontsize=17, horizontalalignment='center', verticalalignment='center', transform=ax4.transAxes, )
-ax4.arrow(13, -0.35, -11, 0.0, width=.01, head_width=0.09, head_length=0.35, color='C1' )
-ax4.arrow(32.5, -0.35, 11, 0.0, width=.01, head_width=0.09, head_length=0.35, color='C1' )
+ax4.text(0.18, 0.04, 'Large Scales', color=c_1, alpha=1, fontsize=17, horizontalalignment='center', verticalalignment='center', transform=ax4.transAxes, )
+ax4.text(0.84, 0.04, 'Small Scales', color=c_1, alpha=1, fontsize=17, horizontalalignment='center', verticalalignment='center', transform=ax4.transAxes, )
+ax4.arrow(13, -0.35, -11, 0.0, width=.01, head_width=0.09, head_length=0.35, color=c_1 )
+ax4.arrow(32.5, -0.35, 11, 0.0, width=.01, head_width=0.09, head_length=0.35, color=c_1 )
 
 
 ax0.set_facecolor('k')

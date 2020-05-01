@@ -4,6 +4,7 @@ import h5py as h5
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import matplotlib as mpl
+from scipy.interpolate import interp1d
 
 
 cosmo_dir = os.path.dirname(os.path.dirname(os.getcwd())) + '/'
@@ -23,8 +24,13 @@ colormap = Deep_20.mpl_colormap
 outputs_file = '../../scale_outputs/outputs_cosmo_2048.txt'
 outputs = np.loadtxt( outputs_file )
 
-text_color ='k'
-# text_color ='white'
+transparent = False
+
+background = 'white'
+# background = 'black'
+# background = 'transparent'
+
+
 
 # 
 # from matplotlib import rc, font_manager
@@ -69,7 +75,8 @@ grid_complete_size = [ 2048, 2048, 2048 ]
 
 
 
-nSnap = 147
+# nSnap = 147
+nSnap = 90
 
 #Box parameters
 Lbox = 50.0 #Mpc/h
@@ -120,6 +127,7 @@ temperature_los = temperature[:,id_i, id_j]
 
 
 
+
 x_comov, vel_Hubble, n_HI_los, tau_redshift = compute_optical_depth( H0, cosmo_h, Omega_M, Omega_L, Lbox, nPoints,  current_z, density_los, HI_density_los, temperature_los, velocity_los, space='redshift' )
 x_comov, vel_Hubble, n_HI_los, tau_real     = compute_optical_depth( H0, cosmo_h, Omega_M, Omega_L, Lbox, nPoints,  current_z, density_los, HI_density_los, temperature_los, velocity_los, space='real' )
 F_real = np.exp(-tau_real)
@@ -154,7 +162,17 @@ data_y = np.array([ y_0, y_1 ]).T
 
 
 
+print n_HI_los.max()
 N_HI_los = n_HI_los * dr_cm
+
+#Interpolate LOS
+x_proper = current_a * x_comov / cosmo_h
+
+x_proper_interp, N_HI_interp, = interpolate_los( x_proper, N_HI_los, R, 8, log_interp=True, kind='cubic')
+vel_Hubble_interp = H * x_proper_interp
+
+
+  
 
 n_slice = 2
 n_height = 256
@@ -172,42 +190,66 @@ fig = plt.figure( figsize=(35*ncols,5*nrows) )
 gs1 = gridspec.GridSpec(nrows*n_per_subplot,1)
 gs1.update(wspace=0, hspace=0.5) # set the spacing between axes. 
 
+
+if background == 'white':
+  text_color ='k'
+  fig.patch.set_facecolor('white')  
+
+if background == 'black':
+  text_color ='white'
+  fig.patch.set_facecolor('black')  
+
+if background == 'transparent':
+  text_color ='white'  
+  
+  
+
 mpl.rcParams['axes.linewidth'] = 4 #set the value globally
 
 color = 'C0'
-tick_size_0 = 24
-tick_size_1 = 24
+tick_size_0 = 30
+tick_size_1 = 30
 c_en = 'C0'
 c_ch = 'C1'
-font_size = 35
+font_size = 45
 line_width_1 = 2
-line_width = 3
+line_width = 4
+
+axes = []
 
 index = 0
 ax = plt.subplot(gs1[index*n_per_subplot:(index+1)*n_per_subplot])
 # ax.set_title( r"Simulated Ly-$\alpha$ Forest Spectra    z={0:.2f}".format(current_z), fontsize=font_size)
 ax.xaxis.tick_top()
-ax.set_title(r'Comoving Distance [$h^{-1} \mathrm{Mpc}$]', fontsize=font_size, pad = 50)
+ax.set_title(r'Comoving Distance [$h^{-1} \mathrm{Mpc}$]', fontsize=font_size, pad = 50, color=text_color)
 ax.xaxis.label_position ='top'
 ax.imshow( np.log10(projection), cmap=colormap, extent=[0,Lbox, 0, Lbox/nPoints*n_height] )
-ax.axhline( Lbox/nPoints*n_height/2.0, linestyle='--',  c=text_color, alpha=0.5, linewidth = 0.8 )
+ax.axhline( Lbox/nPoints*n_height/2.0, linestyle='--',  c='k', alpha=0.5, linewidth =5 )
 # ax.set_yscale('log')
 # ax.set_ylabel( r'$n_{HI}  \,\,\, [cm^{-3}]$ ', fontsize=font_size)
 ax.tick_params(axis='both', which='major', labelsize=tick_size_0, length=10, width=5  )
-ax.set_ylabel( r'$\rho_\mathrm{HI} $ ', fontsize=font_size, labelpad=50)
-ax.text(0.95, 0.85, 'z={0:.2f}'.format(current_z), horizontalalignment='center',  verticalalignment='center', transform=ax.transAxes, fontsize=35, color=text_color) 
+ax.set_ylabel( r'$\rho_\mathrm{HI} $ ', fontsize=font_size, labelpad=50, color=text_color)
+ax.text(0.95, 0.85, 'z={0:.1f}'.format(current_z), horizontalalignment='center',  verticalalignment='center', transform=ax.transAxes, fontsize=40, color='k') 
 ax.tick_params(axis='y', which='major', labelsize=0, length=0, width=0)
 # ax.get_yaxis().set_visible(False)
+axes.append(ax)
+
+
+color  =  'C0'
+
 
 index = 1
 ax = plt.subplot(gs1[index*n_per_subplot:(index+1)*n_per_subplot])
 ax.plot( vel_Hubble, N_HI_los, linewidth=line_width, c=color)
+ax.plot( vel_Hubble_interp, N_HI_interp, '--', linewidth=2, c='C3')
 ax.set_yscale('log')
 ax.set_xlim( vel_Hubble.min(), vel_Hubble.max())
-ax.set_ylabel( r'$N_\mathrm{HI}  \,\,\, [cm^{-2}]$ ', fontsize=font_size)
+ax.set_ylabel( r'$N_\mathrm{HI}  \,\,\, [cm^{-2}]$ ', fontsize=font_size, color=text_color)
 ax.tick_params(axis='both', which='major', labelsize=tick_size_0, length=10, width=5)
 ax.tick_params(axis='x', which='major', labelsize=0,)
 ax.tick_params(axis='both', which='minor', labelsize=tick_size_1)
+axes.append(ax)
+if not transparent: ax.set_facecolor(background)
 
 
 
@@ -221,43 +263,62 @@ ax.set_xlim( vel_Hubble.min(), vel_Hubble.max())
 ax.set_ylim( 0, 1)
 # ax.set_title( 'Real Space ', fontsize= 20 )
 # ax.set_xlabel( 'Redshift Space ', fontsize= 20 )
-ax.text(0.54, 1.08, 'Real Space', fontsize=28, horizontalalignment='right', verticalalignment='center', transform=ax.transAxes )
-ax.text(0.55, -0.10, 'Redshift Space', fontsize=28, horizontalalignment='right', verticalalignment='center', transform=ax.transAxes )
+ax.text(0.54, 1.08, 'Real Space', fontsize=28, horizontalalignment='right', verticalalignment='center', transform=ax.transAxes, color=text_color )
+ax.text(0.55, -0.10, 'Redshift Space', fontsize=28, horizontalalignment='right', verticalalignment='center', transform=ax.transAxes , color=text_color)
 
 ax.get_xaxis().set_visible(False)
 ax.get_yaxis().set_visible(False)
+axes.append(ax)
+# ax.set_facecolor('black')
 
+
+color_real = Deep_20.mpl_colors[1]
+color_real = 'C1'
 
 index = 3
 ax = plt.subplot(gs1[index*n_per_subplot:(index+1)*n_per_subplot])
-ax.plot( vel_Hubble, tau_real, '--', linewidth=line_width_1, c="C1", label='Real Space')
+ax.plot( vel_Hubble, tau_real, '--', linewidth=line_width_1, c=color_real, label='Real Space')
 ax.plot( vel_Hubble, tau_redshift, linewidth=line_width, c=color, label='Redshift Space')
 ax.set_xlim( vel_Hubble.min(), vel_Hubble.max())
-ax.set_ylabel( r'$\tau$ ', fontsize=font_size)
+ax.set_ylabel( r'$\tau$ ', fontsize=font_size, color=text_color)
 ax.tick_params(axis='both', which='major', labelsize=tick_size_0, length=10, width=5)
 ax.tick_params(axis='x', which='major', labelsize=0,)
 ax.tick_params(axis='both', which='minor', labelsize=tick_size_1)
 ax.set_yscale( 'log')
-ax.legend(fontsize=25, frameon=False, loc=2)
+leg = ax.legend(fontsize=25, frameon=False, loc=2)
+for text in leg.get_texts():
+    plt.setp(text, color = text_color)
+axes.append(ax)
+if not transparent: ax.set_facecolor(background)
+
 
 index = 4
 ax = plt.subplot(gs1[index*n_per_subplot:(index+1)*n_per_subplot])
-ax.plot( vel_Hubble, F_real, '--', linewidth=line_width_1, c="C1", label='Real Space')
+ax.plot( vel_Hubble, F_real, '--', linewidth=line_width_1, c=color_real, label='Real Space')
 ax.plot( vel_Hubble, F_redshift, linewidth=line_width, c=color, label='Redshift Space')
 ax.set_xlim( vel_Hubble.min(), vel_Hubble.max())
-ax.set_ylabel( r'$F$ ', fontsize=font_size)
-ax.set_xlabel( r'$v \,\,\,  [km / s]$', fontsize=font_size)
+ax.set_ylabel( r'$F$ ', fontsize=font_size, color=text_color)
+ax.set_xlabel( r'$v \,\,\,  [km / s]$', fontsize=font_size, color=text_color)
 ax.tick_params(axis='both', which='major', labelsize=tick_size_0, length=10, width=5)
 ax.tick_params(axis='both', which='minor', labelsize=tick_size_1)
 ax.set_ylim( 0, 1)
 # ax.legend(fontsize=19, frameon=False, loc=2)
+axes.append(ax)
+if not transparent: ax.set_facecolor(background)
 
 
+
+# Set the borders to a given color...
+for ax in axes:
+    ax.tick_params(color=text_color, labelcolor=text_color )
+    for spine in ax.spines.values():
+        spine.set_edgecolor(text_color)
 
 fig.subplots_adjust( wspace=0 )
 fig.tight_layout()
-outputFileName = 'transmited_flux_{0}_{1}_projection.png'.format(uvb, nSnap)
-fig.savefig( output_dir + outputFileName, bbox_inches='tight', dpi=200 )
+outputFileName = 'transmited_flux_{0}_{1}_projection_{2}_interp.png'.format(uvb, nSnap, background)
+if not transparent: fig.savefig( output_dir + outputFileName, bbox_inches='tight',  facecolor=fig.get_facecolor(), dpi=200 )
+else: fig.savefig( output_dir + outputFileName, bbox_inches='tight',  transparent=True, dpi=200 )
 print 'Saved image: ', output_dir + outputFileName
 
 

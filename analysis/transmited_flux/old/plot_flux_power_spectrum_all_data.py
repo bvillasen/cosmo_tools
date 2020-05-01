@@ -235,7 +235,7 @@ for uvb in [ 'hm12', 'pchw18' ]:
   plot_data_observed = False
 
 
-fileName = output_dir + 'flux_power_spectrum_all_data.png'
+fileName = output_dir + 'flux_power_spectrum_all_data_0.png'
 if normalized:fileName = output_dir + 'flux_power_spectrum_all_data_normalized.png'
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
 print 'Saved Image: ', fileName

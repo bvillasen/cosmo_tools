@@ -33,11 +33,22 @@ ncells = nx * ny * nz
 
 uvb = 'pchw18'
 # uvb = 'hm12'
-inDir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/output_files_{1}/'.format(nPoints, uvb )
-output_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/skewers_{1}/'.format(nPoints, uvb )
+
+# cosmo_name = 'cosmo_3'
+cosmo_name = ''
+
+
+inDir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/output_files_{1}/'.format(nPoints, uvb, cosmo_name )
+output_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/skewers_{1}/'.format(nPoints, uvb, cosmo_name )
 create_directory( output_dir )
 
-snapshots_indices = [83, 86, 90, 93, 96, 99, 102, 106, 110, 114, 119, 124, 130, 136, 143, 151, 159, 169 ]
+# snapshots_indices_0 = [83, 86, 90, 93, 96, 99, 102, 106, 110, 114, 119, 124, 130, 136, 143, 151, 159, 169 ]
+# snapshots_indices = [74, 77, 80, 83, 86, 90, 93, 96, 99, 102, 106, 110, 114, 119, 124, 130, 136, 143, 151, 159, 169]
+# snapshots_indices = [74, 76, 77, 79, 80, 82, 83, 85, 86, 88, 90, 91, 93, 94, 96, 97, 99, 101, 102, 104, 106, 108, 110, 112, 114, 117, 119, 122, 124, 127, 130, 133, 136, 139, 143, 147, 151, 155, 159, 164, 169]
+snapshots_indices = range( 74, 170, 1 )
+
+
+# snapshots_indices = range( 1, 16 )
 
 data_type = 'hydro'
 
@@ -67,6 +78,9 @@ ids_z_local = np.arange(0, box_size, skewer_stride)
 # for nSnap in snapshots_indices:
 
 nSnap = snapshots_indices[rank]
+# if nSnap in snapshots_indices_0: 
+#   print 'Skiping Snap: {0}'.format(nSnap)
+#   exit()
 
 out_file_name = output_dir + 'skewers_{0}_{1}.h5'.format(axis, nSnap)
 outFile = h5.File( out_file_name, 'w')
@@ -75,14 +89,14 @@ outFile = h5.File( out_file_name, 'w')
 skewer_ids = []
 for index_y in range(n_boxes):
   for index_z in range(n_boxes):
-    
+
     subgrid_x = [ 0, nPoints ]
     subgrid_y = [ index_y*box_size, (index_y+1)*box_size ]
     subgrid_z = [ index_z*box_size, (index_z+1)*box_size ]
     subgrid = [ subgrid_x, subgrid_y, subgrid_z ]
-    
+
     precision = np.float64
-  
+
     fields = ['density', 'temperature', 'momentum_x', 'HI_density' ]
     data_snapshot = load_snapshot_data_distributed( nSnap, inDir, data_type, fields, subgrid, domain, precision, proc_grid,  show_progess=show_progess )
     current_z = data_snapshot['Current_z']
@@ -91,19 +105,19 @@ for index_y in range(n_boxes):
     HI_density = data_snapshot[data_type]['HI_density']
     velocity = data_snapshot[data_type]['momentum_x'] / density 
 
-    
+
     for id_y_local in ids_y_local:
       for id_z_local in ids_z_local:
 
         id_y_global = index_y * box_size + id_y_local
         id_z_global = index_z * box_size + id_z_local
-        
+
         skewer_index_y = index_y * n_per_box + id_y_local/skewer_stride
         skewer_index_z = index_z * n_per_box + id_z_local/skewer_stride
     #   
         skewer_id = skewer_index_y + skewer_index_z*n_per_dimension
         skewer_ids.append(skewer_id)
-        
+
         skewer_density = density[:,id_y_local, id_z_local]
         skewer_temperature = temperature[:,id_y_local, id_z_local]
         skewer_HI_density = HI_density[:,id_y_local, id_z_local]

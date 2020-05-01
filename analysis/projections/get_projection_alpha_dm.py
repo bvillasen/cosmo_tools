@@ -15,7 +15,7 @@ cosmo_dir = os.path.dirname(os.path.dirname(os.getcwd())) + '/'
 dataDir = cosmo_dir + 'data/'
 subDirectories = [x[0] for x in os.walk(cosmo_dir)]
 sys.path.extend(subDirectories)
-from load_data_cholla import load_snapshot_data, load_snapshot_data_distributed
+from load_data_cholla import load_snapshot_data, load_snapshot_data_distributed, load_snapshot_data_distributed_periodix_x
 from tools import *
 from congrid import *
 import scipy.ndimage
@@ -62,14 +62,17 @@ dataDir = '/data/groups/comp-astro/bruno/'
 nPoints = 2048
 
 # size_front = 5120
-size_front = 2048 
-size_back = 2048
+size_front =int ( 2048 * 1.4 )
+size_back = int (2048 * 0.8 )
 
-inDir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/output_files_hm12/'.format(nPoints)
-chollaDir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/snapshots_hm12/'.format(nPoints)
-output_dir = '/home/brvillas/cosmo_sims/2048_hydro_50Mpc/projections_hm12/projections_{1}_alpha/'.format(nPoints,size_front)
+field = 'density'
+
+inDir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/output_files_pchw18/'.format(nPoints)
+if field == 'density': output_dir =  dataDir + 'cosmo_sims/{0}_hydro_50Mpc/projections_pchw18/dm/projections_{1}_alpha_3/'.format(nPoints,size_front)
+
 
 use_mpi = True
+
 
 if use_mpi :
   from mpi4py import MPI
@@ -86,6 +89,9 @@ nSnap = 169
 
 if nprocs == 1: show_progess = True
 else: show_progess = False
+
+
+if rank == 0: show_progess = True
 
 
 Lbox = 50000
@@ -110,13 +116,22 @@ n_proc_snaps= (n_index_total-1) // nprocs + 1
 index_start_range = np.array([ rank + i*nprocs for i in range(n_proc_snaps) ])
 index_start_range = index_start_range[ index_start_range < n_index_total ]
 if len(index_start_range) == 0: exit()
+
+
+if not use_mpi: index_start_range = [0]
+
 print 'Generating: {0} {1}\n'.format( rank, index_start_range) 
 
 
-if not use_mpi:
-  index_start_range = [0]
+data_type = 'particles'
 
-for indx_start in index_start_range: 
+
+
+indx_start = 0
+for i, indx_start in enumerate(index_start_range): 
+  
+  # if indx_start > 0: continue
+  
   print "Index: {0}".format(indx_start)
 
 
@@ -125,204 +140,93 @@ for indx_start in index_start_range:
   subgrid_y = [ 0, 2048 ]
   subgrid_z = [ 0, 2048 ]
   subgrid = [ subgrid_x, subgrid_y, subgrid_z ]
-  precision = np.float64
+  precision = np.float32
 
-  data_type = 'particles'
 
-  field = 'density'
+  data_snapshot = load_snapshot_data_distributed_periodix_x(  nSnap, inDir, data_type, field, subgrid, domain, precision, proc_grid, grid_complete_size, show_progess=show_progess )
 
-  if subgrid_x[1] >= grid_complete_size[0]:
-    subgrid_x_0  = subgrid_x[:]
-    subgrid_x_0[1] = grid_complete_size[0]
-    subgrid_0 = [ subgrid_x_0, subgrid_y, subgrid_z ]
-    size_0 = subgrid_x_0[1] - subgrid_x_0[0]
-    data_snapshot_0 = load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid_0, domain, precision, proc_grid,  show_progess=show_progess ) 
-    subgrid_x_1  = subgrid_x[:]
-    subgrid_x_1[0] = 0
-    subgrid_x_1[1] = subgrid_x[1] - grid_complete_size[0]
-    subgrid_1 = [ subgrid_x_1, subgrid_y, subgrid_z ]
-    size_1 = subgrid_x_1[1] - subgrid_x_1[0]
-    data_snapshot_1 = load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid_1, domain, precision, proc_grid,  show_progess=show_progess ) 
-    size_complete = [ subgrid_x[1] - subgrid_x[0], subgrid_y[1] - subgrid_y[0], subgrid_z[1] - subgrid_z[0] ]
-    data_complete = np.zeros( size_complete ) 
-    data_complete[:size_0,:,:] = data_snapshot_0[data_type][field]
-    data_complete[size_0:size_0+size_1,:,:] = data_snapshot_1[data_type][field]
-    data_snapshot = data_snapshot_0
-    data_snapshot[data_type][field] = data_complete
-  else:
-    data_snapshot = load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, domain, precision, proc_grid,  show_progess=show_progess )
-
-  current_z = data_snapshot['current_z']
+  if data_type == 'particles': current_z = data_snapshot['current_z']
+  if data_type == 'hydro': current_z = data_snapshot['Current_z']
   data = data_snapshot[data_type][field]
+  
+  if field == 'density':
+    clip_max = 2116267.2/10
+    clip_min = 0
+    data = np.clip(data, clip_min, clip_max)
+  
+  
+
+
   if show_progess: print ''
-  
-  
-  
-  
+
+
   size_original = ( nPoints, nPoints )
   size_all = np.linspace( size_front, size_back, n_depth).astype(np.int)
-  
-  
-  
-  
-  # size_output = np.array([2160, 3840 ])
-  size_output = np.array([2048, 2048 ])
-  
-  # projection = np.zeros( size_output )
+
+
+  size_output = np.array([2160, 3840 ])
+
   projection_color = np.zeros( size_output )
+  projection_distance = np.zeros( size_output )
   projection_alpha = np.zeros( size_output )
-    
+
   distance_factor_list = []
   for indx_x in range(n_depth):
-  
-  
+
+
     slice_original = data[indx_x]
     size_slice = size_all[indx_x]
-  
-  
-    # slice_rescaled = get_rescaled_image( slice_original, size_slice, size_output )
-    slice_rescaled = slice_original
-    
-    transparency_factor = 1
-    transparency_factor = get_transparency_factor_linear( indx_x, 0.0, 1.0, 0.0, 0, 32, 128, n_depth)
+    slice_rescaled = get_rescaled_image( slice_original, size_slice, size_output )
+
+
+    transparency_factor = get_transparency_factor_linear( indx_x, 0.0, 1.0, 0.0, 0, 180, 256, n_depth)
+    # transparency_factor = get_transparency_factor_linear( indx_x, 0.0, 1.0, 0.0, 0, 256, 256+128, n_depth)
     slice_masked = slice_rescaled.copy()
     min_dens_mask = 1
-    slice_masked[slice_masked<min_dens_mask] = min_dens_mask
-    # slice_rescaled_log = np.log10(slice_rescaled)
-    # slice_rescaled_log[slice_rescaled_log < 0] = 0     
-    projection_alpha +=  np.log10(slice_masked) * transparency_factor
-    # projection_alpha += slice_rescaled * transparency_factor
-    
-    
-    # distance_factor = (indx_x+1)**(-1)
-    # distance_factor = get_distance_factor_linear( indx_x, 0, 512, 1e-4 )
-    # distance_factor = get_distance_factor( indx_x, 0, 64, n_depth, 16 )
-    distance_factor = 1
-    projection_color += slice_rescaled * distance_factor
-    
-    
+    slice_masked = np.clip( slice_masked, a_min=min_dens_mask, a_max=None)  
   
+    projection_alpha +=  np.log10(slice_masked) * transparency_factor**3
+  
+  
+    distance_factor = (transparency_factor)**(2)
+    projection_color += slice_rescaled 
+    projection_distance += slice_rescaled * distance_factor
+  
+  
+
     distance_factor_list.append(distance_factor)
-  
-    
+
+
     if show_progess:
       terminalString  = '\r Slice: {0}/{1}   distance_factor:{2}  transparecy:{3}'.format(indx_x, n_depth, distance_factor, transparency_factor )
       sys.stdout. write(terminalString)
       sys.stdout.flush() 
-  
+
   if show_progess: print ""
   #Write the projection to a file:
-  out_file_name = output_dir + 'projection_{2}_{3}_{0}_{1}.h5'.format( nSnap, indx_start, data_type, field )
+  n_image = indx_start 
+  out_file_name = output_dir + 'projection_{2}_{3}_{0}_{1}.h5'.format( nSnap, n_image, data_type, field )
   out_file = h5.File( out_file_name, 'w')
   out_file.attrs['current_z'] = current_z
   group_type = out_file.create_group( data_type )
-  
-   
+
+
   group_field = group_type.create_group( field )
-  
-  # data_set = group_field.create_dataset( 'projection', data=projection )
-  # data_set.attrs['max'] = projection.max()
-  # data_set.attrs['min'] = projection.min()
-  # 
+
   data_set = group_field.create_dataset( 'color', data= projection_color )
   data_set.attrs['max'] = projection_color.max()
   data_set.attrs['min'] = projection_color.min()
   
+  data_set = group_field.create_dataset( 'distance', data= projection_distance )
+  data_set.attrs['max'] = projection_distance.max()
+  data_set.attrs['min'] = projection_distance.min()
+  
   data_set = group_field.create_dataset( 'alpha', data= projection_alpha )
   data_set.attrs['max'] = projection_alpha.max()
   data_set.attrs['min'] = projection_alpha.min()
-  
+
   out_file.close()
-  print "Saved File: {0}\n".format( out_file_name )
-  
-  
-  
-  # if rank == 0:
-  #   distance_factor_list = np.array( distance_factor_list )
-  #   np.savetxt( 'distance_factor.dat', distance_factor_list)  
-  # 
-  # exit(-1)
-
-  
-  
-  
-  
-  
-  # 
-  # 
-  # print ""
-  # color_name = 'inferno'
-  # # for color_index,color_name in enumerate(list_of_colors):  
-  # print " Saving Color: {0}".format(color_name)
-  # # extra_color_name = '_20'
-  # # color_string = 'colormap = colors.{0}{1}.mpl_colormap'.format( color_name, extra_color_name )
-  # # exec( color_string )
-  # 
-  # colormap = colors.Deep_20_r.mpl_colormap
-  # 
-  # 
-  # fig = plt.figure( frameon=False)
-  # fig.clf()
-  # ax = plt.axes([0,0,1,1], frameon=False)
-  # ax.get_xaxis().set_visible(False)
-  # ax.get_yaxis().set_visible(False)
-  # plt.autoscale(tight=True)
-  # ax.axis('off')
-  # 
-  # 
-  # ax.imshow( np.log10(projection), cmap='inferno'  )
-  # ax.imshow( np.log10(projection), cmap=colormap  )
-  # 
-  # ax.tick_params(axis='both', which='both', bottom=False, top=False, labelbottom=False, right=False, left=False, labelleft=False)
-  # 
-  # ax.xaxis.set_major_locator(matplotlib.ticker.NullLocator())
-  # ax.yaxis.set_major_locator(matplotlib.ticker.NullLocator())
-  # 
-  # fig.set_size_inches( image_size[1], image_size[0] )
-  # 
-  # 
-  # file_name = 'figures/proj_{0}_deep.png'.format( indx_start )
-  # print ' Saving File: {0}'.format(file_name)
-  # fig.savefig( file_name, dpi=dpi,  bbox_inches='tight',   pad_inches=-0.025)
-  # # fig.savefig( file_name, )
-  # print ' Saved File: {0}\n'.format(file_name)
-  # 
-
-
-
-
-
-# # Load Full snapshot 
-# data_cholla = load_snapshot_data( nSnap, chollaDir, hydro=False, cool=False )
-# current_z = data_cholla['current_z']
-# data_1 = data_cholla['dm']['density'][subgrid_x[0]:subgrid_x[1], subgrid_y[0]:subgrid_y[1], subgrid_z[0]:subgrid_z[1] ]
-# 
-# diff = data_1 - data
-# print diff.max(), diff.min()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  print "Saved File {0} / {1}: {2}\n".format(i, len(index_start_range), out_file_name )
 
 
 

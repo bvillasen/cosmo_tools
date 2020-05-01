@@ -27,10 +27,9 @@ homeDir = '/home/brvillas/'
 # dataDir = '/raid/bruno/data/'
 # dataDir = '/gpfs/alpine/proj-shared/ast149/'
 dataDir = '/data/groups/comp-astro/bruno/'
-enzoDir = dataDir + 'cosmo_sims/enzo/1024_hydro_50Mpc/ics/'
-inDir = enzoDir
+inDir = dataDir + 'cosmo_sims/enzo/1024_hydro_50Mpc/ics/'
 # outputDir = dataDir + 'cosmo_sims/1024_hydro_50Mpc/ics_32/'
-outputDir = homeDir + 'cosmo_sims/1024_hydro_50Mpc/ics_512/'
+outputDir = dataDir + 'cosmo_sims/1024_hydro_50Mpc/ics_16/'
 create_directory( outputDir )
 
 nSnap = 0
@@ -46,17 +45,17 @@ current_a = 1./(current_z + 1)
 
 Lbox = 50000.0
 
-proc_grid = [ 8, 8, 8]
+proc_grid = [ 4, 2, 2]
 box_size = [ Lbox, Lbox, Lbox ]
 grid_size = [ 1024, 1024, 1024 ]
 
 # Get the domain decomposition
 domain =  get_domain_block( proc_grid, box_size, grid_size )
 
-# # Generate Particles ICs
-# fields_particles = ['mass', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
-# outputBaseName = '{0}_particles.h5'.format(nSnap)
-# generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True, save_pid_indices=True)
+# Generate Particles ICs
+fields_particles = ['mass', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
+outputBaseName = '{0}_particles.h5'.format(nSnap)
+generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True, save_pid_indices=False)
 
 
 # Get Hydro ICs

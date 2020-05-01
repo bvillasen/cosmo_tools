@@ -1,0 +1,104 @@
+
+Hydro dynamics comoving 
+
+continuity
+\frac{\partial \rho_b}{\partial t}  = -\frac{1}{a} \nabla \cdot ( \rho_b \mathbf{v})   
+
+momentum
+\frac{\partial a \rho_b \mathbf{v}}{\partial t} = - \nabla \cdot ( \rho_b \mathbf{v} \mathbf{v} ) - \nabla p + \rho_b \mathbf{g}
+
+
+energy adiabatic
+\frac{\partial a^2 \rho_b E}{\partial t} & =  -a \nabla \cdot ( \rho_b \mathbf{v} E + p\mathbf{v} ) + a\rho_b \mathbf{v} \cdot \mathbf{g} \\
+& \,\,\,\,\,\, + a \dot{a} ((2-3(\gamma-1)\rho_b e)
+
+dual energy adiabatic
+\frac{\partial a^2 \rho_b e}{\partial t} & = -a \nabla \cdot ( \rho_b \mathbf{v} e ) - a p \nabla \cdot \mathbf{v} \\  
+& \,\,\,\,\,\, + a \dot{a} ((2-3(\gamma-1)\rho_b e) 
+
+
+energy cooling 
+\frac{\partial a^2 \rho_b E}{\partial t} & =  -a \nabla \cdot ( \rho_b \mathbf{v} E + p\mathbf{v} ) + a\rho_b \mathbf{v} \cdot \mathbf{g} \\
+& \,\,\,\,\,\, + a \dot{a} ((2-3(\gamma-1)\rho_b e) + a ( \Gamma  - \Lambda )
+
+
+dual energy cooling
+\frac{\partial a^2 \rho_b e}{\partial t} & = -a \nabla \cdot ( \rho_b \mathbf{v} e ) - a p \nabla \cdot \mathbf{v} \\  
+& \,\,\,\,\,\, + a \dot{a} ((2-3(\gamma-1)\rho_b e) + a ( \Gamma  - \Lambda )
+
+
+
+GRAVITY 
+
+poisson 
+\nabla ^ 2 \phi = \frac{4 \pi G }{a} ( \rho  - \bar{\rho} )
+
+
+poisson fourier
+\hat{\phi}(\mathbf{k}) = G(\mathbf{k}) \hat{\rho}(\mathbf{k}) 
+
+green function
+G(\mathbf{k})=-\frac{(\Delta x / 2 )^2}{\sin^{2} \left(k_{x} \Delta x / 2\right)+\sin^{2} \left(k_{y} \Delta y / 2\right)+\sin^{2} \left(k_{z} \Delta z / 2\right)}
+
+
+potential gradient 3 points
+\frac{\partial \phi_{i,j,k}}{\partial x}  = \frac{1}{2 \Delta x} \left( \phi_{i+1,j,k}  - \phi_{i-1,j,k}  \right)
+
+
+potential gradient 5 points
+\frac{\partial \phi_{i,j,k}}{\partial x}  = \frac{1}{12 \Delta x} \left( \phi_{i-2,j,k} - 8 \phi_{i-1,j,k} + 8 \phi_{i+1,j,k} - \phi_{i+2,j,k}  \right)
+
+potential gradient
+$\mathbf{g} = - \nabla \phi$
+
+
+DARK MATTER PARTICLES
+
+motion equations 
+\frac{d \mathbf{x}_{i}}{d t} &= \frac{1}{a} \mathbf{v}_{i} \\ 
+\frac{d\left(a \mathbf{v}_{i}\right)}{d t} & =\mathbf{g}_{i}
+
+
+particles evolution 1
+\mathbf{v}_i^{n+1/2} &= \frac{1}{a^{n+1/2}} \left(  a^n \mathbf{v}_i^n  + \frac{\Delta t^n}{2} \mathbf{g}_i^n \right) \\
+
+particles evolution 2
+\mathbf{x}_i^{n+1} &= \mathbf{x}_i + \frac{\Delta t^n}{ a^{n+1/2}} \mathbf{v}_i^{n+1/2} \\
+
+particles evolution 3
+\mathbf{v}_i^{n+1} &= \frac{1}{a^{n+1}} \left(  a^{n+1/2} \mathbf{v}_i^{n+1/2}  + \frac{\Delta t^n}{2} \mathbf{g}_i^{n+1} \right) 
+
+
+
+DUAL ENERGY
+
+dual energy enzo
+e_{i}=\left\{\begin{array}{ll}{e_i} & {,\rho_{i}\left(E-\mathbf{v}^{2} / 2\right)_{i} / \max(\rho E)_{i} <\eta} \\ {\left(E-\mathbf{v}^{2} / 2\right)_{i}} & {,\text { otherwise }} \end{array}\right.
+
+dual engergy ramses
+e_{i}=\left\{\begin{array}{ll} {\left(E-\mathbf{v}^{2} / 2\right)_{i}}  & {,\rho_{i}\left(E-\mathbf{v}^{2} / 2\right)_{i} > \beta e_{\text{trunc}}} \\ {e_i} & {,\text { otherwise }} \end{array}\right.
+
+
+truncated energy
+e_{\text{trunc}} \simeq \frac{1}{2} \rho (\Delta v)^2 
+
+
+
+Virial Temperature
+
+
+ZELDOVICH
+
+density
+\rho_b\left(x\right) &=\rho_{0}\left[1-\frac{1+z_{s}}{1+z_0} \cos \left(k x\right)\right]^{-1} 
+
+velocity
+v\left(x\right)&=-H_{0} \frac{1+z_{s}}{(1+z_0)^{1 / 2}} \frac{\sin \left(k x\right)}{k} 
+
+temperature
+T\left(x\right)&=T_{\text {0}}\left[\frac{\rho\left(x\right)}{\bar{\rho}}\right]^{2 / 3}
+
+
+
+
+
