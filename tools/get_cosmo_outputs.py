@@ -2,34 +2,40 @@ import sys, os, time
 import numpy as np
 import matplotlib.pyplot as plt
 
-n_total = 310
-
-fractions = np.array([ 0.09, 0.33, 0.33, 0.33, ])
-
-# n_per_range = (fractions * n_total).astype(int)
-n_per_range = [ 10, 10, 10, 10, 10, 10 ]
-z_range_all = [ [100, 20], [20, 15], [15, 10], [10, 5], [5, 1], [1, 0] ]
-n_ranges = len( n_per_range )
-a_range_all = []
-delta_a_all = []
-for i in range(n_ranges):
-  n = n_per_range[i]
-  z_range = z_range_all[i]
-  z_start = z_range[0]
-  z_end = z_range[-1]
-  a_start = 1./(z_start +1 )
-  a_end = 1./(z_end +1 )
-  a_range = np.linspace( a_start, a_end, n , endpoint=False)
-  if i == n_ranges-1: a_range = np.linspace( a_start, a_end, n )
-  a_range_all.append( a_range)
-  delta_a = a_range[1] - a_range[0]
-  delta_a_all.append(delta_a)
-
-a_range_arr = np.concatenate( a_range_all )
-
-a_vals = a_range_arr
-file_name = 'outputs_cosmo_puchwein.txt'
+z_vals = np.array([ 100, 50., 10., 5, 2, 1.2, 0.8, 0.5, 0.2,  0.0   ])
+a_vals =  1./(z_vals+1)
+file_name = 'outputs_cosmo_10.txt'
 np.savetxt( file_name, a_vals)
+
+
+# n_total = 310
+# 
+# fractions = np.array([ 0.09, 0.33, 0.33, 0.33, ])
+# 
+# # n_per_range = (fractions * n_total).astype(int)
+# n_per_range = [ 10, 10, 10, 10, 10, 10 ]
+# z_range_all = [ [100, 20], [20, 15], [15, 10], [10, 5], [5, 1], [1, 0] ]
+# n_ranges = len( n_per_range )
+# a_range_all = []
+# delta_a_all = []
+# for i in range(n_ranges):
+#   n = n_per_range[i]
+#   z_range = z_range_all[i]
+#   z_start = z_range[0]
+#   z_end = z_range[-1]
+#   a_start = 1./(z_start +1 )
+#   a_end = 1./(z_end +1 )
+#   a_range = np.linspace( a_start, a_end, n , endpoint=False)
+#   if i == n_ranges-1: a_range = np.linspace( a_start, a_end, n )
+#   a_range_all.append( a_range)
+#   delta_a = a_range[1] - a_range[0]
+#   delta_a_all.append(delta_a)
+# 
+# a_range_arr = np.concatenate( a_range_all )
+# 
+# a_vals = a_range_arr
+# file_name = 'outputs_cosmo_puchwein.txt'
+# np.savetxt( file_name, a_vals)
 
 # 
 # div_all = [ 0.94, 1.25, 1.4, 1.075, 1.45, 1.0]
