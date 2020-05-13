@@ -128,8 +128,8 @@ temperature_los = temperature[:,id_i, id_j]
 
 
 
-x_comov, vel_Hubble, n_HI_los, tau_redshift = compute_optical_depth( H0, cosmo_h, Omega_M, Omega_L, Lbox, nPoints,  current_z, density_los, HI_density_los, temperature_los, velocity_los, space='redshift' )
-x_comov, vel_Hubble, n_HI_los, tau_real     = compute_optical_depth( H0, cosmo_h, Omega_M, Omega_L, Lbox, nPoints,  current_z, density_los, HI_density_los, temperature_los, velocity_los, space='real' )
+x_comov, vel_Hubble, n_HI_los, tau_redshift = compute_optical_depth( H0, cosmo_h, Omega_M, Omega_L, Lbox, current_z, HI_density_los, temperature_los, velocity_los, space='redshift', method='error_function' )
+x_comov, vel_Hubble, n_HI_los, tau_real     = compute_optical_depth( H0, cosmo_h, Omega_M, Omega_L, Lbox, current_z, HI_density_los, temperature_los, velocity_los, space='real', method='error_function' )
 F_real = np.exp(-tau_real)
 F_redshift = np.exp(-tau_redshift)
 
@@ -162,14 +162,14 @@ data_y = np.array([ y_0, y_1 ]).T
 
 
 
-print n_HI_los.max()
+# print n_HI_los.max()
 N_HI_los = n_HI_los * dr_cm
+# 
+# #Interpolate LOS
+# x_proper = current_a * x_comov / cosmo_h
 
-#Interpolate LOS
-x_proper = current_a * x_comov / cosmo_h
-
-x_proper_interp, N_HI_interp, = interpolate_los( x_proper, N_HI_los, R, 8, log_interp=True, kind='cubic')
-vel_Hubble_interp = H * x_proper_interp
+# x_proper_interp, N_HI_interp, = interpolate_los( x_proper, N_HI_los, R, 8, log_interp=True, kind='cubic')
+# vel_Hubble_interp = H * x_proper_interp
 
 
   
@@ -241,7 +241,7 @@ color  =  'C0'
 index = 1
 ax = plt.subplot(gs1[index*n_per_subplot:(index+1)*n_per_subplot])
 ax.plot( vel_Hubble, N_HI_los, linewidth=line_width, c=color)
-ax.plot( vel_Hubble_interp, N_HI_interp, '--', linewidth=2, c='C3')
+# ax.plot( vel_Hubble_interp, N_HI_interp, '--', linewidth=2, c='C3')
 ax.set_yscale('log')
 ax.set_xlim( vel_Hubble.min(), vel_Hubble.max())
 ax.set_ylabel( r'$N_\mathrm{HI}  \,\,\, [cm^{-2}]$ ', fontsize=font_size, color=text_color)
@@ -277,8 +277,8 @@ color_real = 'C1'
 
 index = 3
 ax = plt.subplot(gs1[index*n_per_subplot:(index+1)*n_per_subplot])
-ax.plot( vel_Hubble, tau_real, '--', linewidth=line_width_1, c=color_real, label='Real Space')
 ax.plot( vel_Hubble, tau_redshift, linewidth=line_width, c=color, label='Redshift Space')
+ax.plot( vel_Hubble, tau_real, '--', linewidth=line_width_1, c=color_real, label='Real Space')
 ax.set_xlim( vel_Hubble.min(), vel_Hubble.max())
 ax.set_ylabel( r'$\tau$ ', fontsize=font_size, color=text_color)
 ax.tick_params(axis='both', which='major', labelsize=tick_size_0, length=10, width=5)
@@ -316,7 +316,7 @@ for ax in axes:
 
 fig.subplots_adjust( wspace=0 )
 fig.tight_layout()
-outputFileName = 'transmited_flux_{0}_{1}_projection_{2}_interp.png'.format(uvb, nSnap, background)
+outputFileName = 'transmited_flux_{0}_{1}_projection_{2}errf.png'.format(uvb, nSnap, background)
 if not transparent: fig.savefig( output_dir + outputFileName, bbox_inches='tight',  facecolor=fig.get_facecolor(), dpi=200 )
 else: fig.savefig( output_dir + outputFileName, bbox_inches='tight',  transparent=True, dpi=200 )
 print 'Saved image: ', output_dir + outputFileName

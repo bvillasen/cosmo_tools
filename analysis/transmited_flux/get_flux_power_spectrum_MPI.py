@@ -9,6 +9,7 @@ sys.path.extend(subDirectories)
 from tools import *
 from constants_cgs import *
 from spectra_functions import *
+from power_spectrum import get_skewer_flux_power_spectrum
 
 outputs_file = '../../scale_outputs/outputs_cosmo_2048.txt'
 outputs = np.loadtxt( outputs_file )
@@ -86,7 +87,6 @@ if use_mpi: comm.Barrier()
 cosmo_spaces = [ 'redshift', 'real' ]
 for nSnap in snapshots_indices:
   
-  if nSnap > 96: continue
   
   if rank == 0: print "Computing Power Spectrum, snap: ", nSnap
   
@@ -130,56 +130,21 @@ for nSnap in snapshots_indices:
       inFile.close()
 
 
-      x_comov, vel_Hubble, n_HI_los, tau = compute_optical_depth( H0, cosmo_h, Omega_M, Omega_L, Lbox, nPoints,  current_z, density, HI_density, temperature, velocity, space=space )
-      dv = ( vel_Hubble[1:] - vel_Hubble[:-1] )[0]
+      #Hubble velocity = H * x_proper
+      x_comov, vel_Hubble, n_HI_los, tau = compute_optical_depth( H0, cosmo_h, Omega_M, Omega_L, Lbox, current_z, HI_density, temperature, velocity, space=space, method='error_function' )
     
-
       F = np.exp( -tau )
       # F_avrg = F.mean()
       
       #Use the global average (from effective optcial depth) to compute the fluctuations
       F_avrg = F_mean_val
 
-      #Hubble velocity = H * x_proper
-      V = vel_Hubble.max()
-
       # Flux fluctuations
       delta_F = ( F - F_avrg ) / F_avrg 
-
-      k_vals, ft_delta_F = [], []
-      for i in range( nPoints ):
-        k = 2 * np.pi / V * i 
-        # if i > nPoints / 2: k = 2 * np.pi / V * (i - nPoints)  
-        exponencial = np.exp( -1j * k * vel_Hubble)
-        intergral = dv * (exponencial * delta_F).sum()
-        ft_delta = 1. / V * intergral
-        k_vals.append( k )
-        ft_delta_F.append( ft_delta )
-      k_vals = np.array( k_vals )
-      ft_delta_F = np.array( ft_delta_F )
-      amp2 = ft_delta_F.real * ft_delta_F.real + ft_delta_F.imag * ft_delta_F.imag
-
-      fft_k = k_vals
-      delta_k2 = amp2    
-
-
-      k_min = fft_k[fft_k > 0 ].min()
-      k_max = fft_k.max()
-      # nBins = n_kSamples
-      if binning == 'log':
-        # intervals = np.logspace(np.log10(k_min), np.log10(k_max), nBins+1, base=10.0)
-        dk = 0.25
-        intervals_log = np.arange( np.log10(k_min), np.log10(k_max), dk )
-        intervals = 10**(intervals_log)
-      if binning == 'linear': intervals = np.linspace(k_min, k_max, nBins+1 )
-      power, bin_edges= np.histogram( fft_k, bins=intervals, weights=delta_k2 )
-      n_in_bin, bin_edges = np.histogram( fft_k, bins=intervals )
-      n_in_bin = n_in_bin.astype('float')
-      # print n_in_bin
-      bin_centers = np.sqrt(bin_edges[1:] * bin_edges[:-1])
-      # power = power / n_in_bin *vel_Hubble.max()
-      power = power * vel_Hubble.max()
-      power_all.append(power)
+      
+      d_log_k = 0.25
+      bin_centers, skewer_power_spectrum = get_skewer_flux_power_spectrum(vel_Hubble, delta_F, d_log_k=d_log_k )
+      power_all.append(skewer_power_spectrum)
 
     #Send the power spectrum to root process
     power_global = comm.gather( power_all, root=0 )
@@ -200,8 +165,8 @@ for nSnap in snapshots_indices:
       space_group.attrs['n_skewers'] = n_skewers
       space_group.create_dataset( 'skewers_ids', data=skewers_ids)
       space_group.create_dataset( 'k_vals', data=k_vals)
-      space_group.create_dataset( 'n_in_bin', data=n_in_bin)
       space_group.create_dataset( 'power_spectrum_all', data=power_global_all)
+      # space_group.create_dataset( 'n_in_bin', data=n_in_bin)
 
 
 

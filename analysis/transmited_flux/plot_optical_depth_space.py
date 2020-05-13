@@ -54,25 +54,71 @@ ncells = nx * ny * nz
 dataDir = '/data/groups/comp-astro/bruno/'
 # dataDir = '/home/bruno/Desktop/ssd_0/data/'
 
-uvb = 'pchw18'
-# uvb = 'hm12'
+# uvb = 'pchw18'
+uvb = 'hm12'
 output_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/figures/optical_depth/'.format(nPoints, uvb,  )
 create_directory( output_dir )
 
-# snapshots_indices = [74, 77, 80, 83, 86, 90, 93, 96, 99, 102, 106, 110, 114, 119, 124, 130, 136, 143, 151, 159, 169]
-# snapshots_indices = [74, 76, 77, 79, 80, 82, 83, 85, 86, 88, 90, 91, 93, 94, 96, 97, 99, 101, 102, 104, 106, 108, 110, 112, 114, 117, 119, 122, 124, 127, 130, 133, 136, 139, 143, 147, 151, 155, 159, 164, 169]
 
+cosmo_spaces = ['redshift', 'real']
 
-kernel_types = ['smooth', 'scatter' ]
 data_sph = {}
-for kernel_type in kernel_types:
-  data_sph[kernel_type] = {}
-  data_sph[kernel_type]['z'] = []
-  data_sph[kernel_type]['mean'] = []
-  data_sph[kernel_type]['plus'] = []
-  data_sph[kernel_type]['minus'] = []
+for space in cosmo_spaces:
+  data_sph[space] = {}
+  data_sph[space]['z'] = []
+  data_sph[space]['mean'] = []
+  data_sph[space]['plus'] = []
+  data_sph[space]['minus'] = []
 
 input_dir = dataDir + 'cosmo_sims/ewald_512/optical_depth/'
+
+
+for nSnap in [ 11, 12 ]:
+
+  print "nSnap: {0}".format(nSnap)
+  inputFileName = input_dir + 'optical_depth_{0}.h5'.format(nSnap)
+  inFile = h5.File( inputFileName, 'r')
+  current_z = inFile.attrs['current_z'] 
+  n_skewers = inFile[space].attrs['n_skewers']
+  for space in cosmo_spaces:
+    F_vals = inFile[space]['F_mean_vals'][...]
+      
+    
+    F_mean =  F_vals.mean()
+    F_sigma = F_vals.std()
+    F_min = F_vals.min()
+    F_max = F_vals.max()
+
+    nBins = 50
+
+    bin_edges = np.linspace( F_min*0.99, F_max*1.01, nBins )
+    F_hist, bin_edges = np.histogram( F_vals, bins=bin_edges )
+    bin_centers = ( bin_edges[1:] + bin_edges[:-1] ) / 2
+    F_hist = F_hist.astype(np.float)
+    fraction_enclosed = 0.68
+    p_max, p_edge_l, p_edge_r, p_interval, y_interval = get_highest_probability_interval( bin_centers, F_hist, fraction_enclosed, n_points_interpolation=100000, interp='linear', center='max' )
+    p_mean = F_mean
+    
+    p_max = - np.log(p_max)
+    p_mean = -np.log( p_mean)
+    p_edge_m = - np.log(p_edge_r)
+    p_edge_p = - np.log(p_edge_l)
+    
+    # print p_edge_l, p_mean, p_edge_r
+
+
+    data_sph[space]['z'].append( current_z )
+    data_sph[space]['mean'].append( p_mean )
+    data_sph[space]['plus'].append( p_edge_p )
+    data_sph[space]['minus'].append( p_edge_m )  
+    
+  inFile.close()
+
+for space in cosmo_spaces:
+  data_sph[space]['mean'] = np.array( data_sph[space]['mean'] )
+  data_sph[space]['plus'] = np.array( data_sph[space]['plus'] )
+  data_sph[space]['minus'] = np.array( data_sph[space]['minus'] )
+
 
 
 data = { }
@@ -84,7 +130,6 @@ fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(10*ncols,8*nrows))
 fs = 20
 
 
-cosmo_spaces = ['redshift', 'real']
 
 
 # for i,uvb in enumerate(['hm12', 'pchw18' ]):
@@ -93,7 +138,7 @@ for i,uvb in enumerate([ 'pchw18' ]):
   if uvb == 'pchw18':
     color_line = c_0
     color_bar = c_0
-    label_0 = "Cholla (Skewers)"
+    label_0 = "Cholla"
     label_grid = "Cholla (Grid)"
 
   if uvb == 'hm12':
@@ -104,21 +149,19 @@ for i,uvb in enumerate([ 'pchw18' ]):
   input_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/optical_depth_{1}/'.format(nPoints, uvb, )
 
 
-  # for average_method in [ 0, 1 ]:
-  average_method = 1
 
   for space  in cosmo_spaces:
-    
+
     if space == 'redshift':
       label = label_0 + ' Redshift Space'
       color = c_0
       color_bar = color_line = color
-    
+
     if space == 'real':
       label = label_0 + ' Real Space'
       color = c_1
       color_bar = color_line = color
-      
+
     data[uvb] = {}
     data[uvb]['z'] = []
     data[uvb]['mean'] = []
@@ -127,55 +170,37 @@ for i,uvb in enumerate([ 'pchw18' ]):
     data[uvb]['tau_eff'] = []
     
     for nSnap in snapshots_indices:
-      
+    
       print nSnap
-
-
-      
+    
+    
+    
       inputFileName = input_dir + 'optical_depth_{0}.h5'.format(nSnap)
       inFile = h5.File( inputFileName, 'r')
       current_z = inFile.attrs['current_z'] 
       n_skewers = inFile[space].attrs['n_skewers']
-      tau_vals = inFile[space]['tau_vals'][...]
       F_vals = inFile[space]['F_mean_vals'][...]
       inFile.close()
     
-      tau_mean =  tau_vals.mean()
-      tau_sigma = tau_vals.std()
-      tau_min = tau_vals.min()
-      tau_max = tau_vals.max()
     
       F_mean =  F_vals.mean()
       F_sigma = F_vals.std()
       F_min = F_vals.min()
       F_max = F_vals.max()
     
-      nBins = 50
-      # 
-      # diff = ( -np.log(F_mean) - tau_mean  ) / tau_mean
-      # print diff
+      nBins = 25
     
-      if average_method == 0:
-        bin_edges = np.linspace( tau_min*0.99, tau_max*1.01, nBins )
-        tau_hist, bin_edges = np.histogram( tau_vals, bins=bin_edges )
-        bin_centers = ( bin_edges[1:] + bin_edges[:-1] ) / 2
-        tau_hist = tau_hist.astype(np.float)
-        fraction_enclosed = 0.68
-        p_max, p_edge_l, p_edge_r, p_interval, y_interval = get_highest_probability_interval( bin_centers, tau_hist, fraction_enclosed, n_points_interpolation=100000, interp='linear', center='max' )
-        p_mean = tau_vals.mean()
+      bin_edges = np.linspace( F_min*0.99, F_max*1.01, nBins )
+      F_hist, bin_edges = np.histogram( F_vals, bins=bin_edges )
+      bin_centers = ( bin_edges[1:] + bin_edges[:-1] ) / 2
+      F_hist = F_hist.astype(np.float)
+      fraction_enclosed = 0.68
+      p_max, p_edge_l, p_edge_r, p_interval, y_interval = get_highest_probability_interval( bin_centers, F_hist, fraction_enclosed, n_points_interpolation=100000, interp='linear', center='max' )
     
-      if average_method == 1:
-        bin_edges = np.linspace( F_min*0.99, F_max*1.01, nBins )
-        F_hist, bin_edges = np.histogram( F_vals, bins=bin_edges )
-        bin_centers = ( bin_edges[1:] + bin_edges[:-1] ) / 2
-        F_hist = F_hist.astype(np.float)
-        fraction_enclosed = 0.68
-        p_max, p_edge_l, p_edge_r, p_interval, y_interval = get_highest_probability_interval( bin_centers, F_hist, fraction_enclosed, n_points_interpolation=100000, interp='linear', center='max' )
-    
-        p_max = - np.log(p_max)
-        p_mean = -np.log( F_mean)
-        p_edge_l = - np.log(p_edge_l)
-        p_edge_r = - np.log(p_edge_r)
+      p_max = - np.log(p_max)
+      p_mean = -np.log( F_mean)
+      p_edge_l = - np.log(p_edge_l)
+      p_edge_r = - np.log(p_edge_r)
     
       data[uvb]['z'].append( current_z )
       data[uvb]['mean'].append( p_mean )
@@ -194,21 +219,21 @@ for i,uvb in enumerate([ 'pchw18' ]):
     error = np.array( [ delta_m, delta_p ])
     
     
-
+    
     ax.plot(  data[uvb]['z'], data[uvb]['mean'], color=color_line, label=label, lw=3 )
     ax.fill_between( data[uvb]['z'], data[uvb]['plus'], data[uvb]['minus'], facecolor=color_bar, alpha=0.3,  )
+    
 
 
-# 
-# color = 'C4'
-# label = 'PCHW19_1024'
-# # ax.plot(  data_1024[uvb]['z'], data_1024[uvb]['mean'], color=color, label=label, lw=3 )
-# # ax.fill_between( data_1024[uvb]['z'], data_1024[uvb]['plus'], data_1024[uvb]['minus'], facecolor=color, alpha=0.3,  )
-# 
-# color = 'C3'
-# label = 'PCHW19_512'
-# # ax.plot(  data_512[uvb]['z'], data_512[uvb]['mean'], color=color, label=label, lw=3 )
-# # ax.fill_between( data_512[uvb]['z'], data_512[uvb]['plus'], data_512[uvb]['minus'], facecolor=color, alpha=0.3,  )
+color = 'C4'
+label = 'PCHW19_1024'
+# ax.plot(  data_1024[uvb]['z'], data_1024[uvb]['mean'], color=color, label=label, lw=3 )
+# ax.fill_between( data_1024[uvb]['z'], data_1024[uvb]['plus'], data_1024[uvb]['minus'], facecolor=color, alpha=0.3,  )
+
+color = 'C3'
+label = 'PCHW19_512'
+# ax.plot(  data_512[uvb]['z'], data_512[uvb]['mean'], color=color, label=label, lw=3 )
+# ax.fill_between( data_512[uvb]['z'], data_512[uvb]['plus'], data_512[uvb]['minus'], facecolor=color, alpha=0.3,  )
 
 c_1 = 'C1'
 c_2 = 'black'
@@ -216,6 +241,24 @@ c_3 = 'C3'
 c_4 = 'C9'
 # 
 
+space = 'redshift'
+#Add data SPH
+z = data_sph[space]['z']
+tau = data_sph[space]['mean']
+error_p =  ( data_sph[space]['plus'] - data_sph[space]['mean'] ) 
+error_m =  ( data_sph[space]['mean'] - data_sph[space]['minus'] ) 
+tau_error_sph = np.array([ error_m, error_p])
+ax.errorbar( z, tau, yerr=tau_error_sph, fmt='o', c="C4", label='SPH(Skewers): Redshift Space' )
+
+
+space = 'real'
+#Add data SPH
+z = data_sph[space]['z']
+tau = data_sph[space]['mean']
+error_p =  ( data_sph[space]['plus'] - data_sph[space]['mean'] ) 
+error_m =  ( data_sph[space]['mean'] - data_sph[space]['minus'] ) 
+tau_error_sph = np.array([ error_m, error_p])
+ax.errorbar( z, tau, yerr=tau_error_sph, fmt='o', c="C5", label='SPH(Skewers): Real Space' )
 
 #Add data Boera
 z = data_optical_depth_Boera_2019['z'] - 0.05
@@ -256,16 +299,16 @@ ax.set_xlim(1.8, 6.2)
 ax.set_ylim(.1, 10)
 
 
-ax.grid(True, which="both",)
+# ax.grid(True, which="both",)
 
-fileName = output_dir + 'optical_depth_uvb_log_space.png'
+fileName = output_dir + 'optical_depth_uvb_log_space_new.png'
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
 print 'Saved Image: ', fileName
 
 
 
 
-
-
-
-
+# 
+# 
+# 
+# 

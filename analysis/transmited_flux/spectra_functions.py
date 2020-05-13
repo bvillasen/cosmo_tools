@@ -1,6 +1,8 @@
 import sys, os
 import numpy as np
 from scipy.interpolate import interp1d
+from scipy.special import erf
+from scipy.integrate import quad
 
 cosmo_dir = os.path.dirname(os.path.dirname(os.getcwd())) + '/'
 subDirectories = [x[0] for x in os.walk(cosmo_dir)]
@@ -51,13 +53,16 @@ def compute_optical_depth_grid( H0, cosmo_h, Omega_M, Omega_L, current_z, HI_den
   n_HI_los = dens_HI_los / cgs.M_p
   
   
-def get_optical_depth_velocity( current_z, dr, H, dv, n_HI_los, vel_Hubble_los, vel_peculiar_los, temp_los, space='redshift' ):
+
+  
+def get_optical_depth_velocity( current_z, H, dr, dv, n_HI_los, vel_peculiar_los, temp_los, space='redshift', method='error_function', turbulence_boost=0.0 ):
   # Lymann Alpha Parameters
   Lya_lambda = 1.21567e-5 #cm  Rest wave length of the Lyman Alpha Transition
   Lya_nu = cgs.c / Lya_lambda
   f_12 = 0.416 #Oscillator strength
   Lya_sigma = np.pi * cgs.e_charge**2 / cgs.M_e / cgs.c * f_12
   H_cgs = H * 1e5 / cgs.Mpc 
+  dr_cgs = dr * cgs.Mpc
   
   #Extend Ghost cells for periodic boundaries
   n_ghost = 256
@@ -74,28 +79,158 @@ def get_optical_depth_velocity( current_z, dr, H, dv, n_HI_los, vel_Hubble_los, 
   if space == 'real': velocity = vel_Hubble
   if space == 'redshift': velocity = vel_Hubble + vel_peculiar
   
+  b_all = get_Doppler_parameter( temp ) * ( 1 + turbulence_boost )
   
   tau_los = np.zeros(n_points) #Initialize arrays of zeros for the total optical delpth along the line of sight
   
-  #Loop over each cell
-  for i in range(n_points):
-    #Get  local values of the cell
-    v_0 = velocity[i]                      #Velocity of the cell
-    n_HI_0 = n_HI[i]                       #HI nuimber density of the cell   
-    temp_0 = temp[i]                       #temperature of the cell
-    b = get_Doppler_parameter( temp_0 )    #Doppler parameter of the cell
+  
+  
+  if method=='error_function':
+    #Loop over each cell
+    for j in range(n_points):
+      #Get  local values of the cell
+      v_j = vel_Hubble[j]                      #Hubble Velocity of the cell
+      y_l = ( ( v_j - 0.5 * H_cgs * dr_cgs ) - velocity ) / b_all
+      y_r = ( ( v_j + 0.5 * H_cgs * dr_cgs ) - velocity ) / b_all
+      tau_los[j] = Lya_sigma * Lya_lambda  / H_cgs  * np.sum( n_HI * ( erf(y_r) - erf(y_l) ) ) / 2
+      # tau_los[j] = 1
     
-    #Compute the Gaussian component of the optical depth from this single cell
-    exponent = ( vel_Hubble - v_0 ) / b
-    phi = 1. / ( np.sqrt(np.pi) * b ) * np.exp( -1 * exponent**2 )
-    tau = Lya_sigma * Lya_lambda  / H_cgs * n_HI_0 * phi * dv
     
-    #Add the Gaussian component from thi cell to the global optical depth along the line of sight
-    tau_los += tau
+  if method=='gaussian_sum':  
+    #Loop over each cell
+    for i in range(n_points):
+      #Get  local values of the cell
+      v_0 = velocity[i]                      #Velocity of the cell
+      n_HI_0 = n_HI[i]                       #HI nuimber density of the cell   
+      temp_0 = temp[i]                       #temperature of the cell
+      b = b_all[i]                           #Doppler parameter of the cell
+      
+      #Compute the Gaussian component of the optical depth from this single cell
+      exponent = ( vel_Hubble - v_0 ) / b
+      phi = 1. / ( np.sqrt(np.pi) * b ) * np.exp( -1 * exponent**2 )
+      tau = Lya_sigma * Lya_lambda  / H_cgs * n_HI_0 * phi * dv
+      
+      #Add the Gaussian component from thi cell to the global optical depth along the line of sight
+      tau_los += tau
+      
+  if method=='voigt_profile':    
+    # From Bolton and Haehnelt 2007
+    # Hjerting function (Hjerting 1938)
+    Lambda_alpha = 6.265e8 #s^-1 damping constant 
+    Lya_lambda = 1.21567e-5 #cm  Rest wave length of the Lyman Alpha Transition
+
+    #Loop over each cell
+    for i in range(n_points):
+      if i < n_ghost: continue
+      v_pix = vel_Hubble[i]
+      sum_pix = 0
+
+      #Loop over each cell
+      for j in range(n_points):
+        #Get  local values of the cell
+        v_absorb = velocity[j]                   #Velocity of the cell
+        n_HI_0 = n_HI[j]                       #HI nuimber density of the cell   
+        temp_0 = temp[j]                       #temperature of the cell
+        b = b_all[j]                           #Doppler parameter of the cell
+        
+        x = ( v_pix - v_absorb ) / b
+        a = Lambda_alpha * Lya_lambda / ( 4 * np.pi * b )
+        H, abserror = get_H( a, x )
+        sum_pix += n_HI_0 / b * H
+        
+      tau_los[i] = Lya_sigma * Lya_lambda * dr_cgs / np.sqrt(np.pi) * sum_pix
+      
+  if method=='compare_gauss_voigt':    
     
+    # From Bolton and Haehnelt 2007
+    # Hjerting function (Hjerting 1938)
+    Lambda_alpha = 6.265e8 #s^-1 damping constant 
+    Lya_lambda = 1.21567e-5 #cm  Rest wave length of the Lyman Alpha Transition
+
+    
+    for i in range(n_points):
+      if i < n_ghost: continue
+      #Get  local values of the cell
+      v_j = vel_Hubble[i]                      #Hubble Velocity of the cell
+      y_l = ( ( v_j - 0.5 * H_cgs * dr_cgs ) - velocity ) / b_all
+      y_r = ( ( v_j + 0.5 * H_cgs * dr_cgs ) - velocity ) / b_all
+      tau_gauss = Lya_sigma * Lya_lambda  / H_cgs  * np.sum( n_HI * ( erf(y_r) - erf(y_l) ) ) / 2
+      
+
+      v_pix = vel_Hubble[i]
+      sum_pix = 0
+      #Loop over each cell
+      for j in range(n_points):
+        #Get  local values of the cell
+        v_absorb = velocity[j]                   #Velocity of the cell
+        n_HI_0 = n_HI[j]                       #HI nuimber density of the cell   
+        temp_0 = temp[j]                       #temperature of the cell
+        b = b_all[j]                           #Doppler parameter of the cell
+        
+        x = ( v_pix - v_absorb ) / b
+        a = Lambda_alpha * Lya_lambda / ( 4 * np.pi * b )
+        H, abserror = get_H( a, x )
+        sum_pix += n_HI_0 / b * H
+        
+      tau_voigt = Lya_sigma * Lya_lambda * dr_cgs / np.sqrt(np.pi) * sum_pix
+    
+      diff = ( tau_voigt - tau_gauss )/ tau_gauss
+      if abserror < 1e-3: print "index:{3} tau_gauss: {0:.3f}   tau_voigt:{1:.3f}   fract_diff:{2}".format( tau_gauss, tau_voigt, diff, i-n_ghost)
+      
   # Trim the ghost cells from the global optical depth 
   tau_los = tau_los[n_ghost:-n_ghost]
   return tau_los
+
+
+
+
+def H_integrand( y, a, x ):
+  return  np.exp(-y**2) / ( a**2 + (x - y)**2 ) 
+
+
+def get_H(a, x):
+  integral, abserror = quad( H_integrand, -np.inf, np.inf, args=( a, x ) )
+  if abserror > 1e-4: print "Large Error in the H integral"
+  H = a / np.pi * integral
+  return H, abserror
+
+
+def compute_optical_depth( H0, cosmo_h, Omega_M, Omega_L, Lbox,  current_z,  HI_density, temperature, velocity, space='redshift', method='error_function',  turbulence_boost=0.0 ):
+  nPoints = len( HI_density )
+  
+  #Proper length
+  current_a = 1./(current_z + 1)
+  R = current_a * Lbox / cosmo_h
+  nx = nPoints
+  dr = R / nx
+  
+  a_dot = np.sqrt( Omega_M/current_a + Omega_L*current_a**2  ) * H0 
+  H = a_dot / current_a
+  # dens_los = density / (current_a)**3 
+  dens_HI_los = HI_density / (current_a)**3
+  temp_los = temperature
+  vel_los = velocity.copy() 
+  # dv = H * R / nx 
+
+  Lx = Lbox
+  nx = nPoints
+  x_comov  = np.linspace( 0, Lx, nx )
+  r_proper = np.linspace( 0, R,  nx )
+  vel_Hubble = H * r_proper   #km/sec
+  dv = vel_Hubble[1] - vel_Hubble[0]
+  # print nx*dv, vel_Hubble.max()
+
+  #Convert to CGS Units
+  # dens_los    *=  cgs.Msun / cgs.kpc**3 * cosmo_h**2
+  dens_HI_los *=  cgs.Msun / cgs.kpc**3 * cosmo_h**2
+  n_HI_los = dens_HI_los / cgs.M_p
+  vel_los_cms = vel_los * 1e5 
+  vel_Hubble_cms = vel_Hubble * 1e5
+  dv_cms = dv * 1e5
+  
+  tau = get_optical_depth_velocity( current_z,  H, dr, dv_cms, n_HI_los, vel_los_cms, temp_los, space=space, method=method, turbulence_boost=turbulence_boost  )
+  return x_comov, vel_Hubble,  n_HI_los, tau
+
 
 
 
@@ -160,45 +295,8 @@ def compute_optical_depth_interpolate( H0, cosmo_h, Omega_M, Omega_L, Lbox, nPoi
   vel_interp *= 1e5 
   vel_Hubble *= 1e5
 
-  tau = get_optical_depth_velocity( current_z, dr, H, dv, n_HI_interp, vel_Hubble, vel_interp, temp_interp, space=space ,)
+  tau = get_optical_depth_velocity( current_z, H, dv, n_HI_interp, vel_interp, temp_interp, space=space ,)
   return x_comov, vel_Hubble*1e-5,  n_HI_interp, tau
-
-
-def compute_optical_depth( H0, cosmo_h, Omega_M, Omega_L, Lbox, nPoints,  current_z, density, HI_density, temperature, velocity, space='redshift' ):
-  #Proper length
-  current_a = 1./(current_z + 1)
-  R = current_a * Lbox / cosmo_h
-  nx = nPoints
-  dr = R / nx
-  dr_cm = dr * cgs.Mpc
-
-  a_dot = np.sqrt( Omega_M/current_a + Omega_L*current_a**2  ) * H0 
-  H = a_dot / current_a
-  dens_los = density / (current_a)**3 
-  dens_HI_los = HI_density / (current_a)**3
-  temp_los = temperature
-  vel_los = velocity.copy() 
-  dv = H * R / nx * 1e5
-
-  Lx = Lbox
-  nx = len( dens_los)
-  x_comov = np.linspace( 0, Lx, nx )
-  r_proper = current_a * x_comov / cosmo_h
-  vel_Hubble = H * r_proper   #km/sec
-  dr_proper = r_proper / nx
-
-
-  #Convert to CGS Units
-  dens_los    *=  cgs.Msun / cgs.kpc**3 * cosmo_h**2
-  dens_HI_los *=  cgs.Msun / cgs.kpc**3 * cosmo_h**2
-  n_HI_los = dens_HI_los / cgs.M_p
-  vel_los *= 1e5 
-  vel_Hubble *= 1e5
-  
-  print "n_HI max: ", n_HI_los.max()
-
-  tau = get_optical_depth_velocity( current_z, dr, H, dv, n_HI_los, vel_Hubble, vel_los, temp_los, space=space  )
-  return x_comov, vel_Hubble*1e-5,  n_HI_los, tau
 
 
 # 

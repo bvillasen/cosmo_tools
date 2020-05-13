@@ -139,7 +139,7 @@ uvb_values = ['pchw18']
 n_data = len(uvb_values)
 # for index,uvb in enumerate(uvb_values):
 
-cosmo_spaces = ['real', 'redshift']
+cosmo_spaces = [ 'redshift']
 
 uvb = 'pchw18'
 
@@ -151,12 +151,12 @@ for index, space in enumerate(cosmo_spaces):
 
     if uvb == 'pchw18':
       if space == 'real':
-        color_line = c_0
-        color_bar = c_0
-        label = "PCHW19 (Real)"
-      if space == 'redshift':
         color_line = c_1
         color_bar = c_1
+        label = "PCHW19 (Real)"
+      if space == 'redshift':
+        color_line = c_0
+        color_bar = c_0
         label = "PCHW19 (Redshift)"
 
     if uvb == 'hm12':
@@ -176,18 +176,18 @@ for index, space in enumerate(cosmo_spaces):
     n_skewers = inFile[space].attrs['n_skewers']
     skewer_ids = inFile[space]['skewers_ids'][...]
     k_vals = inFile[space]['k_vals'][...]
-    n_in_bin = inFile[space]['n_in_bin'][...]
+    # n_in_bin = inFile[space]['n_in_bin'][...]
     power_all = inFile[space]['power_spectrum_all'][...]
     inFile.close()
 
-    # n_kSamples = power_all.shape[1]
-    indices = np.where( n_in_bin > 0)[0]
-    n_kSamples = len(indices)
-    n_in_bin = n_in_bin[indices]
-    k_vals = k_vals[indices]
-    power_all = power_all[ :, indices ]
-    for i in range(n_skewers):
-      power_all[i] /= n_in_bin
+    n_kSamples = power_all.shape[1]
+    # indices = np.where( n_in_bin > 0)[0]
+    # n_kSamples = len(indices)
+    # n_in_bin = n_in_bin[indices]
+    # k_vals = k_vals[indices]
+    # power_all = power_all[ :, indices ]
+    # for i in range(n_skewers):
+    #   power_all[i] /= n_in_bin
 
     power_mean  = []
     power_sigma = []
@@ -362,8 +362,8 @@ for index, space in enumerate(cosmo_spaces):
   
 
 
-if nrows == 1: fileName = output_dir + 'flux_power_spectrum_z5_space.png'
-if nrows == 2: fileName = output_dir + 'flux_power_spectrum_z2_space.png'
+if nrows == 1: fileName = output_dir + 'flux_power_spectrum_z5_space_new.png'
+if nrows == 2: fileName = output_dir + 'flux_power_spectrum_z2_space_new.png'
 
 if smooth:
   if nrows == 1: fileName = output_dir + 'flux_power_spectrum_z5_smooth.png'
