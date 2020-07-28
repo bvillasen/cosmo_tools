@@ -238,7 +238,7 @@ fs = 16
 ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in' )
 ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
 
-ax.set_xlabel( r'$ k   \,\,\,   [s\,km^{-1}] $',  fontsize=label_size, color= text_color )
+ax.set_xlabel( r'$ k   \,\,\, \,\,  [s\,km^{-1}] $',  fontsize=label_size, color= text_color )
 ax.set_ylabel( r' $\Delta_F^2(k)$', fontsize=label_size, color= text_color )
 
 [sp.set_linewidth(border_width) for sp in ax.spines.values()]
