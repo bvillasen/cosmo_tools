@@ -206,7 +206,7 @@ lw=3
 factor = 1.1
 
 label = r'$\Delta x= {0:.0f}  $'.format(data[2048]['dx']) + r'$\,\, h^{-1} \mathrm{ckpc}$'
-ax.plot( data[2048]['k_vals'],  data[2048]['power_mean']*factor, label=label, c=c_0,  lw=lw)
+ax.plot( data[2048]['k_vals'],  data[2048]['power_mean']*factor, label=label, c='C2',  lw=lw)
 
 
 label = r'$\Delta x= {0:.0f}  $'.format(data[1024]['dx']) + r'$\,\, h^{-1} \mathrm{ckpc}$'
