@@ -6,7 +6,6 @@ import matplotlib.gridspec as gridspec
 import matplotlib as mpl
 from scipy.interpolate import interp1d
 
-mpl.use('Agg')
 
 
 cosmo_dir = os.path.dirname(os.path.dirname(os.getcwd())) + '/'
@@ -32,6 +31,7 @@ background = 'white'
 # background = 'black'
 # background = 'transparent'
 
+mpl.use('Agg')
 
 
 # 
