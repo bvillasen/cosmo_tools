@@ -30,7 +30,7 @@ data = { 'sph':{}, 'grid':{} }
 
 nSnap = 12
 in_file_name = inDir_sph + 'snapshot_{0}_complete.h5'.format(nSnap)
-print "Loading File: ", in_file_name
+print("Loading File: ", in_file_name)
 inFile = h5.File( in_file_name, 'r' )
 
 
@@ -217,7 +217,7 @@ ax.legend(loc=0, fontsize=fs)
 
 fileName = output_dir + 'ionization_fraction_H.png'
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=100)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 
 # 
 # 

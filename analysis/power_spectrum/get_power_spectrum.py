@@ -126,7 +126,7 @@ for nSnap in snapshots:
   dens = data['density'][...]
   
   if current_z < 0: current_z = 0
-  print( 'Snap: {0}   current_z: {1:.3f}'.format( nSnap, current_z ))
+  print(( 'Snap: {0}   current_z: {1:.3f}'.format( nSnap, current_z )))
   power_spectrum, k_vals, count = get_power_spectrum( dens, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples)
   z_list.append( current_z )
   ps_list.append( power_spectrum )
@@ -142,11 +142,11 @@ data[:,1:] = ps_array
 
 out_file_name = 'ps_{0}_dmOnly_cholla_nyx.dat'.format( nPoints )
 np.savetxt( outDir + out_file_name, data )
-print( "Saved file: {0}".format( outDir + out_file_name ))
+print(( "Saved file: {0}".format( outDir + out_file_name )))
 
 out_file_name = 'ps_{0}_k_values.dat'.format( nPoints )
 np.savetxt( outDir + out_file_name, k_vals )
-print( "Saved file: {0}".format( outDir + out_file_name ))
+print(( "Saved file: {0}".format( outDir + out_file_name )))
 
 
 

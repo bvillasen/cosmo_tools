@@ -35,7 +35,7 @@ def load_skewers_single_axis(  n_skewers, skewer_axis,  nSnap, input_dir, set_ra
 
   if set_random_seed:   np.random.seed(12345)
   skewer_ids = np.random.randint(0, n_total, n_skewers)
-  if print_out: print " Loading {0} skewers {1} axis".format(n_skewers, skewer_axis)
+  if print_out: print(" Loading {0} skewers {1} axis".format(n_skewers, skewer_axis))
 
   skewers_dens, skewers_temp, skewers_HI, skewers_vel = [], [], [], []
 

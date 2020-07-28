@@ -81,10 +81,10 @@ create_directory( output_dir )
 
 #Load Power spectrum data
 inputFileName = input_dir + 'flux_power_spectrum_{0}.h5'.format(nSnap)
-print "\nLoadingFile: ", inputFileName
+print("\nLoadingFile: ", inputFileName)
 inFile = h5.File( inputFileName, 'r')
 current_z = inFile.attrs['current_z'] 
-print nSnap, current_z
+print(nSnap, current_z)
 n_skewers = inFile.attrs['n_skewers']
 skewer_ids = inFile['skewers_ids'][...]
 k_vals = inFile['k_vals'][...]
@@ -198,6 +198,6 @@ ax.set_xscale('log')
 
 fileName = output_dir + 'flux_power_spectrum_{0}_{3}_bins{1}{2}.png'.format(nSnap, binning, n_bins, uvb)
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 
   

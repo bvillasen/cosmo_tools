@@ -49,7 +49,7 @@ dz = Lbox / grid_size[2]
 nSnap = 11
 
 in_file_name = inDir + 'snapshot_{0}_complete.h5'.format(nSnap)
-if print_out: print "Loading File: ", in_file_name
+if print_out: print("Loading File: ", in_file_name)
 inFile = h5.File( in_file_name, 'r' )
 
 
@@ -61,16 +61,16 @@ h = inFile.attrs['h']
 N_gas = inFile.attrs['N_gas']
 hsml_max = inFile.attrs['hsml_max']
 
-if print_out: print "N_gas: ", N_gas
+if print_out: print("N_gas: ", N_gas)
 
 nprocs = proc_grid[0] * proc_grid[1] * proc_grid[2] 
 
 
 data = {}
-print 'Loading Data '
+print('Loading Data ')
 fields = [ 'mass', 'hsml', 'rho', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z', 'Nh', 'Ne', 'HeI', 'HeII', 'u' ]
 for field in fields:
-  print " Loading Field ", field
+  print(" Loading Field ", field)
   data[field] = inFile[field][...]
 
 
@@ -99,11 +99,11 @@ for p_id in range( nprocs ):
   indices_all = indices_x * indices_y * indices_z
   indices = np.where( indices_all == True )
   N_local = len( indices[0] )
-  if print_out: print "Pid: {0}   N local: {1}".format( p_id, N_local)
+  if print_out: print("Pid: {0}   N local: {1}".format( p_id, N_local))
 
 
   outFileName = output_dir + '{0}_particles.h5.{1}'.format(nSnap, p_id)
-  print ' Saving File: ', outFileName
+  print(' Saving File: ', outFileName)
   
   file = h5.File( outFileName, 'w' )
   

@@ -65,7 +65,7 @@ else:
 
 
 nSnap = 12
-print "nSnap: {0}".format(nSnap)
+print("nSnap: {0}".format(nSnap))
 
 
 
@@ -83,7 +83,7 @@ kernel_type = kernel_types[0]
 for kernel_type in kernel_types:
 
 
-  print kernel_type
+  print(kernel_type)
   data_out[kernel_type] = {}
   data_out[kernel_type]['F_vals'] = []
   group_kernel = outFile.create_group( kernel_type )
@@ -93,7 +93,7 @@ for kernel_type in kernel_types:
   for n_box in range(n_boxes):
 
     inFileName = input_dir + '{0}.h5.{1}'.format( nSnap, n_box)
-    print "Loading File:", inFileName
+    print("Loading File:", inFileName)
 
     inFile = h5.File( inFileName, 'r')
     current_z = inFile.attrs['Current_z']
@@ -136,7 +136,7 @@ for kernel_type in kernel_types:
 
 outFile.attrs['current_z'] = current_z
 outFile.close()
-print "\nSaved File: ", outputFileName
+print("\nSaved File: ", outputFileName)
 
 
 

@@ -220,9 +220,9 @@ for i in range( n_plots ):
     ax1.set_ylabel( r'$P\,(k)$   $[h^3\mathrm{Mpc}^{-3}]$', fontsize=label_size, labelpad=-2)
     ax2.set_ylabel( r'$\Delta P\,(k)/P\,(k)  \,\,[\times 10^{-3}]$', fontsize=label_size, labelpad=5)
 
-  [i.set_linewidth(border_width) for i in ax1.spines.itervalues()]
-  [i.set_linewidth(border_width) for i in ax2.spines.itervalues()]
+  [i.set_linewidth(border_width) for i in ax1.spines.values()]
+  [i.set_linewidth(border_width) for i in ax2.spines.values()]
 
 fileName = outDir + out_file_name
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=fig_dpi)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)

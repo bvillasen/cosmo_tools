@@ -24,7 +24,7 @@ create_directory( output_dir )
 cosmo_name = ''
 
 
-snapshots = range( 170 )
+snapshots = list(range( 170))
 
 data = {}
 data['current_z'] = []
@@ -40,7 +40,7 @@ for i,uvb in enumerate(['hm12', 'pchw18']):
   
   for nSnap in snapshots:
     
-    print nSnap
+    print(nSnap)
     
     file_name = inDir + 'ionization_fraction_{0}.h5'.format( nSnap)
     
@@ -89,4 +89,4 @@ ax.set_xlabel( "Redshift")
 
 fileName = output_dir + 'ionization_fraction.png'
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)

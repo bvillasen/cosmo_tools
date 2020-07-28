@@ -174,7 +174,7 @@ fileName += '.png'
 
 if not transparent: fig.savefig( output_dir + fileName, bbox_inches='tight',  facecolor=fig.get_facecolor(), dpi=200 )
 else: fig.savefig( output_dir + fileName, bbox_inches='tight',  transparent=True, dpi=200 )
-print 'Saved image: ', output_dir + fileName
+print('Saved image: ', output_dir + fileName)
 # 
 # 
 # 

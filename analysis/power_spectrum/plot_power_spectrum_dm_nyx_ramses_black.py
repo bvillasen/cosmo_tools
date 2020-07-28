@@ -153,9 +153,9 @@ for i in range( n_plots ):
   ax2.tick_params(axis='both', which='minor', labelsize=10, size=3, color=text_color, labelcolor=text_color)
   # ax2.ticklabel_format( style='sci', scilimits=(0, 1))
   
-  for spine in ax1.spines.values():
+  for spine in list(ax1.spines.values()):
       spine.set_edgecolor(text_color)
-  for spine in ax2.spines.values():
+  for spine in list(ax2.spines.values()):
       spine.set_edgecolor(text_color)
 
   # labels = [item.get_text() for item in ax2.get_yticklabels()]
@@ -187,4 +187,4 @@ for i in range( n_plots ):
 fileName = outDir + out_file_name
 if not transparent: fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', facecolor=fig.get_facecolor(), dpi=300)
 else: fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', transparent=True, dpi=300)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)

@@ -44,7 +44,7 @@ output_dir = dataDir + 'cosmo_sims/2048_hydro_50Mpc_{1}/optical_depth_{0}/multip
 
 
 
-snapshots_indices = range( 1, 16, 1)
+snapshots_indices = list(range( 1, 16, 1))
 
 #Cosmological Parameters 
 if cosmo_name == 'planck':
@@ -94,7 +94,7 @@ if rank == 0: create_directory( output_dir )
 nSnap = snapshots_indices[rank]
 # nSnap = 90
 
-print "nSnap: {0}".format(nSnap)
+print("nSnap: {0}".format(nSnap))
 
 
 
@@ -122,7 +122,7 @@ outFile = h5.File( outputFileName, 'w')
 
 for space in cosmo_spaces:
   
-  print "Computing Optical Depth: {0}  Space".format( space )
+  print("Computing Optical Depth: {0}  Space".format( space ))
   
   space_group = outFile.create_group( space )
 
@@ -157,6 +157,6 @@ for space in cosmo_spaces:
 outFile.attrs['current_z'] = current_z
 
 outFile.close()
-print "\nSaved File: ", outputFileName
+print("\nSaved File: ", outputFileName)
 
 

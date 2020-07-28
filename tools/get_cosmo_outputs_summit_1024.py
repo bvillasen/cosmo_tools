@@ -38,7 +38,7 @@ for i in range( n_ranges ):
   # if i == n_ranges -1: delta_a_lin -= 0.00
   # delta_a_lin = np.linspace( delta_a_avrg/div, delta_a_avrg*div, n)
   delta_a_interp.append( delta_a_lin)
-  print( n, delta_a_avrg )
+  print(( n, delta_a_avrg ))
 
 
 delta_a_interp_all = np.concatenate( delta_a_interp)

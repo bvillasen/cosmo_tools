@@ -149,7 +149,7 @@ for nSnap in range(138):
   gas_U_en = data_enzo['gas']['GasEnergy'][...] / dens_enzo
   temp_enzo = get_temp( gas_U_en*1e6)
   t_en = ( dens_enzo * temp_enzo ).sum() / dens_enzo.sum()
-  print ' enzo: ', current_z_enzo 
+  print(' enzo: ', current_z_enzo) 
   z_en_list.append( current_z_enzo )
   t_en_list.append( t_en )  
 

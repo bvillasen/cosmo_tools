@@ -49,7 +49,7 @@ _g_IC_blocks_schema = OrderedDict([
     ('mass', ('f4', 1, [0,1,2,3,4,5])),
     ('u', ('f4', 1, [0,])),
 ])
-_g_blocks_schema = OrderedDict([(k, v) for k, v in _g_IC_blocks_schema.items()])
+_g_blocks_schema = OrderedDict([(k, v) for k, v in list(_g_IC_blocks_schema.items())])
 _g_blocks_schema['rho']  = ('f4', 1, [0,])
 _g_blocks_schema['hsml'] = ('f4', 1, [0,])
 
@@ -280,7 +280,7 @@ class GadgetSnapshot(SnapshotBase):
         raise a SnapshotIOException if an inconsistency is found.
         """
         npars = [None for _ in self.ptype_indices]
-        for (name, fmt) in self._schema.items():
+        for (name, fmt) in list(self._schema.items()):
             pdata = getattr(self, name)
             npars2 = self._npars(pdata)
             for p, (n, n2) in enumerate(zip(npars, npars2)):

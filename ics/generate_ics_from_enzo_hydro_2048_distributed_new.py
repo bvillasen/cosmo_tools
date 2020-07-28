@@ -24,9 +24,9 @@ else:
   index = int(sys.argv[2])
   type = sys.argv[3]
   
-print 'Cosmo Index: ', cosmo_index
-print 'Index: ', index
-print 'Type: ', type
+print('Cosmo Index: ', cosmo_index)
+print('Index: ', index)
+print('Type: ', type)
 
 # dataDir = '/home/bruno/Desktop/data/'
 # dataDir = '/raid/bruno/data/'
@@ -56,14 +56,14 @@ grid_size = [ 2048, 2048, 2048 ]
 
 # Get the domain decomposition
 domain =  get_domain_block( proc_grid, box_size, grid_size )
-print 'N Cells: {0}'.format(grid_size[0]*grid_size[1]*grid_size[2])
+print('N Cells: {0}'.format(grid_size[0]*grid_size[1]*grid_size[2]))
 
 #Generate Particles ICs
 if type == 'particles':
   outputBaseName = '{0}_particles.h5'.format(nSnap)
   if index < 0:
     fields_particles = ['mass', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
-    print fields_particles
+    print(fields_particles)
     generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True, save_pid_indices=True)
     
   # generate_ics_particles_distributed( fields_particles, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=True)
@@ -72,13 +72,13 @@ if type == 'particles':
   if index > 0:
     fields_particles = [ ['mass'], ['pos_x', 'pos_y'], ['pos_z', 'vel_x'], ['vel_y', 'vel_z']  ]
     if index == 1: get_pid_indices = True
-    print fields
+    print(fields)
     for field in fields:
       generate_ics_particles_distributed_single_field( field, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=get_pid_indices )
   
   if index == 0:
     fields_particles = ['mass', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
-    print 'Compressing Fields'
+    print('Compressing Fields')
     compress_fields_to_single_file( fields_particles, domain, proc_grid, outputDir, outputBaseName )
 
 # Generate Hydro Ics

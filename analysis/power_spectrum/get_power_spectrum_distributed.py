@@ -42,18 +42,18 @@ if rank == 0: create_directory( powerDir)
 snapshots = [ 0, 15, 22, 46, 63, 90, 106, 130, 117, 147, 169 ]
 
 for nSnap in snapshots:
-  if rank == 0 : print( "Snapshot: {0}".format(nSnap))
+  if rank == 0 : print(( "Snapshot: {0}".format(nSnap)))
 
   # Load FFT data
   fft_file_name = fftDir + '{0}_data_fft.h5.{1}'.format( nSnap, rank )  
-  if rank == 0: print 'Loading File: {0}'.format(fft_file_name)
+  if rank == 0: print('Loading File: {0}'.format(fft_file_name))
   fft_file = h5.File(  fft_file_name, 'r' )
   fft_amp2 = fft_file['fft_amp2'][...]
   fft_file.close()
 
   # Load FFT data
   kmag_file_name = fftDir + '0_k_magnitude.h5.{1}'.format( nSnap, rank )  
-  if rank == 0: print 'Loading File: {0}'.format(kmag_file_name)
+  if rank == 0: print('Loading File: {0}'.format(kmag_file_name))
   kmag_file = h5.File(  kmag_file_name, 'r' )
   k_mag = kmag_file['k_mag'][...]
   k_mag_min_local = kmag_file.attrs['k_mag_min']
@@ -62,12 +62,12 @@ for nSnap in snapshots:
 
 
   comm.Barrier()
-  if rank == 0: print 'Loaded File: {0}'.format(fft_file_name)
+  if rank == 0: print('Loaded File: {0}'.format(fft_file_name))
 
   #Find global max min
   k_mag_min = comm.allreduce(k_mag_min_local, op=MPI.MIN)[0]
   k_mag_max = comm.allreduce(k_mag_max_local, op=MPI.MAX)[0]
-  if ( rank == 0 ): print( "Kmag min: {0}   max: {1}".format( k_mag_min, k_mag_max) )
+  if ( rank == 0 ): print(( "Kmag min: {0}   max: {1}".format( k_mag_min, k_mag_max) ))
 
 
   #Get the local power spectrum
@@ -76,7 +76,7 @@ for nSnap in snapshots:
   k_mag = k_mag.reshape( size )
 
   n_kSamples = 30
-  if rank == 0: print( '\nComputing Power Spectrum   nSamples: {0}'.format(n_kSamples) )
+  if rank == 0: print(( '\nComputing Power Spectrum   nSamples: {0}'.format(n_kSamples) ))
   intervals = np.logspace(np.log10(k_mag_min*0.999), np.log10(k_mag_max*1.001), n_kSamples+1)
   power, bin_edges= np.histogram( k_mag, bins=intervals, weights=fft_amp2 )
   n_in_bin, bin_edges = np.histogram( k_mag, bins=intervals )
@@ -108,5 +108,5 @@ for nSnap in snapshots:
     data = np.array([ k_vals, power_spectrum])
     outfile_name = powerDir + 'power_spectrum_distributed_{0}.dat'.format(nSnap)
     np.savetxt( outfile_name, data)
-    print 'Saved File: ', outfile_name
+    print('Saved File: ', outfile_name)
     

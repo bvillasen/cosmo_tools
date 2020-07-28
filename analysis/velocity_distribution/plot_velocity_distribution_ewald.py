@@ -53,7 +53,7 @@ for i,nSnap in enumerate([ 11, 12 ]):
   cosmo_h = skewers_ewald.h
   current_z = skewers_ewald.z
 
-  print 'Current z: {0}'.format( current_z )
+  print('Current z: {0}'.format( current_z ))
   current_a = 1. / ( current_z + 1 )
   Omega_M = skewers_ewald.om
   Omega_b = skewers_ewald.ob
@@ -64,7 +64,7 @@ for i,nSnap in enumerate([ 11, 12 ]):
   rho_H_mean = rho_gas_mean_ewald * X
 
   in_file_name = input_dir + 'snapshot_{0}_complete.h5'.format(nSnap)
-  if print_out: print "Loading File: ", in_file_name
+  if print_out: print("Loading File: ", in_file_name)
   inFile = h5.File( in_file_name, 'r' )
 
 
@@ -76,14 +76,14 @@ for i,nSnap in enumerate([ 11, 12 ]):
   N_gas = inFile.attrs['N_gas']
   hsml_max = inFile.attrs['hsml_max']
 
-  if print_out: print "N_gas: ", N_gas
+  if print_out: print("N_gas: ", N_gas)
 
 
   data = {}
-  print 'Loading Data '
+  print('Loading Data ')
   fields = [ 'rho','vel_x', 'vel_y', 'vel_z', ]
   for field in fields:
-    print " Loading Field ", field
+    print(" Loading Field ", field)
     data[field] = inFile[field][...]
 
   inFile.close()
@@ -130,4 +130,4 @@ for i,nSnap in enumerate([ 11, 12 ]):
 fileName = figures_dir + 'dens_vel_distribution_ewald.png'
 if factor_sqrta: fileName = figures_dir + 'dens_vel_distribution_ewald_sqrta.png'
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)

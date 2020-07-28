@@ -65,7 +65,7 @@ nSnap = snapshots_indices[rank]
 # for nSnap in snapshots_indices:
 
 
-print "nSnap: {0}".format(nSnap)
+print("nSnap: {0}".format(nSnap))
 
 
 axis_list = [ 'x', 'y', 'z' ]
@@ -81,7 +81,7 @@ current_a = 1. / ( current_z + 1 )
 
 space = 'redshift'
 
-print "Computing Flux PDF: {0}  Space".format( space )
+print("Computing Flux PDF: {0}  Space".format( space ))
 
 
 F_vals = []
@@ -132,7 +132,7 @@ space_group.create_dataset( 'bin_centers', data=bin_centers)
 space_group.create_dataset( 'Flux_pdf', data=distribution)
 
 outFile.close()
-print "\nSaved File: ", outputFileName
+print("\nSaved File: ", outputFileName)
 
 
 

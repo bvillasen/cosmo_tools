@@ -61,7 +61,7 @@ else:
 
 
 nSnap = 12
-print "nSnap: {0}".format(nSnap)
+print("nSnap: {0}".format(nSnap))
 
 
 
@@ -80,7 +80,7 @@ kernel_types = [ 'smooth', 'scatter' ]
 
 for kernel_type in kernel_types:
   
-  print kernel_type
+  print(kernel_type)
   group_kernel = outFile.create_group( kernel_type )
 
 
@@ -129,7 +129,7 @@ for kernel_type in kernel_types:
 outFile.attrs['current_z'] = current_z
 outFile.attrs['n_skewers'] = n_skewers
 outFile.close()
-print "\nSaved File: ", outputFileName
+print("\nSaved File: ", outputFileName)
 
 
 

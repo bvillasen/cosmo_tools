@@ -60,7 +60,7 @@ dz = Lbox / grid_size[2]
 nSnap = 11
 
 in_file_name = inDir + '{0}_particles.h5.{1}'.format(nSnap, rank)
-if print_out: print "Loading File: ", in_file_name
+if print_out: print("Loading File: ", in_file_name)
 inFile = h5.File( in_file_name, 'r' )
 
 
@@ -72,14 +72,14 @@ h = inFile.attrs['h']
 N_local = inFile.attrs['N_local']
 hsml_max = inFile.attrs['hsml_max']
 
-if print_out: print "N_local: ", N_local
+if print_out: print("N_local: ", N_local)
 
 
 data = {}
-if print_out: print 'Loading Data '
+if print_out: print('Loading Data ')
 fields = [ 'mass', 'rho', 'u', 'hsml', 'pos_x', 'pos_y', 'pos_z', 'Nh', 'HeI', 'HeII' , 'vel_x' ]
 for field in fields:
-  if print_out: print " Loading Field ", field
+  if print_out: print(" Loading Field ", field)
   data[field] = inFile[field][...]
 inFile.close()
 
@@ -108,7 +108,7 @@ mu = rho / ( HI_rho + 2*HII_rho + ( HeI_rho + 2*HeII_rho + 3*HeIII_rho) / 4 )
 # print mu.min(), mu.max()
 
 
-if print_out: print 'Building Tree'
+if print_out: print('Building Tree')
 tree = KDTree( pos )
 
 offset = np.array([ grid_x[0], grid_y[0], grid_z[0] ])
@@ -135,7 +135,7 @@ data_kernel['scatter']['HI_density_0'] = np.zeros(dims_local)
 data_kernel['scatter']['HI_density'] = np.zeros(dims_local)
 
 
-if print_out: print 'Starting Grid Interpolation'
+if print_out: print('Starting Grid Interpolation')
 if use_mpi: comm.Barrier()
 
 N_smooth = 64
@@ -170,7 +170,7 @@ for indx_x in range( dims_local[0] ):
       neig_distances = neig_distances[neig_indices_sort]
       neig_indices = neig_indices[neig_indices_sort]
       h_smooth = neig_distances[N_smooth-1]
-      if h_smooth == 0.0: print "ERROR: h=0 in rank: {0}   indx: [ {1}  {2}  {3} ]".format( rank, indx_x, indx_y, indx_z )
+      if h_smooth == 0.0: print("ERROR: h=0 in rank: {0}   indx: [ {1}  {2}  {3} ]".format( rank, indx_x, indx_y, indx_z ))
       
       # Initializa the smooth values
       smooth_mass = 0
@@ -263,14 +263,14 @@ for indx_x in range( dims_local[0] ):
 
 
 if use_mpi: comm.Barrier()
-if print_out: print ""
+if print_out: print("")
 
 end = time.time()
-if print_out: print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
+if print_out: print(( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) ))
 
 
 outputFileName = output_dir + "{0}.h5.{1}".format( nSnap, rank )
-if print_out: print "Writing File: ", outputFileName
+if print_out: print("Writing File: ", outputFileName)
 outFile = h5.File( outputFileName, 'w' )
 
 outFile.attrs['Current_z'] = np.array([current_z])
@@ -294,7 +294,7 @@ group_scatter.create_dataset('HI_density_0', data=data_kernel['scatter']['HI_den
 group_scatter.create_dataset('HI_density', data=data_kernel['scatter']['HI_density'] )
 
 outFile.close()
-if print_out: print "Saved File: ", outputFileName
+if print_out: print("Saved File: ", outputFileName)
 
 
 

@@ -54,14 +54,14 @@ kernel_types = ['smooth', 'scatter' ]
 data_type = 'sph_kernel'
 for kernel_type in kernel_types:
 
-  print "Kernel Type: ", kernel_type
+  print("Kernel Type: ", kernel_type)
   data['sph'][kernel_type] = {}
   data['sph'][kernel_type]['distribution'] = {}
 
   fields = [ 'density', 'HI_density' ]
   data_snapshot = load_snapshot_data_distributed( nSnap, inDir_sph, data_type, fields, subgrid, domain, precision, proc_grid,  show_progess=show_progess, kernel_types=[kernel_type] )
   current_z = data_snapshot['Current_z']
-  print current_z
+  print(current_z)
   density = data_snapshot[data_type][kernel_type]['density'].flatten()
   HI_density = data_snapshot[data_type][kernel_type]['HI_density'].flatten()
   neutral_fraction = HI_density / ( X * density )
@@ -115,15 +115,15 @@ data['hydro']['distribution'] = {}
 fields = [ 'density', 'HI_density' ]
 data_snapshot = load_snapshot_data_distributed( nSnap, inDir_grid, data_type, fields, subgrid, domain, precision, proc_grid,  show_progess=show_progess, kernel_types=[kernel_type] )
 current_z = data_snapshot['Current_z']
-print current_z
+print(current_z)
 density = data_snapshot[data_type]['density'].flatten()
 HI_density = data_snapshot[data_type]['HI_density'].flatten()
 data_snapshot = {}
-print " Computing Neutral Fraction"
+print(" Computing Neutral Fraction")
 neutral_fraction = np.log10( HI_density / ( X * density ) )
-print " Computing Log Density"
+print(" Computing Log Density")
 density = np.log10(density)
-print " Computing Log HI Density"
+print(" Computing Log HI Density")
 HI_density = np.log10(HI_density)
 data['hydro']['density'] = density
 data['hydro']['HI_density'] = HI_density
@@ -134,7 +134,7 @@ data['hydro']['neutral_fraction'] = neutral_fraction
 
 nBins = 1000
 for field in [ 'density', 'HI_density', 'neutral_fraction' ]:
-  print " Getting Distribution: ", field
+  print(" Getting Distribution: ", field)
   field_data = data['hydro'][field]
   mean = field_data.mean()
   start = 0.05 * mean
@@ -149,7 +149,7 @@ for field in [ 'density', 'HI_density', 'neutral_fraction' ]:
 
 
 
-print "Plotting"
+print("Plotting")
 
 nrows = 1
 ncols = 3
@@ -199,4 +199,4 @@ ax.set_xlim( -7, -3 )
 
 fileName = output_dir + 'density_distribution_new.png'
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=100)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)

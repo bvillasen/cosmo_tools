@@ -67,7 +67,7 @@ def load_tabulated_data_colums( filename, n_cols ):
   data = np.loadtxt(  filename, delimiter=',' )
   n_total = data.shape[0]
   n_per_col = n_total / n_cols
-  print "Loaded {0} colums {1} points ".format(n_cols, n_per_col)
+  print("Loaded {0} colums {1} points ".format(n_cols, n_per_col))
   data_cols = []
   for i in range( n_cols ):
     col = data[i*n_per_col:(i+1)*n_per_col,:]

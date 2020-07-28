@@ -48,7 +48,7 @@ for nSnap in range( 170):
 
   fit_mcmc_dir = input_dir_pchw18 + 'fit_mcmc/'
   inFileName = input_dir_pchw18 + 'phase_diagram_data_{0}.h5'.format(nSnap)
-  print 'Loading File: ', inFileName
+  print('Loading File: ', inFileName)
   inFile = h5.File( inFileName, 'r')
   current_z = inFile.attrs['current_z']
   z_list.append( current_z )
@@ -95,7 +95,7 @@ for i in range( n_cosmologies ):
     fit_mcmc_dir = input_dir + 'fit_mcmc/'
 
     inFileName = input_dir + 'phase_diagram_data_{0}.h5'.format(nSnap)
-    print 'Loading File: ', inFileName
+    print('Loading File: ', inFileName)
     inFile = h5.File( inFileName, 'r')
     current_z = inFile.attrs['current_z'] + (i-1.5)*0.05
 
@@ -172,7 +172,7 @@ for i,data_set in enumerate(data_sets):
   data_name = data_set['name']
   data_fmt = data_formats[i]
   # data_x += 0.0001*i
-  if i == 2: print data_x.shape, data_mean.shape, data_error.shape
+  if i == 2: print(data_x.shape, data_mean.shape, data_error.shape)
   ax.errorbar( data_x, data_mean, yerr=data_error, fmt='none',  alpha=0.8, ecolor= error_colors[i])
   ax.scatter( data_x, data_mean, label=data_name, alpha=0.8, color= error_colors[i])
   
@@ -202,7 +202,7 @@ leg = ax.legend( loc=1, frameon=False, fontsize=14)
 for text in leg.get_texts():
   plt.setp(text, color = text_color)
 ax.tick_params(color=text_color, labelcolor=text_color, labelsize=15)
-for spine in ax.spines.values():
+for spine in list(ax.spines.values()):
     spine.set_edgecolor(text_color)
 if not transparent: ax.set_facecolor('k')
 
@@ -245,7 +245,7 @@ ax.set_xlim( 1.9, 6.1)
 # for text in leg.get_texts():
 #   plt.setp(text, color = text_color)
 ax.tick_params(color=text_color, labelcolor=text_color, labelsize=15)
-for spine in ax.spines.values():
+for spine in list(ax.spines.values()):
     spine.set_edgecolor(text_color)
 if not transparent: ax.set_facecolor('k')
 
@@ -253,7 +253,7 @@ fileName = output_dir + 'thermal_history_data+walther_cosmo_black.png'.format(nS
 if transparent: fileName = output_dir + 'thermal_history_data+walther_cosmo_black.png'.format(nSnap)
 if not transparent: fig.savefig( fileName,  pad_inches=0.1,  facecolor=fig.get_facecolor(),  bbox_inches='tight', dpi=300)
 else: fig.savefig( fileName,  pad_inches=0.1,  transparent=True,  bbox_inches='tight', dpi=300)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 
 
 # 

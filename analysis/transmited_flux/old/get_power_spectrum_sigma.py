@@ -64,10 +64,10 @@ input_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/transmited_flux_{1}/power_spec
 
 #Load Power spectrum data
 inputFileName = input_dir + 'flux_power_spectrum_{0}.h5'.format(nSnap)
-print "\nLoadingFile: ", inputFileName
+print("\nLoadingFile: ", inputFileName)
 inFile = h5.File( inputFileName, 'r')
 current_z = inFile.attrs['current_z'] 
-print nSnap, current_z
+print(nSnap, current_z)
 n_skewers = inFile.attrs['n_skewers']
 skewer_ids = inFile['skewers_ids'][...]
 k_vals = inFile['k_vals'][...]
@@ -121,4 +121,4 @@ for i in range(n_kSamples ):
 
   fileName = output_dir + 'flux_power_spectrum__sigma_{0}_{1}.png'.format( nSnap, i )
   fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
-  print 'Saved Image: ', fileName
+  print('Saved Image: ', fileName)

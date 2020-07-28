@@ -159,10 +159,10 @@ for nSnap in snapshots_indices:
   input_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/transmited_flux_{1}/power_spectrum/multiple_axis/high_res/'.format(nPoints, uvb )
   inputFileName = input_dir + 'flux_power_spectrum_{0}.h5'.format(nSnap)
 
-  print "\nLoadingFile: ", inputFileName
+  print("\nLoadingFile: ", inputFileName)
   inFile = h5.File( inputFileName, 'r')
   current_z = inFile.attrs['current_z'] 
-  print nSnap, current_z
+  print(nSnap, current_z)
   n_skewers = inFile[space].attrs['n_skewers']
   skewer_ids = inFile[space]['skewers_ids'][...]
   k_vals = inFile[space]['k_vals'][...]
@@ -207,7 +207,7 @@ for nSnap in snapshots_indices:
   
   H = get_Hubble_parameter(current_z, H0, Omega_M, Omega_L)
   K_comov = k_vals * H / ( current_z + 1) / cosmo_h
-  print k_vals_comov - K_comov
+  print(k_vals_comov - K_comov)
 
   power_mean = np.array( power_mean )
   power_sigma = np.array( power_sigma )
@@ -317,7 +317,7 @@ for text in leg.get_texts():
 
 
 ax.tick_params(which='both', color=text_color, labelcolor=text_color, labelsize=15)
-for spine in ax.spines.values():
+for spine in list(ax.spines.values()):
     spine.set_edgecolor(text_color)
 
 
@@ -335,7 +335,7 @@ if transparent: fileName += '_transparent'
 fileName += '.png'
 if not transparent: fig.savefig( fileName,  pad_inches=0.1, facecolor=fig.get_facecolor(), bbox_inches='tight', dpi=200)
 else: fig.savefig( fileName,  pad_inches=0.1, transparent=True, bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 
 
 

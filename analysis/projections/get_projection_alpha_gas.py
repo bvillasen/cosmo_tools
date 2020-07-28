@@ -124,7 +124,7 @@ if len(index_start_range) == 0: exit()
 
 if not use_mpi: index_start_range = [0]
 
-print 'Generating: {0} {1}\n'.format( rank, index_start_range) 
+print('Generating: {0} {1}\n'.format( rank, index_start_range)) 
 
 
 data_type = 'hydro'
@@ -136,7 +136,7 @@ for i, indx_start in enumerate(index_start_range):
   
   if indx_start > 300: continue
   
-  print "Index: {0}".format(indx_start)
+  print("Index: {0}".format(indx_start))
 
 
   grid_complete_size = [ 2048, 2048, 2048 ]
@@ -178,10 +178,10 @@ for i, indx_start in enumerate(index_start_range):
     clip_min = 0
     data = np.clip(data, clip_min, clip_max)
   
-    print data.mean()
+    print(data.mean())
 
 
-  if show_progess: print ''
+  if show_progess: print('')
 
 
   size_original = ( nPoints, nPoints )
@@ -226,7 +226,7 @@ for i, indx_start in enumerate(index_start_range):
       sys.stdout. write(terminalString)
       sys.stdout.flush() 
 
-  if show_progess: print ""
+  if show_progess: print("")
   #Write the projection to a file:
   n_image = indx_start 
   out_file_name = output_dir + 'projection_{2}_{3}_{0}_{1}.h5'.format( nSnap, n_image, data_type, field )
@@ -250,7 +250,7 @@ for i, indx_start in enumerate(index_start_range):
   data_set.attrs['min'] = projection_alpha.min()
 
   out_file.close()
-  print "Saved File {0} / {1}: {2}\n".format(i, len(index_start_range), out_file_name )
+  print("Saved File {0} / {1}: {2}\n".format(i, len(index_start_range), out_file_name ))
 
 
 

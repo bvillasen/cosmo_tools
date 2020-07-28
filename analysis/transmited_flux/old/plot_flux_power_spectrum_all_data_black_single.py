@@ -159,10 +159,10 @@ for index,uvb in enumerate([ 'hm12', 'pchw18' ]):
   #Load Power spectrum data
   inputFileName = input_dir + 'flux_power_spectrum_{0}.h5'.format(nSnap)
   if normalized: inputFileName = input_dir + 'flux_power_spectrum_{0}_normalized.h5'.format(nSnap)
-  print "\nLoadingFile: ", inputFileName
+  print("\nLoadingFile: ", inputFileName)
   inFile = h5.File( inputFileName, 'r')
   current_z = inFile.attrs['current_z'] 
-  print nSnap, current_z
+  print(nSnap, current_z)
   n_skewers = inFile.attrs['n_skewers']
   skewer_ids = inFile['skewers_ids'][...]
   k_vals = inFile['k_vals'][...]
@@ -349,7 +349,7 @@ for index,uvb in enumerate([ 'hm12', 'pchw18' ]):
     if not transparent: ax.set_facecolor('k')
     
     ax.tick_params(color=text_color, labelcolor=text_color, labelsize=15)
-    for spine in ax.spines.values():
+    for spine in list(ax.spines.values()):
         spine.set_edgecolor(text_color)
         
     if (nrows > 1 and indx_i != nrows-1 ): ax.tick_params(axis='x',color=text_color, labelcolor=text_color, labelsize=0)
@@ -376,7 +376,7 @@ if smooth:
 
 if not transparent: fig.savefig( fileName,  pad_inches=0.1, facecolor=fig.get_facecolor(), bbox_inches='tight', dpi=200)
 else: fig.savefig( fileName,  pad_inches=0.1, transparent=True, bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 
 
 

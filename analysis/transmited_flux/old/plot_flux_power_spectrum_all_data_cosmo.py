@@ -63,7 +63,7 @@ data_z_v = data_viel['z_vals']
 # 
 # snapshots_indices = [83, 90,  96, 102, 106, 110, 114, 119, 124, 130, 136, 143, 151, 159, 169, 169 ]
 # snapshots_indices.reverse()
-snapshots_indices = range(1, 16)
+snapshots_indices = list(range(1, 16))
 snapshots_indices = [15, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1,  ]
 
 
@@ -115,10 +115,10 @@ for n,cosmo_name in enumerate(cosmo_names):
     #Load Power spectrum data
     inputFileName = input_dir + 'flux_power_spectrum_{0}.h5'.format(nSnap)
     if normalized: inputFileName = input_dir + 'flux_power_spectrum_{0}_normalized.h5'.format(nSnap)
-    print "\nLoadingFile: ", inputFileName
+    print("\nLoadingFile: ", inputFileName)
     inFile = h5.File( inputFileName, 'r')
     current_z = inFile.attrs['current_z'] 
-    print nSnap, current_z
+    print(nSnap, current_z)
     n_skewers = inFile.attrs['n_skewers']
     skewer_ids = inFile['skewers_ids'][...]
     k_vals = inFile['k_vals'][...]
@@ -257,5 +257,5 @@ for n,cosmo_name in enumerate(cosmo_names):
 fileName = output_dir + 'flux_power_spectrum_all_data_cosmo.png'
 if normalized:fileName = output_dir + 'flux_power_spectrum_all_data_normalized.png'
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 

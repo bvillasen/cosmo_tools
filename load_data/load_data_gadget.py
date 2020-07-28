@@ -16,7 +16,7 @@ def load_snapshot_gadget_yt_dm(nSnap, inDir):
   import yt
   snapKey = '{0:03}'.format(nSnap)
   inFileName = 'snapshot_{0}'.format( snapKey)
-  print '\nLoading Gadget file:', inFileName
+  print('\nLoading Gadget file:', inFileName)
 
   ds = yt.load( inDir + inFileName )
   data = ds.all_data()
@@ -52,7 +52,7 @@ def load_gadget_snapshot( nSnap, gadgetDir, interp='CIC', hydro=False, CIC=True 
   snapKey = '_{0:03}.h5'.format( nSnap)
   base_name = 'snapshot'
   inFileName = h5_dir + base_name + snapKey
-  print 'Loading File: ', inFileName
+  print('Loading File: ', inFileName)
 
   gadgetFile = h5py.File( inFileName, 'r')
   current_a = gadgetFile.attrs['current_a']
@@ -89,7 +89,7 @@ def load_gadget_snapshot( nSnap, gadgetDir, interp='CIC', hydro=False, CIC=True 
       if interp == 'NGP':  base_name = "gridFields/grid_NGP_{0:03}.h5".format(nSnap)
 
       inFileName = h5_dir + base_name
-      print 'Loading File: ', inFileName
+      print('Loading File: ', inFileName)
       gadgetFile = h5py.File( inFileName, 'r')
       gamma = gadgetFile.attrs['gamma']
       n_step = gadgetFile.attrs['n_step']
@@ -157,7 +157,7 @@ def load_gadget_file_boxes( nSnap, inDir, nBoxes, part_types=[ 'dm'] ):
   for nBox in range(nBoxes):
     snapKey = '_{0:03}.{1}'.format( nSnap, nBox)
     inFileName = 'snapshot{0}'.format( snapKey)
-    print '\nLoading Gadget file:', inFileName
+    print('\nLoading Gadget file:', inFileName)
     s = glio.GadgetSnapshot( inDir + inFileName )
     s.load()
     head = s.header
@@ -173,11 +173,11 @@ def load_gadget_file_boxes( nSnap, inDir, nBoxes, part_types=[ 'dm'] ):
       outputData['part_types'] = part_types
 
     for part_name in part_types:
-      print ' Loading particles: {0}'.format(part_name)
+      print(' Loading particles: {0}'.format(part_name))
       if part_name == 'gas': part_type = 0
       if part_name == 'dm': part_type = 1
       nPart = head.npart[part_type]
-      print '  n_particles: {0}'.format(nPart)
+      print('  n_particles: {0}'.format(nPart))
       mass = s.mass[part_type] * 1e10  #Msun/h
       pos = s.pos[part_type].T
       vel = s.vel[part_type].T
@@ -199,7 +199,7 @@ def load_gadget_file_boxes( nSnap, inDir, nBoxes, part_types=[ 'dm'] ):
         outputData[part_name]['u'].append( u.astype(np.float64) )
 
   for p_type in part_types:
-    fields = outputData[p_type].keys()
+    fields = list(outputData[p_type].keys())
     for field in fields:
       outputData[p_type][field] = np.concatenate( outputData[p_type][field] )
 
@@ -211,7 +211,7 @@ def load_gadget_file( nSnap, inDir, part_types=[ 'dm']):
   import glio
   snapKey = '{0:03}'.format(nSnap)
   inFileName = 'snapshot_{0}'.format( snapKey)
-  print '\nLoading Gadget file:', inFileName
+  print('\nLoading Gadget file:', inFileName)
   s = glio.GadgetSnapshot( inDir + inFileName )
   s.load()
   head = s.header
@@ -226,15 +226,15 @@ def load_gadget_file( nSnap, inDir, part_types=[ 'dm']):
   outputData['current_z'] = current_z
   outputData['part_types'] = part_types
   
-  print "Current_a: ", current_a
+  print("Current_a: ", current_a)
 
 
   for part_name in part_types:
-    print ' Loading particles: {0}'.format(part_name)
+    print(' Loading particles: {0}'.format(part_name))
     if part_name == 'gas': part_type = 0
     if part_name == 'dm': part_type = 1
     nPart = head.npart[part_type]
-    print '  n_particles: {0}'.format(nPart)
+    print('  n_particles: {0}'.format(nPart))
     mass = s.mass[part_type] * 1e10  #Msun/h
     pos = s.pos[part_type].T
     vel = s.vel[part_type].T

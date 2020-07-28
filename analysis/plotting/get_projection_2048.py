@@ -40,7 +40,7 @@ domain = get_domain_block( proc_grid, box_size, grid_size )
 n_depth =  64
 
 indx_start = 700
-print "Index: {0}".format(indx_start)
+print("Index: {0}".format(indx_start))
 
 grid_complete_size = [ 2048, 2048, 2048 ]
 subgrid_x = [ indx_start, indx_start + n_depth ]
@@ -79,13 +79,13 @@ for field in fields:
   
   projection = data.sum(axis=0)
   out_file.create_dataset( field, data=projection )
-  print ' Saved Field: ', field
+  print(' Saved Field: ', field)
 
 
 
 out_file.attrs['current_z'] = current_z
 out_file.close()
-print 'Saved File: ', out_file_name
+print('Saved File: ', out_file_name)
 
 
 

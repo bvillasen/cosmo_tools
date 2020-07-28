@@ -49,6 +49,6 @@ for nSnap in snapshots:
   file = h5.File( filename, 'w' )
   file.create_dataset( 'delta_density', data=delta_dens )
   file.attrs['current_z'] = current_z
-  print 'Saved file: ', filename
+  print('Saved file: ', filename)
 
 

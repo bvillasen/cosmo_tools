@@ -148,7 +148,7 @@ for text in leg.get_texts():
     
 ax.tick_params(color=text_color, labelcolor=text_color, labelsize=12, length=6, width=3 )
 ax.tick_params(axis='both', which='minor', labelsize=12, color=text_color, labelcolor=text_color,)
-for spine in ax.spines.values():
+for spine in list(ax.spines.values()):
     spine.set_edgecolor(text_color)
     
 

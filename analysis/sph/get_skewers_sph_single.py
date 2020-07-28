@@ -179,15 +179,15 @@ n_skewers_local = n_skewers_total / n_proc_total
 n_skewer_pixels = 2048
 
 if print_out:
-  print "N Skewers Total: ",  n_skewers_total
-  print "N Skewers Local: ",  n_skewers_local
+  print("N Skewers Total: ",  n_skewers_total)
+  print("N Skewers Local: ",  n_skewers_local)
 
 
 
 p_id = rank
 
 
-if print_out: print "Loading Particles Indices "
+if print_out: print("Loading Particles Indices ")
 inFileName = input_dir + 'indices_1D/{0}_indices_{1}.h5.{2}'.format(nSnap, axis, p_id)
 inFile = h5.File( inFileName, 'r')
 domain_x = inFile.attrs['domain_x']
@@ -222,7 +222,7 @@ los_nHI_frac_ewald = skewers_ewald.nHI_frac[indices_domain]
 
 
 data = {}
-if print_out: print "Loading Particles Data "
+if print_out: print("Loading Particles Data ")
 in_file_name = input_dir + 'snapshot_{0}_complete.h5'.format(nSnap)
 inFile = h5.File( in_file_name, 'r' )
 
@@ -241,7 +241,7 @@ if axis == 'z': vel_los_key = 'vel_z'
 
 fields = [ 'mass', 'rho', 'u', 'hsml', 'pos_x', 'pos_y', 'pos_z', 'Nh', 'HeI', 'HeII' , vel_los_key ]
 for field in fields:
-  if print_out:  print " Loading Field ", field
+  if print_out:  print(" Loading Field ", field)
   data[field] = inFile[field][...]
   data[field] = data[field][indices]
 inFile.close()
@@ -269,7 +269,7 @@ HeII_rho  = HeII * X * rho * 4
 HeIII_rho = Y * rho - HeI_rho - HeII_rho
 mu = rho / ( HI_rho + 2*HII_rho + ( HeI_rho + 2*HeII_rho + 3*HeIII_rho) / 4 )
 
-if print_out: print 'Building Tree'
+if print_out: print('Building Tree')
 tree = KDTree( pos )
 
 # 
@@ -329,7 +329,7 @@ ax.plot( pixvel, skewer_vel_ewald )
 
 fileName = figures_dir + 'skewer_{0}_{1}_{2}.png'.format(axis,skewer_id,nSnap)
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 
 
 # skewer_key = str(skewer_id_global)

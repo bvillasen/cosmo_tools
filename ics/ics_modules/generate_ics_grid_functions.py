@@ -51,9 +51,9 @@ def generate_ics_grid_distributed( fields, domain, proc_grid, data_grid, ds, out
   data_fields = {}
   for field in fields:
     start = time.time()
-    print '\nLoading field: {0} '.format(field)
+    print('\nLoading field: {0} '.format(field))
     data = get_yt_field_hydro( field, data_grid, data_fields, current_a, h )
-    print ' Writing field: {0}  {1}'.format(field, data.shape)
+    print(' Writing field: {0}  {1}'.format(field, data.shape))
     nz_total, ny_total, nx_total = data.shape
     nz, ny, nx = nz_total/nProc_z, ny_total/nProc_y, nx_total/nProc_x
 
@@ -65,15 +65,15 @@ def generate_ics_grid_distributed( fields, domain, proc_grid, data_grid, ds, out
           xStr, xEnd = px*nx, (px+1)*nx
           pId = pz + py*nProc_z + px*nProc_z*nProc_y
           data_local = data[zStr:zEnd, yStr:yEnd, xStr:xEnd ]
-          print ' File: {0}   {1}'.format(pId, data_local.shape)
+          print(' File: {0}   {1}'.format(pId, data_local.shape))
           outFiles[pId].create_dataset( field , data=data_local.astype(np.float64) )
     end = time.time()
-    print( 'Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
+    print(( 'Elapsed Time: {0:.2f} min'.format((end - start)/60.) ))
   for pId in range( nProc ):
-    print 'Saved File: ', outFiles[pId]
+    print('Saved File: ', outFiles[pId])
     outFiles[pId].close()
 
-  print 'Files Saved: {0}'.format(outputDir)
+  print('Files Saved: {0}'.format(outputDir))
 
 
 def generate_ics_grid_distributed_single_filed( field, domain, proc_grid, data_grid, ds, outputDir, outputBaseName, current_a, current_z, h ):
@@ -98,9 +98,9 @@ def generate_ics_grid_distributed_single_filed( field, domain, proc_grid, data_g
   data_fields = {}
   for field in fields:
     start = time.time()
-    print '\nLoading field: {0} '.format(field)
+    print('\nLoading field: {0} '.format(field))
     data = get_yt_field_hydro( field, data_grid, data_fields, current_a, h )
-    print ' Writing field: {0}  {1}'.format(field, data.shape)
+    print(' Writing field: {0}  {1}'.format(field, data.shape))
     nz_total, ny_total, nx_total = data.shape
     nz, ny, nx = nz_total/nProc_z, ny_total/nProc_y, nx_total/nProc_x
 
@@ -112,14 +112,14 @@ def generate_ics_grid_distributed_single_filed( field, domain, proc_grid, data_g
           xStr, xEnd = px*nx, (px+1)*nx
           pId = pz + py*nProc_z + px*nProc_z*nProc_y
           data_local = data[zStr:zEnd, yStr:yEnd, xStr:xEnd ]
-          print ' File: {0}   {1}'.format(pId, data_local.shape)
+          print(' File: {0}   {1}'.format(pId, data_local.shape))
           outFiles[pId].create_dataset( field , data=data_local.astype(np.float64) )
     
     end = time.time()
-    print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
+    print(( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) ))
   
   for pId in range( nProc ):
-    print 'Saved File: ', outFiles[pId]
+    print('Saved File: ', outFiles[pId])
     outFiles[pId].close()
 
-  print 'Files Saved: {0}'.format(outputDir)
+  print('Files Saved: {0}'.format(outputDir))

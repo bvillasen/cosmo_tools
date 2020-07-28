@@ -20,7 +20,7 @@ from tools import create_directory
 
 if len(sys.argv) == 0: index = 0
 else: index = int(sys.argv[1])
-print 'Index: ', index
+print('Index: ', index)
 
 # dataDir = '/home/bruno/Desktop/data/'
 # dataDir = '/raid/bruno/data/'
@@ -52,7 +52,7 @@ grid_size = [ 2048, 2048, 2048 ]
 domain =  get_domain_block( proc_grid, box_size, grid_size )
 
 #Generate Particles ICs
-print 'N Cells: {0}'.format(grid_size[0]*grid_size[1]*grid_size[2])
+print('N Cells: {0}'.format(grid_size[0]*grid_size[1]*grid_size[2]))
 # fields_particles = ['pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
 fields_particles = ['mass', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z'  ]
 outputBaseName = '{0}_particles.h5'.format(nSnap)
@@ -63,7 +63,7 @@ outputBaseName = '{0}_particles.h5'.format(nSnap)
 #   get_pid_indices = False
 # 
 if index == 0:
-  print 'Compressing Fields'
+  print('Compressing Fields')
   compress_fields_to_single_file( fields_particles, domain, proc_grid, outputDir, outputBaseName )
 
 

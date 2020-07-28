@@ -302,7 +302,7 @@ image_out_name = output_dir + 'image_composed_dm_new'
 
 image_out.save( image_out_name + '.png', quality=100 )
 image_rgb.save( image_out_name + '.pdf', quality=100 )
-print 'Saved Image: ', image_out_name
+print('Saved Image: ', image_out_name)
 
 
 draw = ImageDraw.Draw( image_out )

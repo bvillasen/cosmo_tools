@@ -31,7 +31,7 @@ data_all = []
 
 dens_mean = 13.794513 * cosmo_h**2
 
-snap_indices = range( 20, 170 )
+snap_indices = list(range( 20, 170))
 
 for nSnap in snap_indices:
 
@@ -47,7 +47,7 @@ data_all = np.array( data_all )
 # 
 outFileName = output_dir + 'global_statistics_{0}.txt'.format( uvb )
 np.savetxt( outFileName, data_all )
-print "Saved File: ", output_dir + outFileName 
+print("Saved File: ", output_dir + outFileName) 
 
 
 
@@ -81,7 +81,7 @@ ax.plot( data_hm12[0], data_hm12[5] )
 
 fileName = output_dir + 'global_statistics.png'
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 
 
 

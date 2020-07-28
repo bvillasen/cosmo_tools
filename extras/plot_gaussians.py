@@ -81,4 +81,4 @@ ax.set_xlabel('Velocity', fontsize=fs)
 
 fig_name = '/home/bruno/Desktop/gaussian_4.png'
 fig.savefig( fig_name,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
-print ( 'Saved Image: ', fig_name )
+print(( 'Saved Image: ', fig_name ))

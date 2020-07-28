@@ -55,7 +55,7 @@ if cosmo_name == 'cosmo_3':
   
 cosmo_h = H0 / 100
 if np.abs(Omega_L + Omega_M -1) > 1e-3: 
-  print "ERROR OMEGAS"
+  print("ERROR OMEGAS")
   exit()
 
 
@@ -103,7 +103,7 @@ proc_skewers= proc_skewers[ proc_skewers < n_skewers ]
 if len(proc_skewers) == 0: exit()
 skewers_ids_proc = skewers_ids[proc_skewers]
 n_skewers_proc = len( skewers_ids_proc )
-print( ' {0}: {1}'.format( rank, skewers_ids_proc) )
+print(( ' {0}: {1}'.format( rank, skewers_ids_proc) ))
 comm.Barrier()
 
 
@@ -129,7 +129,7 @@ for nSnap in snapshots_indices:
     velocity = skewer_data['velocity'][...]
     inFile.close()
     if rank == 0 and print_z: 
-      print 'z = {0}'.format(current_z)
+      print('z = {0}'.format(current_z))
       print_z= False
 
 
@@ -199,12 +199,12 @@ for nSnap in snapshots_indices:
   power_global = comm.gather( power_all, root=0 )
 
   if rank == 0: 
-    print "\mGateth"
+    print("\mGateth")
     power_global_all = []
     for i in range( nprocs ):
       power_global_all.extend( power_global[i ])
     power_global_all = np.array(power_global_all)
-    print power_global_all.shape
+    print(power_global_all.shape)
 
 
 
@@ -222,6 +222,6 @@ for nSnap in snapshots_indices:
     outFile.create_dataset( 'power_spectrum_all', data=power_global_all)
 
     outFile.close()
-    print "\nSaved File: ", outputFileName
+    print("\nSaved File: ", outputFileName)
 
 

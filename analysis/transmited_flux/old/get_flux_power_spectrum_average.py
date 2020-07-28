@@ -95,7 +95,7 @@ for i,skewer_id in enumerate(skewers_ids):
 flux_all = np.array( flux_all )
 flux_mean_global = flux_all.mean()
 
-print '\nMean Flux Global : {0}'.format(flux_mean_global)
+print('\nMean Flux Global : {0}'.format(flux_mean_global))
   
   
 
@@ -150,6 +150,6 @@ outFile.create_dataset( 'n_in_bin', data=n_in_bin)
 outFile.create_dataset( 'power_spectrum_all', data=power_all)
 
 outFile.close()
-print "\nSaved File: ", outputFileName
+print("\nSaved File: ", outputFileName)
 
 

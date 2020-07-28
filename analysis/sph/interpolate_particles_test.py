@@ -56,7 +56,7 @@ def evaluate_field_kernel_0( h, point, field, pos_all, tree ):
 
 indices = np.where( np.log10(dens) > 3.15 )
 N_dens = len( indices[0] )
-print "N_dens: ", N_dens 
+print("N_dens: ", N_dens) 
 
 
 data = {}
@@ -130,7 +130,7 @@ for i,pid in enumerate(indices[0]):
   # print N_neighbors_smooth
 
 
-print "Plotting"
+print("Plotting")
 
 dens = np.array( data['file']['dens'] )
 dens_kernel = np.array( data['kernel']['dens'] )
@@ -181,5 +181,5 @@ ax.legend( loc = 2)
 
 fileName = output_dir + 'density_difference_neighbors.png'
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=300)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 

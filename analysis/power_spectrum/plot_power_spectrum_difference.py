@@ -145,9 +145,9 @@ ax.set_ylabel( r'$\Delta P\,(k)/P\,(k)$', fontsize=label_size, color=text_color)
 
 ax.set_xlabel( r'$k \, \, \, \,[h \mathrm{Mpc}^{-1}]$', fontsize=label_size, color=text_color)
 
-for spine in ax.spines.values():
+for spine in list(ax.spines.values()):
   spine.set_edgecolor(text_color)
-[i.set_linewidth(border_width) for i in ax.spines.itervalues()]
+[i.set_linewidth(border_width) for i in ax.spines.values()]
 
 ax.axhline( y=0., color='C3', linestyle='--', alpha=0.8  )
 ax.set_xscale('log')  

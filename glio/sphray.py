@@ -21,8 +21,8 @@ _sphray_extra_header_schema = OrderedDict([
 ])
 
 _sphray_header_schema = OrderedDict()
-for (key, value) in chain(_g_header_schema.items(),
-                          _sphray_extra_header_schema.items()):
+for (key, value) in chain(list(_g_header_schema.items()),
+                          list(_sphray_extra_header_schema.items())):
     if key != '_padding':
         _sphray_header_schema[key] = value
 

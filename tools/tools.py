@@ -28,7 +28,7 @@ def load_statistics( n_snapshots, stats_dir, data_type ):
       statistics[field]['min'].append( min_val)
       statistics[field]['max'].append( max_val)
     file.close()
-  for field in statistics.keys():
+  for field in list(statistics.keys()):
     statistics[field]['min'] = np.array(statistics[field]['min'])
     statistics[field]['max'] = np.array(statistics[field]['max'])
   return statistics
@@ -44,7 +44,7 @@ def get_field_min_max( nSnap, inDir, outDir, name_base, nBoxes, type, fields, pr
 
   for field in fields:
   
-    print( " nSnap: {0}    Field:{1}".format( nSnap, field ))
+    print(( " nSnap: {0}    Field:{1}".format( nSnap, field )))
 
     min_all, max_all = np.Inf, -np.Inf
 
@@ -56,7 +56,7 @@ def get_field_min_max( nSnap, inDir, outDir, name_base, nBoxes, type, fields, pr
       dims_all = head['dims']
       dims_local = head['dims_local']
       nz, ny, nx = dims_all
-      keys_all = inFile.keys()
+      keys_all = list(inFile.keys())
 
       data_set = inFile[field][...]
       max_box = data_set.max()
@@ -70,7 +70,7 @@ def get_field_min_max( nSnap, inDir, outDir, name_base, nBoxes, type, fields, pr
     line = '{0} {1} {2}\n'.format( field, min_all, max_all)
     outFile.write(line)
   outFile.close()
-  print( "Saved File: ", outDir + out_file_name)
+  print(( "Saved File: ", outDir + out_file_name))
   # 
 
 def print_line_flush( terminalString ):
@@ -81,7 +81,7 @@ def print_line_flush( terminalString ):
 
 
 def create_directory( dir ):
-  print ("Creating Directory: {0}".format(dir) )
+  print(("Creating Directory: {0}".format(dir) ))
   indx = dir[:-1].rfind('/' )
   inDir = dir[:indx]
   dirName = dir[indx:].replace('/','')

@@ -92,4 +92,4 @@ ax_l[2].set_xlim( 0, 20 )
 
 fileName = output_dir + 'ionization_fraction_uvb_comparison.png'
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)

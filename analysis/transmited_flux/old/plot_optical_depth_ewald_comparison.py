@@ -77,7 +77,7 @@ input_dir = dataDir + 'cosmo_sims/ewald_512/optical_depth/multiple_axis/'
 nSnap = 11 
 for nSnap in [ 11, 12 ]:
    
-  print "nSnap: {0}".format(nSnap)
+  print("nSnap: {0}".format(nSnap))
 
   if nSnap == 12: filename = dataDir + "cosmo_sims/ewald_512/skewers_ewald/ne_10_512_mHopkins_newSFRD_spec2048_n5000_z4.996.dat"
   if nSnap == 11: filename = dataDir + "cosmo_sims/ewald_512/skewers_ewald/ne_10_512_mHopkins_newSFRD_spec2048_n5000_z5.499.dat"
@@ -126,7 +126,7 @@ data_sph[space]['minus'] = np.array( data_sph[space]['minus'] )
 
 
 data = { }
-snapshots_indices = range(74, 170, 1)
+snapshots_indices = list(range(74, 170, 1))
 
 nrows = 1
 ncols = 1
@@ -135,7 +135,7 @@ fs = 20
 
 factor_sqrta = True
 
-if factor_sqrta: print "Warning: Usning sqrt(a) factor for peculiar velocities" 
+if factor_sqrta: print("Warning: Usning sqrt(a) factor for peculiar velocities") 
 
 
 # for i,uvb in enumerate(['hm12', 'pchw18' ]):
@@ -177,7 +177,7 @@ for i,uvb in enumerate([ 'pchw18' ]):
 
     for nSnap in snapshots_indices:
 
-      print nSnap
+      print(nSnap)
 
 
 
@@ -311,7 +311,7 @@ ax.set_ylim(.1, 10)
 fileName = output_dir + 'optical_depth_uvb_log_space_multiple_axis_new.png'
 if factor_sqrta: fileName = output_dir + 'optical_depth_uvb_log_space_multiple_axis_new_sqrta.png'
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 
 
 

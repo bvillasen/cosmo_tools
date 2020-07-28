@@ -137,7 +137,7 @@ if plot_ramses:
     dens_ramses = data_ramses['gas']['density'][...]
     temp_ramses = data_ramses['gas']['temperature'][...]
     t_rm = ( dens_ramses * temp_ramses ).sum() / dens_ramses.sum()
-    print ' Ramses: ', current_z_ramses 
+    print(' Ramses: ', current_z_ramses) 
     z_rm_list.append( current_z_ramses )
     t_rm_list.append( t_rm )
 
@@ -157,7 +157,7 @@ if plot_enzo:
     gas_U_en = data_enzo['gas']['GasEnergy'][...] / dens_enzo
     temp_enzo = get_temp( gas_U_en*1e6)
     t_en = ( dens_enzo * temp_enzo ).sum() / dens_enzo.sum()
-    print ' enzo: ', current_z_enzo 
+    print(' enzo: ', current_z_enzo) 
     z_en_list.append( current_z_enzo )
     t_en_list.append( t_en )  
 
@@ -206,7 +206,7 @@ for i in range(n_cholla_files):
     # print temp_cholla
     t_ch = ( dens_cholla * temp_cholla ).sum() / dens_cholla.sum()
     if i == 0: t_ch *= mult[nSnap]
-    print ' cholla: ', current_z_cholla 
+    print(' cholla: ', current_z_cholla) 
     z_ch_list.append( current_z_cholla )
     t_ch_list.append( t_ch )  
   t_ch_list_all.append( t_ch_list )

@@ -80,7 +80,7 @@ for nSnap in range( 170):
   
   fit_mcmc_dir = input_dir_hm12 + 'fit_mcmc/'
   inFileName = input_dir_hm12 + 'phase_diagram_data_{0}.h5'.format(nSnap)
-  print 'Loading File: ', inFileName
+  print('Loading File: ', inFileName)
   inFile = h5.File( inFileName, 'r')
   current_z = inFile.attrs['current_z']
   z_list.append( current_z )
@@ -100,7 +100,7 @@ for nSnap in range( 170):
 
   fit_mcmc_dir = input_dir_pchw18 + 'fit_mcmc/'
   inFileName = input_dir_pchw18 + 'phase_diagram_data_{0}.h5'.format(nSnap)
-  print 'Loading File: ', inFileName
+  print('Loading File: ', inFileName)
   inFile = h5.File( inFileName, 'r')
   current_z = inFile.attrs['current_z']
   # z_list.append( current_z )
@@ -177,7 +177,7 @@ if plot_data:
     data_name = data_set['name']
     data_fmt = data_formats[i]
     data_color = data_colors[i]
-    if i == 2: print data_x.shape, data_mean.shape, data_error.shape
+    if i == 2: print(data_x.shape, data_mean.shape, data_error.shape)
     ax.errorbar( data_x, data_mean, yerr=data_error, fmt=data_fmt, label=data_name, alpha=data_alpha, color=data_color)
       
 ax.plot( z_list, T0_pchw18/10**4,  label='UVB=Puchwein19', color=c_pchw18, lw=lw)
@@ -192,7 +192,7 @@ ax.legend(loc=1, frameon=False, fontsize=legend_font_size-2, ncol=1)
 
 ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in')
 ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
-[sp.set_linewidth(border_width) for sp in ax.spines.itervalues()]
+[sp.set_linewidth(border_width) for sp in ax.spines.values()]
 
 ax = ax_l[1]
 if plot_data:
@@ -218,11 +218,11 @@ ax.set_ylim( 0.9, 2.1)
 
 ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in')
 ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
-[sp.set_linewidth(border_width) for sp in ax.spines.itervalues()]
+[sp.set_linewidth(border_width) for sp in ax.spines.values()]
 
 fileName = output_dir + 'thermal_history_data.pdf'.format(nSnap)
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=300)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 
 
 nrows = 1
@@ -241,7 +241,7 @@ ax.legend(loc=1, frameon=False, fontsize=legend_font_size-2)
 
 ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in')
 ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
-[sp.set_linewidth(border_width) for sp in ax.spines.itervalues()]
+[sp.set_linewidth(border_width) for sp in ax.spines.values()]
 
 ax = ax_l[1]
 ax.plot( z_list, gamma_hm12, lw=lw,  label='UVB=HM12', c=c_hm12)
@@ -255,11 +255,11 @@ ax.set_xlim( 1.8, 16.05)
 
 ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in')
 ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
-[sp.set_linewidth(border_width) for sp in ax.spines.itervalues()]
+[sp.set_linewidth(border_width) for sp in ax.spines.values()]
 
 
 
 fileName = output_dir + 'thermal_history.pdf'.format(nSnap)
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=300)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 

@@ -77,14 +77,14 @@ proc_skewers= proc_skewers[ proc_skewers < n_skewers ]
 if len(proc_skewers) == 0: exit()
 skewers_ids_proc = skewers_ids[proc_skewers]
 n_skewers_proc = len( skewers_ids_proc )
-print( ' {0}: {1}'.format( rank, skewers_ids_proc) )
+print(( ' {0}: {1}'.format( rank, skewers_ids_proc) ))
 if use_mpi: comm.Barrier()
 
 # snapshots_indices = [83]
 
 for nSnap in snapshots_indices:
   
-  print 'Loading Otical Depth: {0}'.format(nSnap)
+  print('Loading Otical Depth: {0}'.format(nSnap))
   
   inFileName = optical_depth_dir + 'optical_depth_{0}.h5'.format(nSnap)
   inFile = h5.File( inFileName, 'r')
@@ -168,12 +168,12 @@ for nSnap in snapshots_indices:
   power_global = comm.gather( power_all, root=0 )
   
   if rank == 0: 
-    print "\n\nGathering All Power Spectra Samples"
+    print("\n\nGathering All Power Spectra Samples")
     power_global_all = []
     for i in range( nprocs ):
       power_global_all.extend( power_global[i ])
     power_global_all = np.array(power_global_all)
-    print 'Shape: {0}'.format(power_global_all.shape)
+    print('Shape: {0}'.format(power_global_all.shape))
   
   
   
@@ -190,6 +190,6 @@ for nSnap in snapshots_indices:
     outFile.create_dataset( 'power_spectrum_all', data=power_global_all)
   
     outFile.close()
-    print "\nSaved File: ", outputFileName
+    print("\nSaved File: ", outputFileName)
   
   

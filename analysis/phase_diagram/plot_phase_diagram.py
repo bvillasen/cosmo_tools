@@ -88,4 +88,4 @@ for nSnap in range( n_snapshots ):
 
   fileName = output_dir + 'phase_diagram_{0}.png'.format(nSnap)
   fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
-  print 'Saved Image: ', fileName
+  print('Saved Image: ', fileName)

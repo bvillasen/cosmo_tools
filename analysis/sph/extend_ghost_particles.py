@@ -38,7 +38,7 @@ create_directory( output_dir )
 nSnap = 11
 
 in_file_name = inDir + 'snapshot_{0}.h5'.format(nSnap)
-if print_out: print "Loading File: ", in_file_name
+if print_out: print("Loading File: ", in_file_name)
 inFile = h5.File( in_file_name, 'r' )
 
 
@@ -90,7 +90,7 @@ data_periodic = extend_pewriodic_boundaries( hsml_max, Lbox, data, fields, print
 N_gas_complete = data_periodic['N_gas']
 
 out_file_name = inDir + 'snapshot_{0}_complete.h5'.format(nSnap)
-if print_out: print "Saving File: ", out_file_name
+if print_out: print("Saving File: ", out_file_name)
 outFile = h5.File( out_file_name, 'w' )
 
 
@@ -105,18 +105,18 @@ outFile.attrs['hsml_max'] = hsml_max
 
 for field in fields:
   if field == 'pos': continue
-  print " Writing Field: ", field
+  print(" Writing Field: ", field)
   outFile.create_dataset( field, data=data_periodic[field] )
 
-print " Writing Field: pos_x"
+print(" Writing Field: pos_x")
 outFile.create_dataset( 'pos_x', data=data_periodic['pos'][:,0] )
-print " Writing Field: pos_y"
+print(" Writing Field: pos_y")
 outFile.create_dataset( 'pos_y', data=data_periodic['pos'][:,1] )
-print " Writing Field: pos_z"
+print(" Writing Field: pos_z")
 outFile.create_dataset( 'pos_z', data=data_periodic['pos'][:,2] )
 
 
 
 outFile.close()
-if print_out: print "Saved File: ", out_file_name
+if print_out: print("Saved File: ", out_file_name)
 

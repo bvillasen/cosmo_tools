@@ -19,8 +19,8 @@ gas_density = grid_data['density'][...]
 HI_density = grid_data['HI_density'][...] 
 temperature = grid_data['temperature'][...]
 
-print( dm_density.mean() )
-print( potential.mean() )
-print( gas_density.mean() )
-print( HI_density.mean() )
-print( temperature.mean() )
+print(( dm_density.mean() ))
+print(( potential.mean() ))
+print(( gas_density.mean() ))
+print(( HI_density.mean() ))
+print(( temperature.mean() ))

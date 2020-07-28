@@ -48,7 +48,7 @@ indxs = diff < 0.007
 
 z = z[1:][indxs]
 t = t_1[indxs] 
-n_steps = np.array(range(len(t))) 
+n_steps = np.array(list(range(len(t)))) 
 
 factor = np.ones_like( t )
 
@@ -61,8 +61,8 @@ t *= factor
 
 t_total = t.sum() /1000 / 3600
 
-print t_total
-print ( t[-1] - t[0] ) / t[0]
+print(t_total)
+print(( t[-1] - t[0] ) / t[0])
 
 
 # Plot the data

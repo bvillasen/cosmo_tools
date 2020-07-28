@@ -38,4 +38,4 @@ data_snapshot = load_snapshot_data_distributed( n_snapshot, input_dir, data_type
 current_z = data_snapshot['Current_z']
 field_data = data_snapshot[data_type][field]
 
-print(field_data.shape)
+print((field_data.shape))

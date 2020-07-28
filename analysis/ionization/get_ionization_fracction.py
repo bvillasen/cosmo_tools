@@ -45,7 +45,7 @@ n_proc_snaps= (n_snap_total-1) // nprocs + 1
 indices_to_generate = np.array([ rank + i*nprocs for i in range(n_proc_snaps) ])
 indices_to_generate = indices_to_generate[ indices_to_generate < n_snap_total ]
 if len(indices_to_generate) == 0: exit()
-print 'Generating: {0} {1}\n'.format( rank, indices_to_generate) 
+print('Generating: {0} {1}\n'.format( rank, indices_to_generate)) 
 
 
 
@@ -65,7 +65,7 @@ subgrid_x = [ 0, 2048 ]
 subgrid_y = [ 0, 2048 ]
 subgrid_z = [ 0, 2048 ]
 subgrid = [ subgrid_x, subgrid_y, subgrid_z ]
-print "{0}: {1}".format( rank, subgrid )
+print("{0}: {1}".format( rank, subgrid ))
 
 
 precision = np.float32
@@ -85,13 +85,13 @@ for nSnap in indices_to_generate:
   out_file_name = output_dir + 'ionization_fraction_{0}.h5'.format( nSnap)
   try:
     f = h5.File( out_file_name, 'r')
-  except IOError, e:
+  except IOError as e:
     skip_index = False
   else:
     f.close()
   
   if skip_index: 
-    print "Skiping Snap: {0}".format(nSnap)
+    print("Skiping Snap: {0}".format(nSnap))
     continue
     
     
@@ -154,7 +154,7 @@ for nSnap in indices_to_generate:
   outFile.attrs['HeIII_frac'] = HeIII_frac
   outFile.close()
 
-  print" {0}: {1}  {2}  {3}   {4}  {5}".format( nSnap, HI_frac, HII_frac, HeI_frac, HeII_frac, HeIII_frac )
-  print "Saved File: {0}".format(out_file_name)
+  print(" {0}: {1}  {2}  {3}   {4}  {5}".format( nSnap, HI_frac, HII_frac, HeI_frac, HeII_frac, HeIII_frac ))
+  print("Saved File: {0}".format(out_file_name))
 
 

@@ -61,7 +61,7 @@ proc_snapshots = np.array([ rank + i*nprocs for i in range(n_proc_snapshots) ])
 proc_snapshots = proc_snapshots[ proc_snapshots < n_snapshots ]
 if len(proc_snapshots) == 0: exit()
 
-print "{0}: {1}".format( rank, proc_snapshots)
+print("{0}: {1}".format( rank, proc_snapshots))
 
 fields = {'dm':['density'], 'gas':['density, HI_density, temperature'] }
 
@@ -77,7 +77,7 @@ outFile = h5.File( outputFile_name, 'w' )
 
 outFile.attrs['current_z'] = current_z
 
-for type in fields.keys(): 
+for type in list(fields.keys()): 
   data = data_cholla[type]
   
   group_type = outFile.create_group( type )
@@ -105,6 +105,6 @@ for type in fields.keys():
     # print " weight {0}: min={1}  max={2}".format( field , ds.attrs['min'], ds.attrs['max'])
 
 outFile.close()
-print "Saved File: {0} \n".format( outputFile_name )
+print("Saved File: {0} \n".format( outputFile_name ))
 
 

@@ -52,14 +52,14 @@ n_snapshots = 170
 n_proc_snaps= (n_snapshots-1) // nprocs + 1
 proc_snaps= np.array([ rank + i*nprocs for i in range(n_proc_snaps) ])
 proc_snaps= proc_snaps[ proc_snaps < n_snapshots ]
-print( ' {0}: {1}'.format( rank, proc_snaps) )
+print(( ' {0}: {1}'.format( rank, proc_snaps) ))
 time.sleep(1)
 comm.Barrier()
 if len(proc_snaps) == 0: exit()
 
 # nSnap = 0
 for nSnap in proc_snaps:
-  print "\nSnapshot: {0}".format(nSnap)
+  print("\nSnapshot: {0}".format(nSnap))
 
   density_snapshot = []
   temperature_snapshot = []
@@ -87,5 +87,5 @@ for nSnap in proc_snaps:
   outFile.create_dataset( 'density', data=density_snapshot)
   outFile.create_dataset( 'temperature', data=temperature_snapshot)
   outFile.close()
-  print "\nSaved File: ", out_file_name
+  print("\nSaved File: ", out_file_name)
 

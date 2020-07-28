@@ -164,4 +164,4 @@ for i in range( n_plots ):
 
 fileName = outDir + out_file_name
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=300)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)

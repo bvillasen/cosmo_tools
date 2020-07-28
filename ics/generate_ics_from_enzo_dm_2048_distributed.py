@@ -20,7 +20,7 @@ from tools import create_directory
 
 if len(sys.argv) == 0: index = 0
 else: index = int(sys.argv[1])
-print 'Index: ', index
+print('Index: ', index)
 
 # dataDir = '/home/bruno/Desktop/data/'
 # dataDir = '/raid/bruno/data/'
@@ -59,5 +59,5 @@ if index > 0:
   generate_ics_particles_distributed_single_field( field, domain, proc_grid, data, ds, outputDir, outputBaseName, current_a, current_z, h, get_pid_indices=False )
 
 if index == 0:
-  print 'Compressing Fields'
+  print('Compressing Fields')
   compress_fields_to_single_file( fields_particles, domain, proc_grid, outputDir, outputBaseName )

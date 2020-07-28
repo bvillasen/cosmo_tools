@@ -97,7 +97,7 @@ skewers_ids = np.linspace(0, n_skewers-1, n_skewers ).astype(np.int)
 
 
 skewers_ids_proc = skewers_ids
-print( ' {0}: {1}'.format( rank, skewers_ids_proc) )
+print(( ' {0}: {1}'.format( rank, skewers_ids_proc) ))
 if use_mpi: comm.Barrier()
 
 
@@ -112,7 +112,7 @@ cosmo_spaces = [ 'redshift' ]
 for nSnap in snapshots_indices:
   
   
-  if rank == 0: print "Computing Power Spectrum, snap: ", nSnap
+  if rank == 0: print("Computing Power Spectrum, snap: ", nSnap)
   
   
   if rank == 0:
@@ -124,11 +124,11 @@ for nSnap in snapshots_indices:
     
     
     if rank == 0:  
-      print "\nSpace: ", space
+      print("\nSpace: ", space)
       space_group = outFile.create_group( space )
     
   
-    if rank == 0: print 'Loading Otical Depth: {0}'.format(nSnap)
+    if rank == 0: print('Loading Otical Depth: {0}'.format(nSnap))
   
     inFileName = optical_depth_dir + 'optical_depth_{0}.h5'.format(nSnap)
     
@@ -144,7 +144,7 @@ for nSnap in snapshots_indices:
     current_z = skewer_dataset['current_z']
     current_a = 1. / ( current_z + 1 )
     if current_z != current_z_tau: 
-      print "ERROR Redshift Mismatch"
+      print("ERROR Redshift Mismatch")
       continue
     los_density = skewer_dataset['density']
     los_HI_density = skewer_dataset['HI_density']
@@ -183,19 +183,19 @@ for nSnap in snapshots_indices:
     power_global = comm.gather( power_all, root=0 )
 
     if rank == 0: 
-      print "\n\nGathering All Power Spectra Samples"
+      print("\n\nGathering All Power Spectra Samples")
       power_global_all = []
       for i in range( nprocs ):
         power_global_all.extend( power_global[i])
       power_global_all = np.array(power_global_all)
-      print 'Shape: {0}'.format(power_global_all.shape)
+      print('Shape: {0}'.format(power_global_all.shape))
   
       k_vals = bin_centers
       
       n_skewers_out = power_global_all.shape[0]
       
   
-      print " Wrirng space: ", space
+      print(" Wrirng space: ", space)
       
   
       #Save Power spectrum data
@@ -211,6 +211,6 @@ for nSnap in snapshots_indices:
   if rank == 0:
     outFile.attrs['current_z'] = current_z
     outFile.close()
-    print "\nSaved File: ", outputFileName
+    print("\nSaved File: ", outputFileName)
 
 

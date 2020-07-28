@@ -38,7 +38,7 @@ nSnap = 12
 
 
 out_file_name = dataDir + 'cosmo_sims/ewald_512/snapshot_{0}.h5'.format(nSnap)
-print "Saving File: ", out_file_name
+print("Saving File: ", out_file_name)
 file = h5.File( out_file_name, 'w' )
 file.attrs['BoxSize'] = data_ewald['BoxSize']
 file.attrs['Omega_M'] = data_ewald['Omega_M']
@@ -60,14 +60,14 @@ for field in fields:
 
 
   in_file_name =  inDir + field + '.dat'
-  print " Loading File: {0}".format( in_file_name ) 
+  print(" Loading File: {0}".format( in_file_name )) 
   data = np.loadtxt( in_file_name )
 
   file.create_dataset( field, data=data )
 
 
 
-print "Saved File: {0}".format(file)
+print("Saved File: {0}".format(file))
 file.close()
 
 

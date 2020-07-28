@@ -21,7 +21,7 @@ for i in range(n_ranges):
   a_range_all.append( a_range)
   delta_a = a_range[1] - a_range[0]
   delta_a_all.append(delta_a)
-  print z_range, delta_a
+  print(z_range, delta_a)
 
 a_range_arr = np.concatenate( a_range_all )
 delta_a_arr = a_range_arr[1:] - a_range_arr[:-1]

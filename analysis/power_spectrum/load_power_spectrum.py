@@ -51,4 +51,4 @@ ps_1 = ps_list_1[index]
 ps_2 = ps_list_2[index]
 diff = ( ps_1 - ps_2 ) / ps_2
 
-print( " z: {0:.3f}   Max Difference: {1} ".format( z, np.abs(diff).max() ) )
+print(( " z: {0:.3f}   Max Difference: {1} ".format( z, np.abs(diff).max() ) ))

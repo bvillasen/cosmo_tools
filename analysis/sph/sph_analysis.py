@@ -57,7 +57,7 @@ def evaluate_field_kernel_0( h, point, field, pos_all, tree ):
 indices = np.where( np.log10(dens) > 3.2 )
 N_dens = len( indices[0] 
 )
-print "N_dens: ", N_dens 
+print("N_dens: ", N_dens) 
 
 
 data = {}
@@ -170,5 +170,5 @@ ax.set_xscale('log')
 # fileName = output_dir + 'kernel.png'.format( pid )
 fileName = output_dir + 'density_{0}.png'.format( pid )
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=300)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 ''

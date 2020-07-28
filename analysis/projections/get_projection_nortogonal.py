@@ -33,7 +33,7 @@ from projection_functions import rescale_image, get_rescaled_image
 
 if len(sys.argv) == 1: index = 0
 else: index = int(sys.argv[1])
-print 'Index: ', index
+print('Index: ', index)
 
 
 
@@ -89,13 +89,13 @@ n_proc_snaps= (n_index_total-1) // nprocs + 1
 index_start_range = np.array([ rank + i*nprocs for i in range(n_proc_snaps) ])
 index_start_range = index_start_range[ index_start_range < n_index_total ]
 if len(index_start_range) == 0: exit()
-print 'Generating: {0} {1}\n'.format( rank, index_start_range) 
+print('Generating: {0} {1}\n'.format( rank, index_start_range)) 
 
 # indx_start = 0
 # indx_start = 1790
 for indx_start in index_start_range: 
 
-  print "Index: {0}".format(indx_start)
+  print("Index: {0}".format(indx_start))
 
 
   grid_complete_size = [ 2048, 2048, 2048 ]
@@ -140,7 +140,7 @@ for indx_start in index_start_range:
   data = data_snapshot[data_type][field]
   
   
-  if show_progess: print ''
+  if show_progess: print('')
   
   
   size_original = ( nPoints, nPoints )
@@ -200,7 +200,7 @@ for indx_start in index_start_range:
       sys.stdout. write(terminalString)
       sys.stdout.flush() 
   
-  if show_progess: print ""
+  if show_progess: print("")
   #Write the projection to a file:
   out_file_name = output_dir + 'projection_{2}_{3}_{0}_{1}.h5'.format( nSnap, indx_start, data_type, field )
   out_file = h5.File( out_file_name, 'w')
@@ -211,7 +211,7 @@ for indx_start in index_start_range:
   data_set.attrs['min'] = projection.min()
   data_set = group_type.create_dataset( field+'back', data=projection_back )
   out_file.close()
-  print "Saved File: {0}\n".format( out_file_name )
+  print("Saved File: {0}\n".format( out_file_name ))
   
   
   

@@ -53,12 +53,12 @@ def load_listFiles( snapshots, outputDir  ):
 def find_parents(snap, box_size, inputDir, rks_dir, outputFile):
   parents_cmnd = rks_dir + 'util/find_parents'
   list_file = inputDir + 'out_{0}.list'.format(snap)
-  print ' Loading file: ', list_file
+  print(' Loading file: ', list_file)
   # print parents_cmnd, list_file, str(box_size), '>', outputFile
   cmd = '{0} {1} {2:.1f} > {3}'.format( parents_cmnd, list_file, box_size, inputDir + outputFile )
   # print cmd
   os.system( cmd )
-  print ' Saved file: ', outputFile
+  print(' Saved file: ', outputFile)
   # call([parents_cmnd, list_file, str(box_size), '>', outputFile ])
   # p = Popen([parents_cmnd, list_file, str(box_size)  ], stdin=PIPE, stdout=PIPE, stderr=PIPE)
   # output, err = p.communicate()
@@ -87,10 +87,10 @@ def load_catalog( start_snap, snap, boxSize, inputDir, rks_dir  ):
   catalog_name = 'snap_{0:03}.catalog'.format( snap )
   files_inDir = os.listdir( inputDir )
   if catalog_name not in files_inDir:
-    print ' Finding parents for snap: {0}'.format(snap - start_snap)
+    print(' Finding parents for snap: {0}'.format(snap - start_snap))
     find_parents( snap - start_snap , boxSize, inputDir, rks_dir, catalog_name  )
   listFile = inputDir + catalog_name
-  print ' Loading Catatalog: ', listFile
+  print(' Loading Catatalog: ', listFile)
   listString = open( listFile ).read()
   headers = listString.splitlines()[0][1:].split()
   nColums = len( headers )
@@ -139,19 +139,19 @@ def finish_bgc2( start_snap, snap, inputDir, rks_dir  ):
   finish_bgc2_cmd = rks_dir + 'util/finish_bgc2'
   cnfig = inputDir + 'rockstar.cfg'
   cmd = '{0} -c {1} -s {2}'.format( finish_bgc2_cmd, cnfig, snap_number )
-  print ' Finishing bgc2 catalog for snap: ', snap
+  print(' Finishing bgc2 catalog for snap: ', snap)
   os.system( cmd )
-  print '  Completed bgc2 '
+  print('  Completed bgc2 ')
 
 def get_catalog_from_bgc2( start_snap, snap, inputDir, rks_dir  ):
   snap_number = snap-start_snap
-  print ' Geting Catatalog from bgc2 for snap: ', snap
+  print(' Geting Catatalog from bgc2 for snap: ', snap)
   ascii_bgc2_cmd = rks_dir + 'util/bgc2_to_ascii'
   cnfig = inputDir + 'rockstar.cfg'
   bgc2_output_halos = inputDir + 'snap_{0:03}_bgc2.catalog'.format(snap)
   cmd = '{0} -c {1} -s {2} > {3}'.format( ascii_bgc2_cmd, cnfig, snap_number, bgc2_output_halos )
   os.system( cmd )
-  print '  Catatalog from bgc2 saved: ', bgc2_output_halos
+  print('  Catatalog from bgc2 saved: ', bgc2_output_halos)
 
 
 def load_catalog_bgc2( start_snap, snap, inputDir, rks_dir  ):
@@ -159,7 +159,7 @@ def load_catalog_bgc2( start_snap, snap, inputDir, rks_dir  ):
   bgc2_output_halos = 'snap_{0:03}_bgc2.catalog'.format(snap)
   files_inDir = os.listdir( inputDir )
   if bgc2_output_halos not in files_inDir: get_catalog_from_bgc2( start_snap, snap, inputDir, rks_dir  )
-  print ' Loading bgc2 Catatalog: ', bgc2_output_halos
+  print(' Loading bgc2 Catatalog: ', bgc2_output_halos)
   listFile = inputDir + bgc2_output_halos
   listString = open( listFile ).read()
   headers = listString.splitlines()[0][1:].split()

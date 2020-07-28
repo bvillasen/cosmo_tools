@@ -68,12 +68,12 @@ def load_snapshot_data_distributed( nSnap, inDir, data_type, fields, subgrid, do
   #Find the boundaries of the volume to load
   domains = { 'x':{'l':[], 'r':[]}, 'y':{'l':[], 'r':[]}, 'z':{'l':[], 'r':[]}, }
   for id in ids_to_load:
-    for ax in domains.keys():
+    for ax in list(domains.keys()):
       d_l, d_r = domain[id]['grid'][ax]
       domains[ax]['l'].append(d_l)
       domains[ax]['r'].append(d_r)
   boundaries = {}
-  for ax in domains.keys():
+  for ax in list(domains.keys()):
     boundaries[ax] = [ min(domains[ax]['l']),  max(domains[ax]['r']) ]
 
   # Get the size of the volume to load
@@ -87,7 +87,7 @@ def load_snapshot_data_distributed( nSnap, inDir, data_type, fields, subgrid, do
   data_out[data_type] = {}
   
   if type(fields) != list: fields = [fields]
-  print "Loading Snapshot: {0}  ->  {1}".format(nSnap, fields)
+  print("Loading Snapshot: {0}  ->  {1}".format(nSnap, fields))
 
   if data_type == 'sph_kernel':
     
@@ -107,10 +107,10 @@ def load_snapshot_data_distributed( nSnap, inDir, data_type, fields, subgrid, do
           inFile = h5.File( inDir + inFileName, 'r')
           head = inFile.attrs
           if added_header == False:
-            for h_key in head.keys():
+            for h_key in list(head.keys()):
               if h_key in ['dims', 'dims_local', 'offset', 'bounds', 'domain', 'dx', ]: continue
               data_out[h_key] = head[h_key][0]
-              if h_key == 'current_z': print ' current_z: {0}'.format( data_out[h_key])
+              if h_key == 'current_z': print(' current_z: {0}'.format( data_out[h_key]))
             added_header = True
             
           if show_progess:
@@ -160,10 +160,10 @@ def load_snapshot_data_distributed( nSnap, inDir, data_type, fields, subgrid, do
         inFile = h5.File( inDir + inFileName, 'r')
         head = inFile.attrs
         if added_header == False:
-          for h_key in head.keys():
+          for h_key in list(head.keys()):
             if h_key in ['dims', 'dims_local', 'offset', 'bounds', 'domain', 'dx', ]: continue
             data_out[h_key] = head[h_key][0]
-            if h_key == 'current_z': print ' current_z: {0}'.format( data_out[h_key])
+            if h_key == 'current_z': print(' current_z: {0}'.format( data_out[h_key]))
           added_header = True
           
         if show_progess:
@@ -204,7 +204,7 @@ def load_snapshot_data_grid( nSnap, inFileName ):
   # inFileName = '{0}.h5'.format(nSnap)
   snapFile = h5.File( inFileName, 'r')
   t = snapFile.attrs['t'][0]
-  inputKeys = snapFile.keys()
+  inputKeys = list(snapFile.keys())
   grid_keys = [ 'density', 'momentum_x', 'momentum_y', 'momentum_z', 'Energy']
   optional_keys = [ 'GasEnergy', 'gravity_density', 'potential', 'potential_grav']
   data_grid = {}
@@ -227,7 +227,7 @@ def load_snapshot_data_particles( nSnap, inputDir, single_file=False ):
     inFileName = '{0}_particles.h5'.format(nSnap)
   
   partsFile = h5.File( inputDir + inFileName, 'r')
-  fields_data = partsFile.keys()
+  fields_data = list(partsFile.keys())
   current_a = partsFile.attrs['current_a']
   current_z = partsFile.attrs['current_z']
   # particle_mass = partsFile.attrs['particle_mass']
@@ -240,7 +240,7 @@ def load_snapshot_data_particles( nSnap, inputDir, single_file=False ):
   extra_keys = [ 'grav_potential', 'mass' ]
   for key in extra_keys:
     if key not in fields_data: continue
-    if key in partsFile.keys(): part_keys.append(key)
+    if key in list(partsFile.keys()): part_keys.append(key)
   for key in part_keys:
     if key not in fields_data: continue
     data_part[key] = partsFile[key]
@@ -264,8 +264,8 @@ def load_snapshot_data( nSnap, inDir, cool=False, dm=True, cosmo=True, hydro=Tru
   outDir = {'dm':{}, 'gas':{} }
   if hydro:  
     data_grid = h5.File( gridFileName, 'r' )
-    fields_data = data_grid.keys()
-    for key in data_grid.attrs.keys(): outDir[key] = data_grid.attrs[key]
+    fields_data = list(data_grid.keys())
+    for key in list(data_grid.attrs.keys()): outDir[key] = data_grid.attrs[key]
     fields_grid = fields_data
     for field in fields_grid:
       if field not in fields_data: continue
@@ -273,16 +273,16 @@ def load_snapshot_data( nSnap, inDir, cool=False, dm=True, cosmo=True, hydro=Tru
 
   if dm:
     data_part = h5.File( partFileName, 'r' )
-    fields_data = data_part.keys()
+    fields_data = list(data_part.keys())
     fields_part = [ 'density',  'grav_potential', 'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z' ]
     # current_z = data_part.attrs['current_z']
     # current_a = data_part.attrs['current_a']
     # outDir['current_a'] = current_a
     # outDir['current_z'] = current_z
-    for key in data_part.attrs.keys(): outDir[key] = data_part.attrs[key]
+    for key in list(data_part.attrs.keys()): outDir[key] = data_part.attrs[key]
     if cosmo:
       current_z = data_part.attrs['current_z']
-      print ("Loading Cholla Snapshot: {0}       current_z: {1}".format( nSnap, current_z) )
+      print(("Loading Cholla Snapshot: {0}       current_z: {1}".format( nSnap, current_z) ))
     for field in fields_part:
       if field not in fields_data: continue
       # print field
@@ -362,29 +362,29 @@ def convert_data(nSnapshots, gridFileName, partFileName ):
   outFileName = outDir + 'data_log10_1.h5'
   outFile = h5.File( outFileName, 'w' )
 
-  snapshots = range(nSnapshots)
+  snapshots = list(range(nSnapshots))
   for nSnap in snapshots:
-    print 'Snapshot: ', nSnap
+    print('Snapshot: ', nSnap)
     snapKey = str(nSnap)
     outSnap = outFile.create_group( snapKey )
     current_a = file_part[snapKey].attrs['current_a']
     current_z = file_part[snapKey].attrs['current_z']
     outSnap.attrs['current_a'] = current_a
     outSnap.attrs['current_z'] = current_z
-    print current_z, current_a
+    print(current_z, current_a)
 
     part_types = ['gas', 'dm']
     grid_keys = ['density' ]
     part_keys = ['density']
     for part_type in part_types:
-      print ' {0}'.format( part_type )
+      print(' {0}'.format( part_type ))
       file_data = file_grid if part_type == 'gas' else file_part
       outPart = outSnap.create_group( part_type )
       keys = grid_keys if part_type == 'gas' else part_keys
       for key in keys:
-        print '  {0}'.format( key)
+        print('  {0}'.format( key))
         data = file_data[snapKey][key][...]
-        print data.mean()
+        print(data.mean())
         data_new, data_min, data_max = change_data( data )
         outPart.create_dataset( key, data=data_new.astype(np.float32) )
         outPart.attrs['min_'+key] = data_min

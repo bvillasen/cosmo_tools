@@ -256,7 +256,7 @@ for nSnap in range(  0 , 79):
     ax.tick_params(axis='both', which='minor', labelsize=label_size, size=3, labelcolor=text_color, color=text_color)
     ax.text(-0.11, 0.5, r'Density  [ $h^2$M$_{\odot}$kpc$^{-3}$ ]', fontsize=fs_0, horizontalalignment='right', verticalalignment='center', transform=ax.transAxes, color=text_color, rotation=90 )
     ax.set_facecolor(background)
-    for spine in ax.spines.values():
+    for spine in list(ax.spines.values()):
         spine.set_edgecolor(text_color)
     leg = ax.legend(loc=2, fontsize=16, frameon=False)
     for text in leg.get_texts():
@@ -271,7 +271,7 @@ for nSnap in range(  0 , 79):
     # ax.ticklabel_format( axis='both', style='sci', scilimits=(0,0)) 
     ax.text(-0.11, 0.5, r'Velocity  [ km/s ]', fontsize=fs_0, horizontalalignment='right', verticalalignment='center', transform=ax.transAxes, color=text_color, rotation=90 )
     ax.set_facecolor(background)
-    for spine in ax.spines.values():
+    for spine in list(ax.spines.values()):
         spine.set_edgecolor(text_color)
 
     ax = ax_list[2]
@@ -283,7 +283,7 @@ for nSnap in range(  0 , 79):
     ax.tick_params(axis='both', which='minor', labelsize=label_size, size=3, labelcolor=text_color, color=text_color)
     ax.text(-0.11, 0.5, r'Temperature  [ K ]', fontsize=fs_0, horizontalalignment='right', verticalalignment='center', transform=ax.transAxes, color=text_color, rotation=90 )
     ax.set_facecolor(background)
-    for spine in ax.spines.values():
+    for spine in list(ax.spines.values()):
         spine.set_edgecolor(text_color)
 
 
@@ -291,7 +291,7 @@ for nSnap in range(  0 , 79):
     # out_file_name = 'zeldovich_{0}_dashed.png'.format( nSnap )
 
     fig.savefig( outDir + out_file_name, facecolor=fig.get_facecolor(), dpi=300, bbox_inches='tight')
-    print( "Saved image: " + outDir + out_file_name)
+    print(( "Saved image: " + outDir + out_file_name))
 
     for ax in ax_list:
       ax.clear()

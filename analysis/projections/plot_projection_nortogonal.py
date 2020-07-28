@@ -35,7 +35,7 @@ from projection_functions import rescale_image, get_rescaled_image
 
 if len(sys.argv) == 1: index = 0
 else: index = int(sys.argv[1])
-print 'Index: ', index
+print('Index: ', index)
 
 
 
@@ -77,7 +77,7 @@ n_proc_snaps= (n_index_total-1) // nprocs + 1
 index_start_range = np.array([ rank + i*nprocs for i in range(n_proc_snaps) ])
 index_start_range = index_start_range[ index_start_range < n_index_total ]
 if len(index_start_range) == 0: exit()
-print 'Generating: {0} {1}\n'.format( rank, index_start_range) 
+print('Generating: {0} {1}\n'.format( rank, index_start_range)) 
 
 
 get_statistics = False
@@ -87,7 +87,7 @@ if get_statistics:
   minval_list = []
   for indx_start in index_start_range:
     file_name = output_dir + 'projection_{2}_{3}_{0}_{1}.h5'.format( nSnap, indx_start, data_type, field ) 
-    print 'Loading File: {0}'.format(  file_name )
+    print('Loading File: {0}'.format(  file_name ))
     file = h5.File( file_name, 'r' )
     projection = file[data_type][field][...]
     max_val = file[data_type][field].attrs['max'] 
@@ -113,7 +113,7 @@ for indx_start in index_start_range:
 
 
   file_name = output_dir + 'projection_{2}_{3}_{0}_{1}.h5'.format( nSnap, indx_start, data_type, field )
-  print 'Loading File: {0}'.format(  file_name )
+  print('Loading File: {0}'.format(  file_name ))
   file = h5.File( file_name, 'r' )
   projection = file[data_type][field][...]
   max_val_local = np.log10( file[data_type][field].attrs['max'] )
@@ -166,8 +166,8 @@ for indx_start in index_start_range:
 
   if color_reverse: color_name += '_r'
   file_name = output_dir + 'figures/proj_{0}.png'.format( indx_start, color_name )
-  print ' Saving File: {0}'.format(file_name)
+  print(' Saving File: {0}'.format(file_name))
   fig.savefig( file_name, dpi=dpi,  bbox_inches='tight',   pad_inches=-0.025)
   # fig.savefig( file_name, )
-  print ' Saved File: {0}\n'.format(file_name)
+  print(' Saved File: {0}\n'.format(file_name))
 

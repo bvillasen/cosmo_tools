@@ -61,7 +61,7 @@ n_proc_snaps= (n_index_total-1) // nprocs + 1
 indices_to_generate = np.array([ rank + i*nprocs for i in range(n_proc_snaps) ])
 indices_to_generate = indices_to_generate[ indices_to_generate < n_index_total ]
 if len(indices_to_generate) == 0: exit()
-print 'Generating: {0} {1}\n'.format( rank, indices_to_generate) 
+print('Generating: {0} {1}\n'.format( rank, indices_to_generate)) 
 
 # if field == 'density':
 #   img_name_rho = output_dir + 'rho_gas.png'

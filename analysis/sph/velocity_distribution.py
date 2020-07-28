@@ -42,7 +42,7 @@ Lbox = skewers_ewald.box / 1000.
 cosmo_h = skewers_ewald.h
 current_z = skewers_ewald.z
 
-print 'Current z: {0}'.format( current_z )
+print('Current z: {0}'.format( current_z ))
 current_a = 1. / ( current_z + 1 )
 Omega_M = skewers_ewald.om
 Omega_b = skewers_ewald.ob
@@ -80,7 +80,7 @@ dens_cholla = data_skewers['density'].flatten()/rho_gas_mean_cholla
 vel_cholla = np.abs( data_skewers['velocity'].flatten() )
 if add_factor: vel_cholla *= np.sqrt( current_a )
 current_z = data_skewers['current_z']
-print 'Current z: {0}'.format( current_z )
+print('Current z: {0}'.format( current_z ))
 n_skewers = data_skewers['n_skewers']
 
 
@@ -149,5 +149,5 @@ ax.text(0.65, 0.95, text, horizontalalignment='left',  verticalalignment='center
 fileName = figures_dir + 'dens_vel_distribution_{0}.png'.format(nSnap)
 if add_factor: fileName = figures_dir + 'dens_vel_distribution_factor_{0}.png'.format(nSnap)
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 

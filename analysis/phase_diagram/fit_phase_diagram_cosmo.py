@@ -48,7 +48,7 @@ for nSnap in range(1, 16):
 
 
   inFileName = input_dir + 'phase_diagram_data_{0}.h5'.format(nSnap)
-  print( 'Loading File: ' + inFileName)
+  print(( 'Loading File: ' + inFileName))
   inFile = h5.File( inFileName, 'r')
   current_z = inFile.attrs['current_z']
   phase = inFile['phase'][...] / ncells
@@ -114,7 +114,7 @@ for nSnap in range(1, 16):
   data_out = np.array([ overdensity_values, temp_mean_values, temp_sigma_values, temp_sigma_l_values, temp_sigma_r_values ])
   outFileName = output_dir + 'mean_phase_region_{0}.txt'.format(nSnap)
   np.savetxt(outFileName, data_out)
-  print "Saved File: ", outFileName
+  print("Saved File: ", outFileName)
   
   #Linear Regresion
   def linear_model( x, T0, gamma ):
@@ -133,7 +133,7 @@ for nSnap in range(1, 16):
   data = np.array([ fit_T0, fit_gamma, fit_T0_sigma, fit_gamma_sigma, dens_line_l, dens_line_r])
   outFileName = output_dir + 'fit_linear_regresion_{0}.txt'.format(nSnap)
   np.savetxt( outFileName, data, header=h )
-  print "Saved File: ", outFileName
+  print("Saved File: ", outFileName)
   
   # 
   
@@ -161,15 +161,15 @@ for nSnap in range(1, 16):
   sigma_T0 = linear_MDL.stats()['T0']['standard deviation']
   mean_gamma = linear_MDL.stats()['gamma']['mean']
   sigma_gamma = linear_MDL.stats()['gamma']['standard deviation']
-  print ""
-  print "Fit:   T0: {0} {1}      gamma:{2} {3}".format( mean_T0, sigma_T0, mean_gamma, sigma_gamma)
+  print("")
+  print("Fit:   T0: {0} {1}      gamma:{2} {3}".format( mean_T0, sigma_T0, mean_gamma, sigma_gamma))
   
   # plot(linear_MDL)
   
   outFileName = output_dir + 'fit_mcmc_{0}.pkl'.format(nSnap)
   f = open( outFileName, "wb")
   pickle.dump( linear_MDL.stats(), f)
-  print "Saved File: ", outFileName
+  print("Saved File: ", outFileName)
 
 
 

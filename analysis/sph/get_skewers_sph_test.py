@@ -81,8 +81,8 @@ n_skewers_local = n_skewers_total
 n_skewer_pixels = 2048
 
 if print_out:
-  print "N Skewers Total: ",  n_skewers_total
-  print "N Skewers Local: ",  n_skewers_local
+  print("N Skewers Total: ",  n_skewers_total)
+  print("N Skewers Local: ",  n_skewers_local)
 
 
 
@@ -98,7 +98,7 @@ for skewer_id in range(100):
 
   out_text = ' Skewer {0}/{1}'.format( skewer_id, n_skewers_local ) 
   if print_out: print_line_flush(out_text)
-  print ''
+  print('')
   # 
   skewer_x, skewer_y, skewer_z = xlos[skewer_id], ylos[skewer_id], zlos[skewer_id]
   skewer_axis = skewers_ewald.dirlos[skewer_id]
@@ -143,7 +143,7 @@ for skewer_id in range(100):
   
   
   diff = ( tau_eff - tau_eff_ewald ) / tau_eff_ewald
-  print "Diff: {0}".format(diff)
+  print("Diff: {0}".format(diff))
 
   nrows = 5
   ncols = 1
@@ -204,7 +204,7 @@ for skewer_id in range(100):
   fileName = figures_dir + 'skewer_{0}_{1}.png'.format(skewer_id,nSnap)
   fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
 
-  print 'Saved Image: ', fileName
+  print('Saved Image: ', fileName)
 # 
 # 
 # # skewer_key = str(skewer_id_global)

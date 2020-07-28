@@ -65,7 +65,7 @@ else:
 
 
 nSnap = rank
-print "nSnap: {0}".format(nSnap)
+print("nSnap: {0}".format(nSnap))
 
 
 
@@ -87,7 +87,7 @@ n_boxes = 512
 for n_box in range(n_boxes):
 
   inFileName = input_dir + '{0}.h5.{1}'.format( nSnap, n_box)
-  print "Loading File:", inFileName
+  print("Loading File:", inFileName)
 
   inFile = h5.File( inFileName, 'r')
   current_z = inFile.attrs['Current_z']
@@ -130,7 +130,7 @@ outFile.create_dataset( 'F_vals', data=F_vals)
 
 outFile.attrs['current_z'] = current_z
 outFile.close()
-print "\nSaved File: ", outputFileName
+print("\nSaved File: ", outputFileName)
 
 
 

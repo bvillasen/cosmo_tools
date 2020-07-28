@@ -153,5 +153,5 @@ fig.subplots_adjust( wspace=0 )
 fig.tight_layout()
 outputFileName = 'transmited_flux_{0}_{1}.png'.format(uvb, nSnap)
 fig.savefig( output_dir + outputFileName, bbox_inches='tight', dpi=200 )
-print 'Saved image: ', output_dir + outputFileName
+print('Saved image: ', output_dir + outputFileName)
 

@@ -144,10 +144,10 @@ for res_index, nPoints in enumerate([2048, 1024, 512]):
 
     #Load Power spectrum data
     inputFileName = input_dir + 'flux_power_spectrum_{0}.h5'.format(nSnap)
-    print "\nLoadingFile: ", inputFileName
+    print("\nLoadingFile: ", inputFileName)
     inFile = h5.File( inputFileName, 'r')
     current_z = inFile.attrs['current_z'] 
-    print nSnap, current_z
+    print(nSnap, current_z)
     n_skewers = inFile.attrs['n_skewers']
     skewer_ids = inFile['skewers_ids'][...]
     k_vals = inFile['k_vals'][...]
@@ -195,7 +195,7 @@ for res_index, nPoints in enumerate([2048, 1024, 512]):
 
     indx_j = snap_index % ncols
     indx_i = snap_index/ncols
-    print indx_i, indx_j
+    print(indx_i, indx_j)
     
     if indx_j == 0: factor = 1.1
     if indx_j == 3: factor = 1.0  
@@ -271,7 +271,7 @@ for res_index, nPoints in enumerate([2048, 1024, 512]):
 fileName = output_dir + 'flux_power_spectrum_resolution.png'
 if not transparent: fig.savefig( fileName,  pad_inches=0.1, facecolor=fig.get_facecolor(), bbox_inches='tight', dpi=200)
 else: fig.savefig( fileName,  pad_inches=0.1, transparent=True, bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 
 
 

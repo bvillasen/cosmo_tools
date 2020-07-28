@@ -56,12 +56,12 @@ if get_statistics:
     data_set = data_proj['density']['projection_weighted']
     max_val = data_set.attrs['max']
     min_val = data_set.attrs['min']
-    print  ' {0}:  {1}   {2}'.format( nSnap, min_val, max_val )
+    print(' {0}:  {1}   {2}'.format( nSnap, min_val, max_val ))
     max_all = max( max_all, max_val)
     min_all = min( min_all, min_val)
   stats = np.array([ n_snapshots, min_all, max_all])
   np.savetxt( inDir + 'statistics.txt', stats )
-  print 'Statistics Saved'
+  print('Statistics Saved')
 
 
 cbar_labels = [ r'$\log_{10}$ Density  $[ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$' ]
@@ -74,10 +74,10 @@ n_snapshots, min_global, max_global = np.loadtxt( inDir + 'statistics.txt' )
 
 
 nSnap = 0
-snapshots = range( 42, 43 )
+snapshots = list(range( 42, 43))
 for nSnap in snapshots:
 
-  print "\nSnapshot: {0}".format( nSnap)
+  print("\nSnapshot: {0}".format( nSnap))
 
   # data_cholla = load_snapshot_data( nSnap, inDir_snapshots, hydro=False )
   # scale_0 = data_cholla['current_a']
@@ -118,7 +118,7 @@ for nSnap in snapshots:
     n_image = i + n_per_snapshot*nSnap
     scale_proj = scale_vals[i]
     z_proj = 1/scale_proj - 1
-    print " Image: {0}     z={1:.2f}".format(n_image, z_proj)
+    print(" Image: {0}     z={1:.2f}".format(n_image, z_proj))
     delta_scale = scale_proj - scale_0
     data_proj = data_0 + delta_scale * data_delta
     
@@ -148,7 +148,7 @@ for nSnap in snapshots:
     fig.tight_layout()
     fileName = 'projection_{0}.png'.format(n_image)
     fig.savefig( outDir + fileName,  bbox_inches='tight', dpi=200 )
-    print 'Saved image: ', outDir + fileName
+    print('Saved image: ', outDir + fileName)
     ax.clear()
     
 

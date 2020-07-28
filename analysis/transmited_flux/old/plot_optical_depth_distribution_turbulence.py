@@ -71,7 +71,7 @@ for space in cosmo_spaces:
     
     F_mean = F_vals.mean()
     tau_eff = - np.log( F_mean )
-    print "F_boost: {0}    tau_eff: {1:.2f}".format( turbulence_boost, tau_eff)
+    print("F_boost: {0}    tau_eff: {1:.2f}".format( turbulence_boost, tau_eff))
 inFile.close()
 
 
@@ -116,7 +116,7 @@ ax.set_ylabel( r'$P(\langle F \rangle)$', fontsize=fs)
 
 fileName = output_dir + 'optical_depth_distribution_turbulence.png'
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 # 
 # 
 # 

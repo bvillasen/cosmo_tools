@@ -78,11 +78,11 @@ if n_arg > 1:
     args.append( float( arg ))
   eta_1, eta_2 = args
   if rank == 0:
-    print "Using command arguments"
-    print args
+    print("Using command arguments")
+    print(args)
 
 
-print 'eta: {0:.3f}  {1:.3f} /'.format( eta_1, eta_2 )
+print('eta: {0:.3f}  {1:.3f} /'.format( eta_1, eta_2 ))
 
 
 nPoints = 256
@@ -298,5 +298,5 @@ fig.tight_layout()
 if not transparent:fig.savefig( outDir + fileName,  bbox_inches='tight', facecolor=fig.get_facecolor(), dpi=200 )
 else:fig.savefig( outDir + fileName,  bbox_inches='tight', transparent=True, dpi=200 )
 
-print 'Saved image: ', fileName
-print ''
+print('Saved image: ', fileName)
+print('')

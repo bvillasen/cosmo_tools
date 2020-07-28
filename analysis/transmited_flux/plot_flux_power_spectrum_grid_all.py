@@ -185,7 +185,7 @@ for uvb in uvb_list:
     # Load Power spectrum data
     inputFileName = input_dir + 'flux_power_spectrum_{0}.h5'.format(nSnap)
 
-    print "\nLoadingFile: ", inputFileName
+    print("\nLoadingFile: ", inputFileName)
     inFile = h5.File( inputFileName, 'r')
     current_z = inFile.attrs['current_z'] 
     # print nSnap, current_z
@@ -313,7 +313,7 @@ save_to_file = False
 
 if save_to_file:
   outfile_name = dataDir + 'power_spectra_data/data_cholla.h5'
-  print "Saving to file: ", outfile_name
+  print("Saving to file: ", outfile_name)
   outFile = h5.File( outfile_name, 'w')
 
 for uvb_index,uvb in enumerate(uvb_list):
@@ -354,7 +354,7 @@ for uvb_index,uvb in enumerate(uvb_list):
     
     z_vals_out.append(current_z)
     
-    print indx_i, indx_j, nSnap, current_z
+    print(indx_i, indx_j, nSnap, current_z)
     
     ax = ax_l[indx_i][indx_j]
     
@@ -505,7 +505,7 @@ z_vals_out = np.array(z_vals_out)
 
 
 if save_to_file:
-  print "Saved file: ", outfile_name
+  print("Saved file: ", outfile_name)
   outFile.create_dataset('z_vals', data=z_vals_out)
   outFile.close()
 
@@ -513,7 +513,7 @@ if save_to_file:
 fileName += '.pdf'
 if not transparent: fig.savefig( fileName,  pad_inches=0.1, facecolor=fig.get_facecolor(), bbox_inches='tight', dpi=200)
 else: fig.savefig( fileName,  pad_inches=0.1, transparent=True, bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 
 
 

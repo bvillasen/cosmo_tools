@@ -13,7 +13,7 @@ def compress_particles(  nSnap, nBoxes, name_base, out_base_name,inDir, outDir, 
   dims_all = head['dims']
   dims_local = head['dims_local']
   nz, ny, nx = dims_all
-  keys_all = inFile.keys()
+  keys_all = list(inFile.keys())
   # print(keys_all)
 
   keys_grid = ['density', 'grav_potential']
@@ -29,18 +29,18 @@ def compress_particles(  nSnap, nBoxes, name_base, out_base_name,inDir, outDir, 
   
   
   print('\nParticles:')
-  print( ' snap: {0}  {1}'.format( nSnap, keys ))
-  if inFile.attrs.get('current_z') is not None: print( ' current_z: {0}'.format( inFile.attrs['current_z'][0] ))
+  print(( ' snap: {0}  {1}'.format( nSnap, keys )))
+  if inFile.attrs.get('current_z') is not None: print(( ' current_z: {0}'.format( inFile.attrs['current_z'][0] )))
   inFile.close()
   
   added_header = False
   
   for key in keys:
     if key not in keys_all:
-      print("ERROR key {0} not found".format(key) )
-      print(" Availbale keys {0} ".format(keys_all) )
+      print(("ERROR key {0} not found".format(key) ))
+      print((" Availbale keys {0} ".format(keys_all) ))
       continue
-    print( '  Loading: {0}').format( key )
+    print(( '  Loading: {0}').format( key ))
     # print( '   Creating data array')
     data_all = np.zeros( dims_all, dtype=precision )
     data_all_parts = []
@@ -50,7 +50,7 @@ def compress_particles(  nSnap, nBoxes, name_base, out_base_name,inDir, outDir, 
       inFile = h5py.File( inDir + inFileName, 'r')
       head = inFile.attrs
       if added_header == False:
-        for h_key in head.keys():
+        for h_key in list(head.keys()):
           if h_key in ['dims', 'dims_local', 'offset', 'bounds', 'domain', 'dx', ]: continue
           # print h_key
           fileSnap.attrs[h_key] = head[h_key][0]
@@ -71,11 +71,11 @@ def compress_particles(  nSnap, nBoxes, name_base, out_base_name,inDir, outDir, 
       data_set.attrs['max'] = data_all.max()
       data_set.attrs['min'] = data_all.min()
       data_set.attrs['mean'] = data_all.mean()
-      print( '  {0} [ min  max  mean ] = [ {1}  {2}  {3} ]'.format( key, data_set.attrs['min'], data_set.attrs['max'], data_set.attrs['mean']))
+      print(( '  {0} [ min  max  mean ] = [ {1}  {2}  {3} ]'.format( key, data_set.attrs['min'], data_set.attrs['max'], data_set.attrs['mean'])))
     if key in keys_parts:
       array_parts = np.concatenate(data_all_parts)
       fileSnap.create_dataset( key, data=array_parts.astype(precision) )
       # print 'nParticles: ', len(array_parts)
   
   fileSnap.close()
-  print( ' Saved File: {0}'.format( outDir+fileName) )
+  print(( ' Saved File: {0}'.format( outDir+fileName) ))

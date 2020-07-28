@@ -115,7 +115,7 @@ n_proc_snaps= (n_index_total-1) // nprocs + 1
 indices_to_generate = np.array([ rank + i*nprocs for i in range(n_proc_snaps) ])
 indices_to_generate = indices_to_generate[ indices_to_generate < n_index_total ]
 if len(indices_to_generate) == 0: exit()
-print( 'Generating: {0} {1}\n'.format( rank, indices_to_generate) )
+print(( 'Generating: {0} {1}\n'.format( rank, indices_to_generate) ))
 
 
 nSnap = 90
@@ -154,7 +154,7 @@ for i in range(n_data):
 
 
   inFileName = input_dir + 'phase_diagram_data_{0}.h5'.format(nSnap)
-  print( 'Loading File: ' + inFileName )
+  print(( 'Loading File: ' + inFileName ))
   inFile = h5.File( inFileName, 'r')
   current_z = inFile.attrs['current_z']
   phase = inFile['phase'][...]
@@ -235,7 +235,7 @@ for i in range(n_data):
   cb = ax.cax.colorbar(im,   )
   cb.ax.tick_params(labelsize=tick_label_size_major, size=tick_size_major, color=text_color, width=tick_width_major, length=tick_size_major, labelcolor=text_color, direction='in' )
   ax.cax.toggle_label(True)
-  [sp.set_linewidth(border_width) for sp in cb.ax.spines.itervalues()]
+  [sp.set_linewidth(border_width) for sp in cb.ax.spines.values()]
 
 
 
@@ -283,12 +283,12 @@ for i in range(n_data):
   ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in')
   ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
 
-  for spine in ax.spines.values():
+  for spine in list(ax.spines.values()):
       spine.set_edgecolor(text_color)
       # spine.set_lw(0.5)
 
 
-  [sp.set_linewidth(border_width) for sp in ax.spines.itervalues()]
+  [sp.set_linewidth(border_width) for sp in ax.spines.values()]
 
   if plot_fit:
     # Conver logT0 to T0
@@ -304,7 +304,7 @@ for i in range(n_data):
 
 
 fig.savefig( out_fileName,  pad_inches=0.1,  facecolor=fig.get_facecolor(),  bbox_inches='tight', dpi=fig_dpi)
-print( 'Saved Image: ' + out_fileName )
+print(( 'Saved Image: ' + out_fileName ))
 
 
 # 

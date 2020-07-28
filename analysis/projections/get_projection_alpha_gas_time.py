@@ -122,13 +122,13 @@ if len(index_start_range) == 0: exit()
 
 if not use_mpi: index_start_range = [0]
 
-print 'Generating: {0} {1}\n'.format( rank, index_start_range) 
+print('Generating: {0} {1}\n'.format( rank, index_start_range)) 
 
 
 n_snapshots = 170
 n_indices_full_time = 2048
 indices_per_snapshot = n_indices_full_time / ( n_snapshots  )
-if rank == 0: print indices_per_snapshot
+if rank == 0: print(indices_per_snapshot)
 
 
 
@@ -152,7 +152,7 @@ for i, index in enumerate(index_start_range):
   out_file_name = output_dir + 'projection_{2}_{3}_{1}.h5'.format( 0, index, data_type, field )
   try:
     f = h5.File( out_file_name, 'r')
-  except IOError, e:
+  except IOError as e:
     print('File does not exist')
     skip_index = False
   else:
@@ -165,7 +165,7 @@ for i, index in enumerate(index_start_range):
   nSnap = index / indices_per_snapshot 
   n = index % indices_per_snapshot
   
-  print "Index: {0}  snap: {1}   n:{2}".format(indx_start, nSnap, n)
+  print("Index: {0}  snap: {1}   n:{2}".format(indx_start, nSnap, n))
 
 
   grid_complete_size = [ 2048, 2048, 2048 ]
@@ -179,7 +179,7 @@ for i, index in enumerate(index_start_range):
   # offset = -1
   # if nSnap != current_snap:
   if nSnap >= n_snapshots - 1:  nSnap = n_snapshots -1
-  print "Loading snapshot: {0}".format(nSnap)
+  print("Loading snapshot: {0}".format(nSnap))
   nSnap_0 = nSnap
   data_snapshot = load_snapshot_data_distributed_periodix_x(  nSnap_0, inDir, data_type, field, subgrid, domain, precision, proc_grid, grid_complete_size, show_progess=show_progess )
   if data_type == 'particles': current_z = data_snapshot['current_z']
@@ -225,7 +225,7 @@ for i, index in enumerate(index_start_range):
   #   data = np.clip(data, clip_min, clip_max)
     
   
-  if show_progess: print ''
+  if show_progess: print('')
   
   
   size_original = ( nPoints, nPoints )
@@ -268,7 +268,7 @@ for i, index in enumerate(index_start_range):
       sys.stdout. write(terminalString)
       sys.stdout.flush() 
 
-  if show_progess: print ""
+  if show_progess: print("")
   #Write the projection to a file:
   out_file = h5.File( out_file_name, 'w')
   out_file.attrs['current_z'] = current_z
@@ -290,7 +290,7 @@ for i, index in enumerate(index_start_range):
   data_set.attrs['min'] = projection_alpha.min()
 
   out_file.close()
-  print "Saved File {0} / {1}: {2}\n".format(i, len(index_start_range), out_file_name )
+  print("Saved File {0} / {1}: {2}\n".format(i, len(index_start_range), out_file_name ))
 
 
 

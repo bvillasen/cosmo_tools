@@ -33,7 +33,7 @@ output_dir = dataDir + 'cosmo_sims/ewald_512/skewers_1D/optical_depth/'
 create_directory( output_dir )
 
 nSnap = 11
-print "nSnap: {0}".format(nSnap)
+print("nSnap: {0}".format(nSnap))
 
 
 if nSnap == 12: filename_ewald = dataDir + "cosmo_sims/ewald_512/skewers_ewald/ne_10_512_mHopkins_newSFRD_spec2048_n5000_z4.996.dat"

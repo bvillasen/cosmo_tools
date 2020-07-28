@@ -151,7 +151,7 @@ ax.legend(fontsize=legend_font_size, frameon=False)
 ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in')
 ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
 
-[i.set_linewidth(border_width) for i in ax.spines.itervalues()]
+[i.set_linewidth(border_width) for i in ax.spines.values()]
 
 ax.set_yscale('log')
 ax.set_xscale('log')

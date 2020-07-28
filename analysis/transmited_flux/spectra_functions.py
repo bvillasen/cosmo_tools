@@ -175,7 +175,7 @@ def get_optical_depth_velocity( current_z, H, dr, dv, n_HI_los, vel_peculiar_los
       tau_voigt = Lya_sigma * Lya_lambda * dr_cgs / np.sqrt(np.pi) * sum_pix
     
       diff = ( tau_voigt - tau_gauss )/ tau_gauss
-      if abserror < 1e-3: print "index:{3} tau_gauss: {0:.3f}   tau_voigt:{1:.3f}   fract_diff:{2}".format( tau_gauss, tau_voigt, diff, i-n_ghost)
+      if abserror < 1e-3: print("index:{3} tau_gauss: {0:.3f}   tau_voigt:{1:.3f}   fract_diff:{2}".format( tau_gauss, tau_voigt, diff, i-n_ghost))
       
   # Trim the ghost cells from the global optical depth 
   tau_los = tau_los[n_ghost:-n_ghost]
@@ -190,7 +190,7 @@ def H_integrand( y, a, x ):
 
 def get_H(a, x):
   integral, abserror = quad( H_integrand, -np.inf, np.inf, args=( a, x ) )
-  if abserror > 1e-4: print "Large Error in the H integral"
+  if abserror > 1e-4: print("Large Error in the H integral")
   H = a / np.pi * integral
   return H, abserror
 

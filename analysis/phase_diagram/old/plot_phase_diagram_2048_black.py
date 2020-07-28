@@ -58,7 +58,7 @@ n_proc_snaps= (n_index_total-1) // nprocs + 1
 indices_to_generate = np.array([ rank + i*nprocs for i in range(n_proc_snaps) ])
 indices_to_generate = indices_to_generate[ indices_to_generate < n_index_total ]
 if len(indices_to_generate) == 0: exit()
-print 'Generating: {0} {1}\n'.format( rank, indices_to_generate) 
+print('Generating: {0} {1}\n'.format( rank, indices_to_generate)) 
 
 
 nSnap = 140
@@ -93,7 +93,7 @@ for nSnap in indices_to_generate:
 
 
     inFileName = input_dir + 'phase_diagram_data_{0}.h5'.format(nSnap)
-    print 'Loading File: ', inFileName
+    print('Loading File: ', inFileName)
     inFile = h5.File( inFileName, 'r')
     current_z = inFile.attrs['current_z']
     phase = inFile['phase'][...]
@@ -211,7 +211,7 @@ for nSnap in indices_to_generate:
     ax.set_facecolor('k')
     
     ax.tick_params(color='white', labelcolor='white', labelsize=15)
-    for spine in ax.spines.values():
+    for spine in list(ax.spines.values()):
         spine.set_edgecolor('white')
         # spine.set_lw(0.5)
 
@@ -227,7 +227,7 @@ for nSnap in indices_to_generate:
 
   fileName = output_dir + 'phase_diagram_{0}.png'.format(nSnap)
   fig.savefig( fileName,  pad_inches=0.1,  facecolor=fig.get_facecolor(),  bbox_inches='tight', dpi=300)
-  print 'Saved Image: ', fileName
+  print('Saved Image: ', fileName)
 
 
 # 

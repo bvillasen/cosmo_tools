@@ -38,7 +38,7 @@ for field in fields:
 
 for i in range(n_boxes):
   in_file_name = input_dir + 'data_kernel_{0}_{1}.h5'.format(nSnap, i)
-  print "Loading File: ", in_file_name
+  print("Loading File: ", in_file_name)
   file = h5.File( in_file_name, 'r')
   
   for field in fields:
@@ -125,7 +125,7 @@ ax.set_xlabel(r'$N_{\mathrm{neighbors}}$')
 
 fileName = output_dir + 'density_2d_neighboours.png'
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=300)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 
 
 

@@ -45,7 +45,7 @@ if simulation == 'cholla_2048':
   uvb = 'hm12'
   input_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/skewers_{1}/'.format(nPoints, uvb,  )
   output_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/optical_depth_{1}/'.format(nPoints, uvb, )
-  snapshots_indices = range( 74, 170, 1)
+  snapshots_indices = list(range( 74, 170, 1))
 
 
 if simulation == 'ewald_512':
@@ -91,7 +91,7 @@ nSnap = snapshots_indices[rank]
 
 # interpolate = False
 
-print "nSnap: {0}".format(nSnap)
+print("nSnap: {0}".format(nSnap))
 
 
 skewer_axis = 'x'
@@ -157,6 +157,6 @@ for space in cosmo_spaces:
 outFile.attrs['current_z'] = current_z
 
 outFile.close()
-print "\nSaved File: ", outputFileName
+print("\nSaved File: ", outputFileName)
 
 

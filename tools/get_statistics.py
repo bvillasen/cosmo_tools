@@ -32,8 +32,8 @@ def split_name( file_name, part=False):
   return [int(nSnapshot), int(nBox)]
 
 if rank == 0:  
-  print( 'Input Dir: ' + inDir )
-  print( 'Output Dir: ' + outDir )
+  print(( 'Input Dir: ' + inDir ))
+  print(( 'Output Dir: ' + outDir ))
 
 name_base = 'h5'
 
@@ -54,8 +54,8 @@ nSnapshots = len( snapshots_all )
 nBoxes = len( boxes )
 
 if rank == 0:
-  print( "Number of snapshots: {0}".format(nSnapshots) )
-  print( "Number of files per snapshot: {0}".format(nBoxes) )
+  print(( "Number of snapshots: {0}".format(nSnapshots) ))
+  print(( "Number of files per snapshot: {0}".format(nBoxes) ))
 
 
 #Set wich snapshots to compress
@@ -66,7 +66,7 @@ n_proc_snaps= (n_to_compress-1) // nprocs + 1
 proc_snaps= np.array([ rank + i*nprocs for i in range(n_proc_snaps) ])
 proc_snaps= proc_snaps[ proc_snaps < n_to_compress ]
 if len(proc_snaps) == 0: exit()
-print( ' {0}: {1}'.format( rank, proc_snaps) )
+print(( ' {0}: {1}'.format( rank, proc_snaps) ))
 time.sleep(1)
 comm.Barrier()
 

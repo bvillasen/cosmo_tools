@@ -59,7 +59,7 @@ for i in range(n_data):
 
 
   inFileName = input_dir + 'phase_diagram_data_{0}.h5'.format(nSnap)
-  print 'Loading File: ', inFileName
+  print('Loading File: ', inFileName)
   inFile = h5.File( inFileName, 'r')
   current_z = inFile.attrs['current_z']
   phase = inFile['phase'][...]
@@ -163,7 +163,7 @@ for i in range(n_data):
     ax.text(0.95, 0.1, text, horizontalalignment='right',  verticalalignment='center', transform=ax.transAxes, fontsize=17)
 
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 
 
 # 

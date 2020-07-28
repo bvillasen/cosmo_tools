@@ -26,10 +26,10 @@ def get_phase_diagram_bins( density, temperature, bins_dens, bins_temp, nbins, n
   temperature = np.log10(temperature)
   bins_dens = np.log10(bins_dens)
   bins_temp = np.log10(bins_temp)
-  if density.min() < bins_dens[0]:  print "ERROR: Density out of range"
-  if density.max() > bins_dens[-1]: print "ERROR: Density out of range"
-  if temperature.min() < bins_temp[0]:  print "ERROR: Temperature out of range"
-  if temperature.max() > bins_temp[-1]: print "ERROR: Temperature out of range"
+  if density.min() < bins_dens[0]:  print("ERROR: Density out of range")
+  if density.max() > bins_dens[-1]: print("ERROR: Density out of range")
+  if temperature.min() < bins_temp[0]:  print("ERROR: Temperature out of range")
+  if temperature.max() > bins_temp[-1]: print("ERROR: Temperature out of range")
 
   phase, yedges, xedges  = np.histogram2d( density, temperature, bins=[bins_dens, bins_temp] )
   xcenters = (xedges[:-1] + xedges[1:])/2

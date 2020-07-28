@@ -239,8 +239,8 @@ for nSnap in range(0,338):
     fig.patch.set_facecolor('black')              
     fig.savefig( outDir + fileName,  bbox_inches='tight',  facecolor=fig.get_facecolor(),  dpi=200, pad_inches=-0.0 )
     plt.clf()
-    print 'Saved image: ', fileName
-    print ''
+    print('Saved image: ', fileName)
+    print('')
     
     
   

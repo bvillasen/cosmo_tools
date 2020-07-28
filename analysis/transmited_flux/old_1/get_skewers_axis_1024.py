@@ -48,7 +48,7 @@ create_directory( output_dir )
 # snapshots_indices = range( 74, 170, 1 )
 # snapshots_indices = range( 74, 170, 1 )
 # snapshots_indices = range( 74, 122, 1 )
-snapshots_indices = range( 122, 170, 1 )
+snapshots_indices = list(range( 122, 170, 1))
 
 
 data_type = 'hydro'
@@ -154,10 +154,10 @@ for axis in ['x', 'y', 'z']:
             skewer_HI_density = HI_density[id_y_local, id_z_local, :]
             skewer_velocity = velocity[id_y_local, id_z_local, :]
             
-          if skewer_density.shape[0]     != nPoints: print "ERROR: Skewer has the wrong length"
-          if skewer_temperature.shape[0] != nPoints: print "ERROR: Skewer has the wrong length"
-          if skewer_HI_density.shape[0]  != nPoints: print "ERROR: Skewer has the wrong length"
-          if skewer_velocity.shape[0]    != nPoints: print "ERROR: Skewer has the wrong length"
+          if skewer_density.shape[0]     != nPoints: print("ERROR: Skewer has the wrong length")
+          if skewer_temperature.shape[0] != nPoints: print("ERROR: Skewer has the wrong length")
+          if skewer_HI_density.shape[0]  != nPoints: print("ERROR: Skewer has the wrong length")
+          if skewer_velocity.shape[0]    != nPoints: print("ERROR: Skewer has the wrong length")
 
 
           skewer_group = outFile.create_group( str(skewer_id) )
@@ -170,14 +170,14 @@ for axis in ['x', 'y', 'z']:
 
   skewer_ids = np.sort( skewer_ids )
   n_skewers = len(skewer_ids)
-  test = range( n_skewers )
+  test = list(range( n_skewers))
   diff = skewer_ids - test
-  print 'Computed {0} skewers.'.format(n_skewers)
-  print ' Ids test  min:{0}  max:{1}'.format(min(diff), max(diff) )
+  print('Computed {0} skewers.'.format(n_skewers))
+  print(' Ids test  min:{0}  max:{1}'.format(min(diff), max(diff) ))
 
 
 
   outFile.attrs['current_z'] = current_z
   outFile.attrs['n'] = n_skewers
   outFile.close()
-  print "Saved File: ", out_file_name 
+  print("Saved File: ", out_file_name) 

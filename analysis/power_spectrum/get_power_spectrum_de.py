@@ -43,7 +43,7 @@ z_list = []
 ps_list = []
 
 n_snapshots = 10
-snapshots = range(n_snapshots)
+snapshots = list(range(n_snapshots))
 
 nSnap =  0
 for nSnap in snapshots:
@@ -66,11 +66,11 @@ data[:,1:] = ps_array
 # 
 out_file_name = 'ps_{0}_gas_cholla_{1}.dat'.format( nPoints, data_name )
 np.savetxt( outDir + out_file_name, data )
-print( "Saved file: {0}".format( outDir + out_file_name ))
+print(( "Saved file: {0}".format( outDir + out_file_name )))
 
 out_file_name = 'ps_{0}_k_values.dat'.format( nPoints )
 np.savetxt( outDir + out_file_name, k_vals )
-print( "Saved file: {0}".format( outDir + out_file_name ))
+print(( "Saved file: {0}".format( outDir + out_file_name )))
 
 
 

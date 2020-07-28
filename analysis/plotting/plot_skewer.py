@@ -135,7 +135,7 @@ ax.set_facecolor(facecolor)
 
 fileName = output_dir + 'skewer.png'
 fig.savefig( fileName,  pad_inches=-0.005,   bbox_inches='tight', dpi=300)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 
 
 

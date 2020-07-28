@@ -97,7 +97,7 @@ n_proc_snaps= (n_index_total-1) // nprocs + 1
 index_start_range = np.array([ rank + i*nprocs for i in range(n_proc_snaps) ])
 index_start_range = index_start_range[ index_start_range < n_index_total ]
 if len(index_start_range) == 0: exit()
-print 'Generating: {0} {1}\n'.format( rank, index_start_range) 
+print('Generating: {0} {1}\n'.format( rank, index_start_range)) 
 
 
 get_statistics = False
@@ -116,7 +116,7 @@ if get_statistics:
   for indx_start in index_start_range:
   # for indx_start in [0]:
     file_name = input_dir + 'projection_{2}_{3}_{0}_{1}.h5'.format( nSnap, indx_start, data_type, field ) 
-    print 'Loading File: {0}'.format(  file_name )
+    print('Loading File: {0}'.format(  file_name ))
     file = h5.File( file_name, 'r' )
     for projection_type in projection_types:
       projection = file[data_type][field][projection_type]
@@ -155,7 +155,7 @@ for indx_start in index_start_range:
 
 
   file_name = input_dir + 'projection_{2}_{3}_{0}_{1}.h5'.format( nSnap, indx_start, data_type, field )
-  print 'Loading File: {0}'.format(  file_name )
+  print('Loading File: {0}'.format(  file_name ))
   file = h5.File( file_name, 'r' )
 
   color = file[data_type][field]['color'][...]
@@ -235,7 +235,7 @@ for indx_start in index_start_range:
 
     out_file_name = output_dir + 'img_background.png'.format(indx_start)
     img_black.save( out_file_name )
-    print "Saved Image: ", out_file_name
+    print("Saved Image: ", out_file_name)
   save_background = False 
   if use_mpi: comm.Barrier()
 
@@ -248,7 +248,7 @@ for indx_start in index_start_range:
   command = os.popen(command)
   command.read()
   command.close()
-  print "Saved Image: ", image_file_name
+  print("Saved Image: ", image_file_name)
 
 
   command = 'rm {1}proj_alpha_{0}.png'.format(indx_start, output_dir)

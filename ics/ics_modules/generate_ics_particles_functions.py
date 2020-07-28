@@ -26,7 +26,7 @@ def Get_PID_Indices( key_pos, domain, ds, data, outputDir, save_pid_indices=True
   
   key_domain, key_delta = keys_domain[key_pos]
   delta = domain['global'][key_delta]
-  print ' Getting Indices: {0}'.format(key_domain)
+  print(' Getting Indices: {0}'.format(key_domain))
   
 
   key_data = keys_data[key_pos]
@@ -35,7 +35,7 @@ def Get_PID_Indices( key_pos, domain, ds, data, outputDir, save_pid_indices=True
   current_a = 1./(current_z + 1)
   pos = data[('all', key_data)].in_units('kpc').v/current_a*h
   n_total = len(pos)
-  print ' N total: {0}'.format(n_total)
+  print(' N total: {0}'.format(n_total))
 
   type_int = np.int16
   pid_indxs = ( pos / delta ).astype( type_int )
@@ -45,7 +45,7 @@ def Get_PID_Indices( key_pos, domain, ds, data, outputDir, save_pid_indices=True
     file_temp_indx = h5.File( outputDir + 'temp_indices_{0}.h5'.format( key_pos ) , 'w')
     file_temp_indx.create_dataset( 'pid_indxs', data=pid_indxs )
     file_temp_indx.close()
-    print '  Saved Indices: {0}'.format(key_domain)
+    print('  Saved Indices: {0}'.format(key_domain))
   else:
     return pid_indxs
 
@@ -59,7 +59,7 @@ def generate_ics_particles_distributed( fields, domain, proc_grid, data, ds, out
       else: indices[key_pos] = Get_PID_Indices( key_pos, domain, ds, data, outputDir, save_pid_indices = False )
   # Load all indices 
   if save_pid_indices:
-    print 'Loading Indices'
+    print('Loading Indices')
     index_x = h5.File( outputDir + 'temp_indices_pos_x.h5', 'r' )['pid_indxs'][...]
     index_y = h5.File( outputDir + 'temp_indices_pos_y.h5', 'r' )['pid_indxs'][...]
     index_z = h5.File( outputDir + 'temp_indices_pos_z.h5', 'r' )['pid_indxs'][...]
@@ -68,7 +68,7 @@ def generate_ics_particles_distributed( fields, domain, proc_grid, data, ds, out
     index_y = indices['pos_y']
     index_z = indices['pos_z']
   
-  print 'Computing Global Indices'
+  print('Computing Global Indices')
   indexs = index_x + index_y * proc_grid[0] + index_z*proc_grid[0]*proc_grid[1]
 
   #Free the indices memory
@@ -87,22 +87,22 @@ def generate_ics_particles_distributed( fields, domain, proc_grid, data, ds, out
 
   
   for field in fields:
-    print "\nSaving Field: ", field
+    print("\nSaving Field: ", field)
     data_field = get_yt_field( field, data, current_a, h )
     if field == 'mass': particle_mass = data_field[0]
-    print ' N total: {0} / {1}'.format(len(data_field), 1024**3)
+    print(' N total: {0} / {1}'.format(len(data_field), 1024**3))
 
     n_local_all = []
     for pId in range(n_procs):
       indx = np.where(indexs == pId)[0]
       n_local = len(indx)
-      print " pId: {0}   n_local:{1}".format( pId, n_local)
+      print(" pId: {0}   n_local:{1}".format( pId, n_local))
       n_local_all.append(n_local)
       # print '  n_local: ', n_local
       data_local = data_field[indx]
       outFile = h5_out_files[pId]
       outFile.create_dataset( field, data = data_local )
-    print "Total Particles Saved: ", sum(n_local_all)
+    print("Total Particles Saved: ", sum(n_local_all))
     
     #Clear the data that was saved
     data_field = None
@@ -114,9 +114,9 @@ def generate_ics_particles_distributed( fields, domain, proc_grid, data, ds, out
     n_local = n_local_all[pId]
     outFile.attrs['particle_mass'] = particle_mass
     outFile.attrs['n_particles_local'] = n_local
-    print "Saved File: ", outFile
+    print("Saved File: ", outFile)
     outFile.close()
-  print 'Files Saved: {0}'.format(outputDir)
+  print('Files Saved: {0}'.format(outputDir))
 
 
 
@@ -129,11 +129,11 @@ def generate_ics_particles_distributed_single_field( field, domain, proc_grid, d
       Get_PID_Indices( key_pos, domain, ds, data, outputDir )
 
   # Load all indices 
-  print 'Loading Indices'
+  print('Loading Indices')
   index_x = h5.File( outputDir + 'temp_indices_pos_x.h5', 'r' )['pid_indxs'][...]
   index_y = h5.File( outputDir + 'temp_indices_pos_y.h5', 'r' )['pid_indxs'][...]
   index_z = h5.File( outputDir + 'temp_indices_pos_z.h5', 'r' )['pid_indxs'][...]
-  print 'Computing Global Indices'
+  print('Computing Global Indices')
   indexs = index_x + index_y * proc_grid[0] + index_z*proc_grid[0]*proc_grid[1]
 
   #Free the indices memory
@@ -151,7 +151,7 @@ def generate_ics_particles_distributed_single_field( field, domain, proc_grid, d
     h5_out_files.append(outFile)
 
 
-  print "\nSaving Field: ", field
+  print("\nSaving Field: ", field)
   data_field = get_yt_field( field, data, current_a, h )
   if field == 'mass': particle_mass = data_field[0]
 
@@ -159,13 +159,13 @@ def generate_ics_particles_distributed_single_field( field, domain, proc_grid, d
   for pId in range(n_procs):
     indx = np.where(indexs == pId)[0]
     n_local = len(indx)
-    print " pId: {0}   n_local:{1}".format( pId, n_local)
+    print(" pId: {0}   n_local:{1}".format( pId, n_local))
     n_local_all.append(n_local)
     # print '  n_local: ', n_local
     data_local = data_field[indx]
     outFile = h5_out_files[pId]
     outFile.create_dataset( field, data = data_local )
-  print "Total Particles Saved: ", sum(n_local_all)
+  print("Total Particles Saved: ", sum(n_local_all))
   
   #Clear the data that was saved
   data_field = None
@@ -177,9 +177,9 @@ def generate_ics_particles_distributed_single_field( field, domain, proc_grid, d
     n_local = n_local_all[pId]
     if field == 'mass': outFile.attrs['particle_mass'] = particle_mass
     outFile.attrs['n_particles_local'] = n_local
-    print "Saved File: ", outFile
+    print("Saved File: ", outFile)
     outFile.close()
-  print 'Files Saved: {0}'.format(outputDir)
+  print('Files Saved: {0}'.format(outputDir))
 
 
 def compress_fields_to_single_file( fields, domain, proc_grid, outputDir, outputBaseName ):
@@ -187,7 +187,7 @@ def compress_fields_to_single_file( fields, domain, proc_grid, outputDir, output
   n_procs = proc_grid[0]*proc_grid[1]*proc_grid[2]
   for pId in range(n_procs):
     # if pId == 'global': continue
-    print '\npId: ', pId
+    print('\npId: ', pId)
 
     # Create the final output file
     file_name = outputDir + outputBaseName + '.{0}'.format(pId)
@@ -198,26 +198,26 @@ def compress_fields_to_single_file( fields, domain, proc_grid, outputDir, output
     for field in fields:
       #Load the field data
       file_name = outputDir + outputBaseName + '.{0}_{1}'.format(pId, field)
-      print ' Loading Field: {0}     File: {1}'.format( field, outputBaseName + '.{0}_{1}'.format(pId, field) )
+      print(' Loading Field: {0}     File: {1}'.format( field, outputBaseName + '.{0}_{1}'.format(pId, field) ))
       inFile = h5.File( file_name, 'r' )
       data_field = inFile[field][...]
       n_local = inFile.attrs['n_particles_local']
       n_local_all.append( n_local )
 
       if field == 'mass':
-        for key in inFile.attrs.keys():
+        for key in list(inFile.attrs.keys()):
           outFile.attrs[key] = inFile.attrs[key]
-        print '  Saved Attrs'
+        print('  Saved Attrs')
 
-      print '  Writing Field: {0}   n_local: {1}'.format( field, n_local )
+      print('  Writing Field: {0}   n_local: {1}'.format( field, n_local ))
       outFile.create_dataset( field, data=data_field )
       inFile.close()
       
     if np.min(n_local_all) != np.max(n_local_all): 
-      print 'ERROR: n_local mismatch'
+      print('ERROR: n_local mismatch')
       extit()
 
-    print 'Saved File: ', outFile
+    print('Saved File: ', outFile)
     outFile.close()
     
 def generate_ics_particles_single_domain( pId, data_in, outDir, outputBaseName,  domain ):
@@ -235,11 +235,11 @@ def generate_ics_particles_single_domain( pId, data_in, outDir, outputBaseName, 
   vel_z = data['vel_z'][...]
   mass = data['mass'][...]
   nPart = pos_x.shape[0]
-  print '  Nparticles: ', nPart
+  print('  Nparticles: ', nPart)
 
 
   outputFileName = outDir + outputBaseName + ".{0}".format(pId)
-  print ' Writing h5 file: ', outputFileName
+  print(' Writing h5 file: ', outputFileName)
   outFile = h5.File( outputFileName, 'w')
   # outFile.attrs['box_size'] = box_size
   outFile.attrs['current_a'] = current_a
@@ -250,20 +250,20 @@ def generate_ics_particles_single_domain( pId, data_in, outDir, outputBaseName, 
   yMin, yMax = domain[pId]['box']['y']
   zMin, zMax = domain[pId]['box']['z']
   
-  print( '{0} x[{1} , {2}] y[{3} , {4}] z[{5}, {6}]'.format( pId, xMin, xMax, yMin, yMax, zMin, aMax))
+  print(( '{0} x[{1} , {2}] y[{3} , {4}] z[{5}, {6}]'.format( pId, xMin, xMax, yMin, yMax, zMin, aMax)))
 
   # indx_x = np.where( ( (pos_x >= xMin) & (pos_x < xMax ) ) )
   # indx_y = np.where( ( (pos_y >= yMin) & (pos_y < yMax ) ) )
   # indx_z = np.where( ( (pos_z >= zMin) & (pos_z < zMax ) ) )
   # indx = [ idx for idx in range(len(pos_x)) if ( ( idx in indx_x ) )]
 
-  print " Finding indexs X"
+  print(" Finding indexs X")
   indx_x = set(np.where( ( (pos_x >= xMin) & (pos_x < xMax ) ) )[0])
-  print " Finding indexs Y"
+  print(" Finding indexs Y")
   indx_y = set(np.where( ( (pos_y >= yMin) & (pos_y < yMax ) ) )[0])
-  print " Finding indexs Z"
+  print(" Finding indexs Z")
   indx_z = set(np.where( ( (pos_z >= zMin) & (pos_z < zMax ) ) )[0])
-  print " Finding indexs All"
+  print(" Finding indexs All")
   indx = indx_x.intersection( indx_y)
   indx = list(indx.intersection( indx_z ))
   n_local = len(indx)
@@ -274,8 +274,8 @@ def generate_ics_particles_single_domain( pId, data_in, outDir, outputBaseName, 
   vel_y_l = vel_y[indx]
   vel_z_l = vel_z[indx]
   mass_l = mass[indx]
-  print '  n_local: ', n_local
-  print '  Current_a: ', current_a
+  print('  n_local: ', n_local)
+  print('  Current_a: ', current_a)
   outFile.attrs['n_particles_local'] = n_local
   # outFile.attrs['N_DM_file'] = np.float(nPart)
   outFile.create_dataset( 'mass', data=mass_l )
@@ -286,7 +286,7 @@ def generate_ics_particles_single_domain( pId, data_in, outDir, outputBaseName, 
   outFile.create_dataset( 'vel_y', data=vel_y_l  )
   outFile.create_dataset( 'vel_z', data=vel_z_l  )
   outFile.close()
-  print ''
+  print('')
   return n_local
 
 
@@ -308,13 +308,13 @@ def generate_ics_particles( data_in, outDir, outputBaseName, proc_grid, box_size
   particle_mass = mass[0]
   nPart = pos_x.shape[0]
   ids = np.arange(nPart).astype(np.int64)
-  print '  Nparticles: ', nPart
+  print('  Nparticles: ', nPart)
 
   dx = domain[0]['box']['dx']
   dy = domain[0]['box']['dy']
   dz = domain[0]['box']['dz']
   
-  print( dx, dy, dz)
+  print(( dx, dy, dz))
 
   index_x = ( pos_x / dx ).astype(np.int)
   index_y = ( pos_y / dy ).astype(np.int)
@@ -327,7 +327,7 @@ def generate_ics_particles( data_in, outDir, outputBaseName, proc_grid, box_size
   for pId in range(nprocs):
 
     outputFileName = outDir + outputBaseName + ".{0}".format(pId)
-    print ' Writing h5 file: ', outputFileName
+    print(' Writing h5 file: ', outputFileName)
     outFile = h5.File( outputFileName, 'w')
     outFile.attrs['current_a'] = current_a
     outFile.attrs['current_z'] = current_z
@@ -344,8 +344,8 @@ def generate_ics_particles( data_in, outDir, outputBaseName, proc_grid, box_size
     vel_z_l = vel_z[indx]
     mass_l = mass[indx]
     ids_l = ids[indx]
-    print '  n_local: ', n_local
-    print '  Current_a: ', current_a
+    print('  n_local: ', n_local)
+    print('  Current_a: ', current_a)
     outFile.attrs['n_particles_local'] = n_local
     # outFile.attrs['N_DM_file'] = np.float(nPart)
     outFile.create_dataset( 'mass', data=mass_l )
@@ -358,8 +358,8 @@ def generate_ics_particles( data_in, outDir, outputBaseName, proc_grid, box_size
     outFile.create_dataset( 'particle_IDs', data=ids_l.astype(np.int64)  )
 
     outFile.close()
-    print ''
-  print "Total Particles Saved: ", sum(n_local_all)
+    print('')
+  print("Total Particles Saved: ", sum(n_local_all))
   # domain = get_domain_block( proc_grid, box_size, grid_size )
   #
   # current_a = data_in['current_a']

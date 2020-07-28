@@ -50,7 +50,7 @@ def evaluate_field_kernel( h, point, field, pos_all, tree ):
 
 
 def extend_pewriodic_boundaries( h_max, Lbox, data, fields, print_out=True ):
-  if print_out: print "Extending Periodic Boundaries"
+  if print_out: print("Extending Periodic Boundaries")
   pos = data['pos']
   N_gas = pos.shape[0]
   pos_x, pos_y, pos_z = pos.T
@@ -63,8 +63,8 @@ def extend_pewriodic_boundaries( h_max, Lbox, data, fields, print_out=True ):
   indices_ghost = np.concatenate( (indices_l, indices_r, indices_d, indices_u, indices_b, indices_t ) )
   N_ghost = len( indices_ghost )
 
-  if print_out: print " N_gas: ", N_gas
-  if print_out: print " N_ghost: ", N_ghost
+  if print_out: print(" N_gas: ", N_gas)
+  if print_out: print(" N_ghost: ", N_ghost)
 
   data_periodic = {}
   for field in fields:
@@ -87,7 +87,7 @@ def extend_pewriodic_boundaries( h_max, Lbox, data, fields, print_out=True ):
 
   N_gas_periodic = len(data_periodic['mass'])
   data_periodic['N_gas'] = N_gas_periodic
-  if print_out: print" N_periodic: {0}   {1}".format( N_gas_periodic, N_gas+N_ghost) 
+  if print_out: print(" N_periodic: {0}   {1}".format( N_gas_periodic, N_gas+N_ghost)) 
   return data_periodic
   
 

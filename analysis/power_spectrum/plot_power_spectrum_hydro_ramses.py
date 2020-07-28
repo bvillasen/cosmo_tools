@@ -161,7 +161,7 @@ for i in range( n_plots ):
     if n == n_skip: continue
     if n==0: ax1.plot( k_vals, ps_1[n], '--', c='k', linewidth=1, label=code_label[i],  )
     label = r'$z =  {0:.1f}$'.format(z_0[n])
-    print label
+    print(label)
     # color = colormap[n_colors - counter - 1 + offset ]
     color = colormap[counter + offset]
     ax1.plot( k_vals, ps_0[n],  linewidth=3, label=label, color=color )
@@ -225,9 +225,9 @@ for i in range( n_plots ):
     ax1.set_ylabel( r'$P\,(k)$   $\,\,[\,h^3\mathrm{Mpc}^{-3}\,]$', fontsize=17)
     ax2.set_ylabel( r'$\Delta P\,(k)/P\,(k)$', fontsize=17, labelpad=1)
 
-  [i.set_linewidth(border_width) for i in ax1.spines.itervalues()]
-  [i.set_linewidth(border_width) for i in ax2.spines.itervalues()]
+  [i.set_linewidth(border_width) for i in ax1.spines.values()]
+  [i.set_linewidth(border_width) for i in ax2.spines.values()]
 
 fileName = outDir + out_file_name
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=fig_dpi)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)

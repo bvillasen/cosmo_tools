@@ -82,7 +82,7 @@ cosmo_spaces = ['redshift', 'real']
 
 
 data = { }
-snapshots_indices = range(74, 170, 1)
+snapshots_indices = list(range(74, 170, 1))
 
 nrows = 1
 ncols = 1
@@ -110,7 +110,7 @@ for i,z_range in enumerate(z_range_list):
   F_vals_z_range = []
   for nSnap in snap_indices:
 
-    print nSnap
+    print(nSnap)
     
     inputFileName = input_dir + 'optical_depth_{0}.h5'.format(nSnap)
     inFile = h5.File( inputFileName, 'r')
@@ -159,7 +159,7 @@ ax.set_xlabel(r'$ \tau_{eff}$', fontsize=fs )
 
 fileName = output_dir + 'optical_depth_distribution_cumulative.png'
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 
 
 

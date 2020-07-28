@@ -60,7 +60,7 @@ for i in range( n_samples ):
   n_HI_max = n_HI_max_vals[i]
   color = colors[i]
   
-  print n_HI_max
+  print(n_HI_max)
   
   n_HI_sigma = 20
   temp = 1e4
@@ -92,7 +92,7 @@ for i in range( n_samples ):
 
   diff = ( F_mean_redshift - F_mean_real ) / F_mean_real
   
-  print diff
+  print(diff)
   # print ( tau_mean_redshift - tau_mean_real ) / tau_mean_real
 
 
@@ -143,5 +143,5 @@ for i in range( n_samples ):
 
 fileName = output_dir + 'transmited_flux_test.png'
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 

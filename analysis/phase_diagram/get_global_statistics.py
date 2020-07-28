@@ -72,7 +72,7 @@ dens_HeII_mean_all = []
 
 dens_range = 0.1
 
-snap_indices = np.array(range( 20, 170 )) 
+snap_indices = np.array(list(range( 20, 170))) 
 
 n_to_compress = len(snap_indices)
 n_proc_snaps= (n_to_compress-1) // nprocs + 1
@@ -80,23 +80,23 @@ proc_snaps= np.array([ rank + i*nprocs for i in range(n_proc_snaps) ])
 proc_snaps= proc_snaps[ proc_snaps < n_to_compress ]
 proc_snaps = snap_indices[proc_snaps]
 if len(proc_snaps) == 0: exit()
-print( ' {0}: {1}'.format( rank, proc_snaps) )
+print(( ' {0}: {1}'.format( rank, proc_snaps) ))
 time.sleep(1)
 if use_mpi: comm.Barrier()
 
 nSnap = 169
 for nSnap in proc_snaps:
 
-  print ''
+  print('')
 
   field = 'density'
   data_snapshot = load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, domain, precision, proc_grid,  show_progess=show_progess )
   current_z = data_snapshot['Current_z']
-  print current_z
+  print(current_z)
   data_field = data_snapshot[data_type][field]
   z_all.append(current_z)
   dens_mean = data_field.mean() 
-  print "Dens Mean: ", dens_mean
+  print("Dens Mean: ", dens_mean)
   indices_p = data_field > dens_mean * ( 1 - dens_range )
   indices_m = data_field < dens_mean * ( 1 + dens_range )
   indices = indices_m * indices_p
@@ -164,6 +164,6 @@ data_all = np.array([ z_all, T0_all, gamma_all ]).T
 
 outFileName = output_dir + 'thermal_history_{0}.txt'.format( uvb )
 np.savetxt( outFileName, data_all )
-print "Saved File: ", output_dir + outFileName 
+print("Saved File: ", output_dir + outFileName) 
 # 
 # 

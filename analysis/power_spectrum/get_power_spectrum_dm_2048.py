@@ -20,7 +20,7 @@ from tools import *
 
 if len(sys.argv) == 1: index = 0
 else: index = int(sys.argv[1])
-print 'Index: ', index
+print('Index: ', index)
 
 # 
 # from mpi4py import MPI
@@ -73,21 +73,21 @@ snapshots = [0]
 for nSnap in snapshots:
 
   start = time.time()
-  print ' Loading DM Density'
+  print(' Loading DM Density')
   data_cholla = load_snapshot_data( nSnap, chollaDir, hydro=False, cool=False )
   current_z = data_cholla['current_z']
   dens = data_cholla['dm']['density'][...]
   n_threads = 56
-  print ' Computing FFT n_threads:{0}'.format(n_threads)
+  print(' Computing FFT n_threads:{0}'.format(n_threads))
   power_spectrum, k_vals, count = get_power_spectrum_fftw( dens, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples, n_threads=n_threads)
   end = time.time()
-  print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
+  print(( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) ))
 
 
   data = np.array([ k_vals, power_spectrum])
   outfile_name = powerDir + 'power_spectrum_{0}.dat'.format(nSnap)
   np.savetxt( outfile_name, data)
-  print 'Saved File: ', outfile_name
+  print('Saved File: ', outfile_name)
 
 
 # 

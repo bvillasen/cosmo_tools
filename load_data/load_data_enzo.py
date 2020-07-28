@@ -83,9 +83,9 @@ def load_snapshot_enzo_yt( nSnap, inDir, cooling=False, metals=False, hydro=True
   h = ds.hubble_constant
   current_z = ds.current_redshift
   current_a = 1./(current_z + 1)
-  print current_a
-  print current_z
-  print h
+  print(current_a)
+  print(current_z)
+  print(h)
 
   if hydro:
     data_grid = ds.covering_grid( level=0, left_edge=ds.domain_left_edge, dims=ds.domain_dimensions )

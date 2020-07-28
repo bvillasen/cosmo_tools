@@ -210,4 +210,4 @@ ax.text(0.55, 0.95, text, horizontalalignment='left',  verticalalignment='center
 
 fileName = figures_dir + 'vel_distribution_skewers.png'.format(nSnap)
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)

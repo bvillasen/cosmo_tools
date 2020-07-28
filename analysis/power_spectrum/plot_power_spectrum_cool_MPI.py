@@ -10,7 +10,7 @@ system = 'lux'
 if system == 'shamrock': dev_dir = '/home/bruno/Desktop/Dropbox/Developer/'
 if system == 'lux': dev_dir = '/data/groups/comp-astro/bruno/'
 cosmo_dir = dev_dir + 'cosmo_tools/'
-print 'Cosmos Dir: ', cosmo_dir
+print('Cosmos Dir: ', cosmo_dir)
 toolsDirectory = cosmo_dir + "tools/"
 load_dir = cosmo_dir + "load_data/"
 figures_dir = cosmo_dir + 'figures/'
@@ -89,7 +89,7 @@ n_power_data = 6
 ps_all = np.ones( [n_power_data, n_kSamples] ) 
 # ps_all *= rank
 
-print " Cholla: ", nSnap
+print(" Cholla: ", nSnap)
 
 # if i not in [9]: continue
 data_cholla = load_snapshot_data( nSnap, chollaDir_0, cool=True )
@@ -109,7 +109,7 @@ ps_all[2] = ps_gas_H_cholla
 # # ps_all[3] = ps_gas_HII_cholla
 # 
 # 
-print ' Enzo: ', nSnap
+print(' Enzo: ', nSnap)
 # data_enzo = load_snapshot_enzo( nSnap, enzoDir, dm=True, cool=True)
 data_enzo = load_snapshot_data( nSnap, chollaDir_1, cool=True )
 current_a_enzo = data_enzo['current_a']
@@ -316,5 +316,5 @@ ax4.set_xscale('log')
 
 # ax1.xlim()
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=300)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 

@@ -103,7 +103,7 @@ kernel_types = ['smooth', 'scatter']
 added_header = False
 for kernel_type in kernel_types:
   
-  if rank == 0: print "Kernel Type: ", kernel_type
+  if rank == 0: print("Kernel Type: ", kernel_type)
   
   fields = [ 'density' ]
   data_snapshot = load_snapshot_data_distributed( nSnap, inDir, data_type, fields, subgrid, domain, precision, proc_grid,  show_progess=show_progess, kernel_types=kernel_types )
@@ -119,7 +119,7 @@ for kernel_type in kernel_types:
     dens_mean_global = np.mean( dens_mean_all)
   else:
     dens_mean_global = dens_mean_local
-  if rank == 0: print 'Dens Mean = {0}'.format(dens_mean_global) 
+  if rank == 0: print('Dens Mean = {0}'.format(dens_mean_global)) 
 
   #Get Overdensity
   density = density / dens_mean_global
@@ -143,7 +143,7 @@ for kernel_type in kernel_types:
   bins_temp = np.logspace( temp_start, temp_end, nbins, base=10 )
 
   #Get the phase diagram
-  if rank == 0: print " Generating Phase Diagram,   n_bins:{0}".format(nbins)
+  if rank == 0: print(" Generating Phase Diagram,   n_bins:{0}".format(nbins))
   centers_dens, centers_temp, phase = get_phase_diagram_bins( density, temperature, bins_dens, bins_temp, nbins, ncells )
 
   if use_mpi:
@@ -161,7 +161,7 @@ for kernel_type in kernel_types:
     else:
       phase_sum = phase_all
 
-    print "Phase sum: {0} / {1}".format(phase_sum.sum(), ncells)
+    print("Phase sum: {0} / {1}".format(phase_sum.sum(), ncells))
 
     if added_header == False: outFile.attrs['current_z'] = current_z
     added_header = True
@@ -175,7 +175,7 @@ for kernel_type in kernel_types:
     
   
 outFile.close()
-print "Saved File: ", outFileName
+print("Saved File: ", outFileName)
 
 if use_mpi:comm.Barrier()
 

@@ -25,7 +25,7 @@ field = 'density'
 
 # Load Projection file for the given field
 file_name = input_dir + 'projection_{2}_{3}_{0}_{1}.h5'.format( nSnap, frame_index, data_type, field )
-print ('Loading File: {0}'.format(  file_name ))
+print(('Loading File: {0}'.format(  file_name )))
 file = h5.File( file_name, 'r' )
 
 # Get the color projection
@@ -42,7 +42,7 @@ field = 'temperature'
 
 # Load Projection file for the given field
 file_name = input_dir + 'projection_{2}_{3}_{0}_{1}.h5'.format( nSnap, frame_index, data_type, field )
-print ('Loading File: {0}'.format(  file_name ))
+print(('Loading File: {0}'.format(  file_name )))
 file = h5.File( file_name, 'r' )
 
 # Get the color projection

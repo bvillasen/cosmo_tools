@@ -99,7 +99,7 @@ for n,nSnap in enumerate(snapshots):
   dens = inFile['density'][...]
   inFile.close()
   
-  print( 'Snap: {0}   current_z: {1:.3f}'.format( nSnap, current_z ))
+  print(( 'Snap: {0}   current_z: {1:.3f}'.format( nSnap, current_z )))
   power_spectrum_paris, k_vals_paris, count_paris = get_power_spectrum( dens, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples)
   
   
@@ -112,7 +112,7 @@ for n,nSnap in enumerate(snapshots):
   dens = inFile['density'][...]
   inFile.close()
   
-  print( 'Snap: {0}   current_z: {1:.3f}'.format( nSnap, current_z ))
+  print(( 'Snap: {0}   current_z: {1:.3f}'.format( nSnap, current_z )))
   power_spectrum_pfft, k_vals_pfft, count_pfft = get_power_spectrum( dens, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples)
   
   # 
@@ -132,7 +132,7 @@ for n,nSnap in enumerate(snapshots):
   
   diff = ( power_spectrum_0 - power_spectrum_1 ) / power_spectrum_1
   
-  print "Difference:  min: {0}    max: {1}".format( diff.min(), diff.max() )
+  print("Difference:  min: {0}    max: {1}".format( diff.min(), diff.max() ))
   
   
   label = 'z = {0:.1f}'.format(current_z)
@@ -203,4 +203,4 @@ out_file_name = 'ps_comparison_cufft_sor_128.png'
 fileName = outDir + out_file_name
 if not transparent: fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', facecolor=fig.get_facecolor(), dpi=300)
 else: fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', transparent=True, dpi=300)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)

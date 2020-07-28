@@ -73,7 +73,7 @@ proc_skewers= proc_skewers[ proc_skewers < n_skewers ]
 if len(proc_skewers) == 0: exit()
 skewers_ids_proc = skewers_ids[proc_skewers]
 n_skewers_proc = len( skewers_ids_proc )
-print( ' {0}: {1}'.format( rank, skewers_ids_proc) )
+print(( ' {0}: {1}'.format( rank, skewers_ids_proc) ))
 # comm.Barrier()
 
 snapshots_indices = [83]

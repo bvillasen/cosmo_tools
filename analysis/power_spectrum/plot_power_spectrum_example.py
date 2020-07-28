@@ -91,7 +91,7 @@ axes = [ ax0, ax4, ax1, ax2, ax3 ]
 # Set the borders to a given color...
 for ax in axes:
     ax.tick_params(color=text_color, labelcolor=text_color, labelsize=15)
-    for spine in ax.spines.values():
+    for spine in list(ax.spines.values()):
         spine.set_edgecolor(text_color)
         
 fs = 22        
@@ -108,7 +108,7 @@ ax0.axes.xaxis.set_ticklabels([])
 ax1.plot(x, components[0], color='C0',)
 ax1.set_xlim(0, 2*np.pi)
 ax1.set_ylabel("C1", fontsize=fs, color=text_color )
-for spine in ax1.spines.values():
+for spine in list(ax1.spines.values()):
     spine.set_lw(0.5)
 ax1.axes.xaxis.set_ticklabels([])
 k = 2*np.pi / lambda_vals[0]
@@ -121,7 +121,7 @@ ax1.text(0.90, 0.80, label, color=text_color, alpha=1, fontsize=20, horizontalal
 ax2.plot(x, components[1], color='C0')
 ax2.set_xlim(0, 2*np.pi)
 ax2.set_ylabel("C2", fontsize=fs, color=text_color )
-for spine in ax2.spines.values():
+for spine in list(ax2.spines.values()):
     spine.set_lw(0.5)
 ax2.axes.xaxis.set_ticklabels([])
 k = 2*np.pi / lambda_vals[1]
@@ -132,7 +132,7 @@ ax2.text(0.90, 0.80, label, color=text_color, alpha=1, fontsize=20, horizontalal
 ax3.plot(x, components[2], color='C0')
 ax3.set_xlim(0, 2*np.pi)
 ax3.set_ylabel("C3", fontsize=fs, color=text_color )
-for spine in ax3.spines.values():
+for spine in list(ax3.spines.values()):
     spine.set_lw(0.5)
 # ax3.axes.xaxis.set_ticklabels([])
 ax3.set_xlabel( r'$X$', fontsize=fs, color=text_color )
@@ -176,4 +176,4 @@ ax4.set_facecolor('k')
 
 fileName = outDir + out_file_name
 fig.savefig( fileName,  pad_inches=0.1, facecolor=fig.get_facecolor(),  bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)

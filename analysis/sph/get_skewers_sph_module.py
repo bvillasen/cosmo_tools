@@ -52,7 +52,7 @@ axis = 'x'
 
 
 data = {}
-if print_out: print "Loading Particles Data "
+if print_out: print("Loading Particles Data ")
 in_file_name = input_dir + 'snapshot_{0}_complete.h5'.format(nSnap)
 inFile = h5.File( in_file_name, 'r' )
 
@@ -72,7 +72,7 @@ if axis == 'z': vel_los_key = 'vel_z'
 
 fields = [ 'mass', 'rho', 'u', 'hsml', 'pos_x', 'pos_y', 'pos_z', 'Nh', 'HeI', 'HeII' , 'vel_x', 'vel_y', 'vel_z' ]
 for field in fields:
-  if print_out:  print " Loading Field ", field
+  if print_out:  print(" Loading Field ", field)
   data[field] = inFile[field][...]
   # data[field] = data[field][indices]
 inFile.close()
@@ -103,7 +103,7 @@ HeII_rho  = HeII * X * rho * 4
 HeIII_rho = Y * rho - HeI_rho - HeII_rho
 mu = rho / ( HI_rho + 2*HII_rho + ( HeI_rho + 2*HeII_rho + 3*HeIII_rho) / 4 )
 
-if print_out: print 'Building Tree'
+if print_out: print('Building Tree')
 tree = KDTree( pos )
 # tree = 0
 

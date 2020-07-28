@@ -71,7 +71,7 @@ space = 'redshift'
 uvb = 'pchw18'
 
 data = { }
-snapshots_indices = range(74, 170, 1)
+snapshots_indices = list(range(74, 170, 1))
 
 
 
@@ -92,7 +92,7 @@ for nPoints in nPoints_list:
 
   for nSnap in snapshots_indices:
 
-    print nSnap
+    print(nSnap)
 
     inputFileName = input_dir + 'optical_depth_{0}.h5'.format(nSnap)
     inFile = h5.File( inputFileName, 'r')
@@ -215,7 +215,7 @@ if plot_observed:
 
 
 ax.tick_params(which='both', color=text_color, labelcolor=text_color, labelsize=15)
-for spine in ax.spines.values():
+for spine in list(ax.spines.values()):
     spine.set_edgecolor(text_color)
 
 
@@ -245,7 +245,7 @@ if plot_observed: fileName += '_data'
 fileName += '.png'
 if not transparent: fig.savefig( fileName ,  pad_inches=0.1, facecolor=fig.get_facecolor(), bbox_inches='tight', dpi=200)
 else: fig.savefig( fileName,  pad_inches=0.1, transparent=True, bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 
 
 

@@ -16,10 +16,10 @@ nxp = ( nx/2 + 1)
 n_slab = nxp * ny
 
 n_mpi = mpi[0]*mpi[1]*mpi[2]
-print n_mpi
+print(n_mpi)
 
-print n_per_gpu
-print n_slab / n_mpi 
-print nz / n_mpi
+print(n_per_gpu)
+print(n_slab / n_mpi) 
+print(nz / n_mpi)
 
 

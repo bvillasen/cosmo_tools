@@ -36,7 +36,7 @@ for axis in axis_list:
 
   #Create Output File 
   outFileName = output_dir + 'skewers_{0}_{1}.h5'.format( axis, nSnap, )
-  print "Writing to File: ", outFileName 
+  print("Writing to File: ", outFileName) 
   outFile = h5.File( outFileName, 'w' )
 
 
@@ -46,13 +46,13 @@ for axis in axis_list:
 
 
     inFileName =  input_dir + 'skewers_{0}_{1}.h5.{2}'.format( axis, nSnap, p_id )
-    print "Loading File: ", inFileName 
+    print("Loading File: ", inFileName) 
     inFile = h5.File( inFileName, 'r' )
     current_z = inFile.attrs['current_z']
     n_local = inFile.attrs['n']
     n_skewers += n_local
 
-    for skewer_id in inFile.keys():
+    for skewer_id in list(inFile.keys()):
       skewer_data        = inFile[skewer_id]
       skewer_density     = skewer_data['density'][...]
       skewer_HI_density  = skewer_data['HI_density'][...]
@@ -73,7 +73,7 @@ for axis in axis_list:
   outFile.attrs['n'] = n_skewers
 
 
-  print "Saved {0} skewers".format(n_skewers)
-  print "Saved File: ", outFileName 
+  print("Saved {0} skewers".format(n_skewers))
+  print("Saved File: ", outFileName) 
   outFile.close()  
     

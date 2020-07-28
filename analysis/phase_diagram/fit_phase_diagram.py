@@ -46,7 +46,7 @@ nSnap = 169
 
 
 inFileName = input_dir + 'phase_diagram_data_{0}.h5'.format(nSnap)
-print( 'Loading File: ' + inFileName)
+print(( 'Loading File: ' + inFileName))
 inFile = h5.File( inFileName, 'r')
 current_z = inFile.attrs['current_z']
 phase = inFile['phase'][...] / ncells
@@ -112,7 +112,7 @@ temp_sigma_r_values = np.array( temp_sigma_r_values )
 data_out = np.array([ overdensity_values, temp_mean_values, temp_sigma_values, temp_sigma_l_values, temp_sigma_r_values ])
 outFileName = output_dir + 'mean_phase_region_{0}.txt'.format(nSnap)
 np.savetxt(outFileName, data_out)
-print "Saved File: ", outFileName
+print("Saved File: ", outFileName)
 
 #Linear Regresion
 def linear_model( x, T0, gamma ):
@@ -132,7 +132,7 @@ h = "T0, gamma, T_0_sigma, gamma_sigma, delta_left, delta_right, pcov"
 data = np.array([ fit_T0, fit_gamma, fit_T0_sigma, fit_gamma_sigma, dens_line_l, dens_line_r])
 outFileName = output_dir + 'fit_linear_regresion_{0}.txt'.format(nSnap)
 np.savetxt( outFileName, data, header=h )
-print "Saved File: ", outFileName
+print("Saved File: ", outFileName)
 
   # 
   

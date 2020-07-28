@@ -57,7 +57,7 @@ for axis in axis_list:
 
 
   in_file_name = inDir + 'snapshot_{0}_complete.h5'.format(nSnap)
-  if print_out: print "Loading File: ", in_file_name
+  if print_out: print("Loading File: ", in_file_name)
   inFile = h5.File( in_file_name, 'r' )
 
 
@@ -69,16 +69,16 @@ for axis in axis_list:
   N_gas = inFile.attrs['N_gas']
   hsml_max = inFile.attrs['hsml_max']
 
-  if print_out: print "N_gas: ", N_gas
+  if print_out: print("N_gas: ", N_gas)
 
   nprocs = proc_grid[0] * proc_grid[1] * proc_grid[2] 
 
 
   data = {}
-  print 'Loading Data '
+  print('Loading Data ')
   fields = [  'pos_x', 'pos_y', 'pos_z', ]
   for field in fields:
-    print " Loading Field ", field
+    print(" Loading Field ", field)
     data[field] = inFile[field][...]
 
 
@@ -102,10 +102,10 @@ for axis in axis_list:
     indices_all = indices_x * indices_y * indices_z
     indices = np.where( indices_all == True )[0]
     N_local = len( indices )
-    if print_out: print "Pid: {0}   {1}  {2}  {3}  N local: {4}".format( p_id, domain_x, domain_y, domain_z, N_local)
+    if print_out: print("Pid: {0}   {1}  {2}  {3}  N local: {4}".format( p_id, domain_x, domain_y, domain_z, N_local))
 
     outFileName = output_dir + '{0}_indices_{1}.h5.{2}'.format(nSnap, axis, p_id)
-    print ' Saving File: ', outFileName
+    print(' Saving File: ', outFileName)
 
     file = h5.File( outFileName, 'w' )
 

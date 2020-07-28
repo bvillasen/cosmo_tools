@@ -39,12 +39,12 @@ def get_domain_block( proc_grid, box_size, grid_size ):
   return domain
 
 def get_domain_parent( domain, domain_parent):
-  for i in domain.keys():
+  for i in list(domain.keys()):
     proc_domain = domain[i]
     center_x = proc_domain['box']['center_x']
     center_y = proc_domain['box']['center_y']
     center_z = proc_domain['box']['center_z']
-    for parent_id in domain_parent.keys():
+    for parent_id in list(domain_parent.keys()):
       xMin, xMax = domain_parent[parent_id]['box']['x']
       yMin, yMax = domain_parent[parent_id]['box']['y']
       zMin, zMax = domain_parent[parent_id]['box']['z']

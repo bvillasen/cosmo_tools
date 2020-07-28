@@ -82,7 +82,7 @@ kernel_types = ['smooth', 'scatter']
 
 for kernel_type in kernel_types:
   
-  print kernel_type
+  print(kernel_type)
   kernel_group = outFile.create_group( kernel_type )
 
   skewer_ids = []
@@ -135,14 +135,14 @@ for kernel_type in kernel_types:
 
   skewer_ids = np.sort( skewer_ids )
   n_skewers = len(skewer_ids)
-  test = range( n_skewers )
+  test = list(range( n_skewers))
   diff = skewer_ids - test
-  print 'Computed {0} skewers.'.format(n_skewers)
-  print ' Ids test  min:{0}  max:{1}'.format(min(diff), max(diff) )
+  print('Computed {0} skewers.'.format(n_skewers))
+  print(' Ids test  min:{0}  max:{1}'.format(min(diff), max(diff) ))
 
 
 
 outFile.attrs['current_z'] = current_z
 outFile.attrs['n'] = n_skewers
 outFile.close()
-print "Saved File: ", out_file_name 
+print("Saved File: ", out_file_name) 

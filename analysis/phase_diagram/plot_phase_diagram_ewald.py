@@ -54,10 +54,10 @@ kernel_types = [ 'smooth', 'scatter' ]
 for kernel_type in kernel_types:
   data['sph'][kernel_type] = {}
   inFileName = input_dir_sph + 'phase_diagram_data_{0}.h5'.format(nSnap)
-  print 'Loading File: ', inFileName
+  print('Loading File: ', inFileName)
   inFile = h5.File( inFileName, 'r')
   current_z = inFile.attrs['current_z']
-  print current_z
+  print(current_z)
   phase = inFile[kernel_type]['phase'][...]
   centers_dens = inFile[kernel_type]['centers_dens'][...]
   centers_temp = inFile[kernel_type]['centers_temp'][...]
@@ -77,10 +77,10 @@ for kernel_type in kernel_types:
 
 nSnap = 82
 inFileName = input_dir_grid + 'phase_diagram_data_{0}.h5'.format(nSnap)
-print 'Loading File: ', inFileName
+print('Loading File: ', inFileName)
 inFile = h5.File( inFileName, 'r')
 current_z = inFile.attrs['current_z']
-print current_z
+print(current_z)
 phase = inFile['phase'][...]
 centers_dens = inFile['centers_dens'][...]
 centers_temp = inFile['centers_temp'][...]
@@ -248,7 +248,7 @@ for i in range(n_data):
   # ax.set_facecolor('k')
 
   ax.tick_params(color=textcolor, labelcolor=textcolor, labelsize=15)
-  for spine in ax.spines.values():
+  for spine in list(ax.spines.values()):
       spine.set_edgecolor(textcolor)
       # spine.set_lw(0.5)
 
@@ -264,7 +264,7 @@ for i in range(n_data):
 
 fileName = output_dir + 'phase_diagram_sph_grid_z5.5.png'.format(nSnap)
 fig.savefig( fileName,  pad_inches=0.1,  facecolor=fig.get_facecolor(),  bbox_inches='tight', dpi=300)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 
 
 # 

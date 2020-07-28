@@ -38,7 +38,7 @@ create_directory( output_dir )
 nSnap = 12
 
 in_file_name = inDir + 'snapshot_{0}.h5'.format(nSnap)
-if print_out: print "Loading File: ", in_file_name
+if print_out: print("Loading File: ", in_file_name)
 inFile = h5.File( in_file_name, 'r' )
 
 
@@ -104,7 +104,7 @@ data = {}
 n_particles = len(mass_slice)
 
 #Build the KDTree
-if print_out: print "Building KDTree"
+if print_out: print("Building KDTree")
 tree = KDTree( pos_slice )
 
 
@@ -124,8 +124,8 @@ if len(proc_indices) == 0: exit()
 
 n_particles_local = len(proc_indices)
 if print_out: 
-  print "N particles slice: ", n_particles
-  print "N particles local: ", n_particles_local
+  print("N particles slice: ", n_particles)
+  print("N particles local: ", n_particles_local)
 if use_mpi: comm.Barrier()
 
 
@@ -136,7 +136,7 @@ dens_vals_kernel = []
 dens_vals = []
 hsml_vals = []
 pos_x_list, pos_y_list, pos_z_list = [], [], []
-if print_out: print "Getting Density"
+if print_out: print("Getting Density")
 comm.Barrier()
 
 for id in range( n_particles_local ):
@@ -194,11 +194,11 @@ dens_smooth_local = np.array( dens_vals_smooth).astype(np.float64)
 h_smooth_local = np.array( h_smooth_vals)
 
 
-print "Finished: {0}".format(rank)
+print("Finished: {0}".format(rank))
 comm.Barrier()
 
 outputFileName = output_dir + 'data_kernel_{0}_{1}.h5'.format(nSnap, rank)
-print "Saving File: ", outputFileName
+print("Saving File: ", outputFileName)
 file = h5.File( outputFileName, 'w' )
 file.attrs['current_z'] = current_z
 file.create_dataset( 'N_neighbours', data=N_neighbours_local)

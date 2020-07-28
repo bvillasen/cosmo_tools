@@ -39,7 +39,7 @@ plot_dm = True
 
 in_file_name = input_dir + 'projections_{0}_{1}.h5'.format( nSnap, n_depth )
 if plot_dm: in_file_name = input_dir + 'projections_{0}_{1}_dm.h5'.format( nSnap, n_depth )
-print ' Loading File: ', in_file_name
+print(' Loading File: ', in_file_name)
 in_file = h5.File( in_file_name, 'r' )
 
 
@@ -138,7 +138,7 @@ for field in fields:
   out_file_name = output_dir + 'projection_{0}_{1}_{2}_full.png'.format( field, nSnap, n_depth, )
   if save_full: 
     img_alpha.save( out_file_name )
-    print 'Saved Image: ', out_file_name
+    print('Saved Image: ', out_file_name)
 
 
 
@@ -166,7 +166,7 @@ for field in fields:
   img_alpha = Image.fromarray( rgba_data_bytes )
   out_file_name = output_dir + 'projection_{0}_{1}_{2}_zoom_{3:.1f}.png'.format( field, nSnap, n_depth, expand_factor )
   img_alpha.save( out_file_name )
-  print 'Saved Image: ', out_file_name
+  print('Saved Image: ', out_file_name)
 
 
 

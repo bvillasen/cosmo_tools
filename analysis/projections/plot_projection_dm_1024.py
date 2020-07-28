@@ -67,7 +67,7 @@ transparent = True
 proj_offset = 0
 proj_depth = 200
 
-print nSnap
+print(nSnap)
 fileName = 'projection_{0}.png'.format(nSnap)
 if transparent: fileName = 'projection_{0}_transparent.png'.format(nSnap)
 
@@ -86,8 +86,8 @@ proj = get_projection( dens, proj_offset, proj_depth, log=False )
 proj = np.log10(proj)
 proj_min = proj.min()
 proj_max = proj.max()
-print proj2_min, proj2_max
-print proj_min, proj_max
+print(proj2_min, proj2_max)
+print(proj_min, proj_max)
 
 
 
@@ -176,8 +176,8 @@ if not transparent: fig.patch.set_facecolor('black')
 if not transparent: fig.savefig( outDir + fileName,  bbox_inches='tight',  facecolor=fig.get_facecolor(),  dpi=200, pad_inches=-0.0 )
 else: fig.savefig( outDir + fileName,  bbox_inches='tight',  transparent=True,  dpi=200, pad_inches=-0.0 )
 plt.clf()
-print 'Saved image: ', fileName
-print ''
+print('Saved image: ', fileName)
+print('')
 
 
 # 

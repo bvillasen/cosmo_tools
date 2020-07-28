@@ -22,7 +22,7 @@ inDir = dataDir + 'cosmo_sims/ewald_512/snap_{0}/'.format(nSnap)
 
 snapKey = '{0:03}'.format(nSnap)
 inFileName = 'snap_{0}.0'.format( snapKey)
-print '\nLoading Gadget file:', inFileName
+print('\nLoading Gadget file:', inFileName)
 
 ds = yt.load( inDir + inFileName )
 data = ds.all_data()

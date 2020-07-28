@@ -79,7 +79,7 @@ space = 'redshift'
 
  
 data = { }
-snapshots_indices = range(74, 170, 1)
+snapshots_indices = list(range(74, 170, 1))
 
 nrows = 1
 ncols = 1
@@ -126,7 +126,7 @@ for i,uvb in enumerate(['hm12', 'pchw18' ]):
 
   for nSnap in snapshots_indices:
 
-    print nSnap
+    print(nSnap)
 
     inputFileName = input_dir + 'optical_depth_{0}.h5'.format(nSnap)
     inFile = h5.File( inputFileName, 'r')
@@ -214,7 +214,7 @@ ax.errorbar( z, tau, yerr=tau_error, fmt='o', c=c_3, label='Bosman+2018' )
 
 ax.tick_params(color=text_color, labelcolor=text_color, labelsize=15,  length=8)
 ax.tick_params(which='minor', color=text_color, labelcolor=text_color, labelsize=15,  length=4)
-for spine in ax.spines.values():
+for spine in list(ax.spines.values()):
     spine.set_edgecolor(text_color)
     
 
@@ -251,7 +251,7 @@ fileName += '.pdf'
 
 if not transparent: fig.savefig( fileName ,  pad_inches=0.1, facecolor=fig.get_facecolor(), bbox_inches='tight', dpi=300)
 else: fig.savefig( fileName,  pad_inches=0.1, transparent=True, bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 
 
 

@@ -78,10 +78,10 @@ for uvb in [ 'pchw18' ]:
 
     #Load Power spectrum data
     inputFileName = input_dir + 'flux_power_spectrum_{0}.h5'.format(nSnap)
-    print "\nLoadingFile: ", inputFileName
+    print("\nLoadingFile: ", inputFileName)
     inFile = h5.File( inputFileName, 'r')
     current_z = inFile.attrs['current_z'] 
-    print nSnap, current_z
+    print(nSnap, current_z)
     n_skewers = inFile.attrs['n_skewers']
     skewer_ids = inFile['skewers_ids'][...]
     k_vals = inFile['k_vals'][...]
@@ -137,7 +137,7 @@ for uvb in [ 'pchw18' ]:
 
     indx_j = snap_index % ncols
     indx_i = snap_index/nrows
-    print snap_index, indx_i, indx_j
+    print(snap_index, indx_i, indx_j)
     
     ax = ax_l[indx_i][indx_j]
     
@@ -173,4 +173,4 @@ for uvb in [ 'pchw18' ]:
 
 fileName = output_dir + 'flux_power_spectrum_all_zoom_{2}_bins{0}{1}.png'.format(n_bins, binning, uvb)
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)

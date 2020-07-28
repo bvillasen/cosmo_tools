@@ -15,7 +15,7 @@ def load_snapshot_nyx( nSnap, inDir, hydro=True, particles=True, cic=True):
   inFileName = inDir + 'h5_files/snapshot_{0:03}.h5'.format(nSnap)
   
   if particles:
-    print "Loading: ", inFileName
+    print("Loading: ", inFileName)
     inFile = h5.File(inFileName, 'r')
     current_a = inFile.attrs['current_a']
     current_z = inFile.attrs['current_z']
@@ -75,7 +75,7 @@ def load_data_nyx_yt( inFileName, inDir, hydro=True ):
   h = ds.hubble_constant
   current_z = ds.current_redshift
   current_a = 1/(current_z + 1)
-  print h
+  print(h)
 
   p_mass = data[('all', 'particle_mass')] * h
   p_pos_x = data[('all', 'particle_position_x')].in_units('kpc')/current_a * h

@@ -18,7 +18,7 @@ def expand_data_particles_to_cholla( proc_grid, box_size, grid_size, inFileName,
 
 
 
-  print '\n Loading data file: ', inFileName
+  print('\n Loading data file: ', inFileName)
   inFile = h5py.File( inFileName, 'r')
   current_a = inFile.attrs['current_a']
   current_z = inFile.attrs['current_z']
@@ -32,14 +32,14 @@ def expand_data_particles_to_cholla( proc_grid, box_size, grid_size, inFileName,
   vel_z = data['vel_x'][...]
   mass = data['mass'][...]
   nPart = mass.shape[0]
-  print '  Nparticles: ', nPart
+  print('  Nparticles: ', nPart)
   inFile.close()
 
   nprocs = proc_grid[0] * proc_grid[1] * proc_grid[2]
   for pId in range(nprocs):
 
     outputFileName = outDir + outputBaseName + ".{0}".format(pId)
-    print ' Writing h5 file: ', outputFileName
+    print(' Writing h5 file: ', outputFileName)
     outFile = h5py.File( outputFileName, 'w')
     outFile.attrs['box_size'] = box_size
     outFile.attrs['current_a'] = current_a
@@ -49,7 +49,7 @@ def expand_data_particles_to_cholla( proc_grid, box_size, grid_size, inFileName,
     yMin, yMax = domain[pId]['box']['y']
     zMin, zMax = domain[pId]['box']['z']
     
-    print( '{0} x[{1} , {2}] y[{3} , {4}] z[{5}, {6}]'.format( pId, xMin, xMax, yMin, yMax, zMin, aMax))
+    print(( '{0} x[{1} , {2}] y[{3} , {4}] z[{5}, {6}]'.format( pId, xMin, xMax, yMin, yMax, zMin, aMax)))
 
     indx_x = np.where( ( (pos_x >= xMin) & (pos_x < xMax ) ) )
     indx_y = np.where( ( (pos_y >= yMin) & (pos_y < yMax ) ) )
@@ -69,8 +69,8 @@ def expand_data_particles_to_cholla( proc_grid, box_size, grid_size, inFileName,
     vel_y_l = vel_y[indx]
     vel_z_l = vel_z[indx]
     mass_l = mass[indx]
-    print '  n_local: ', n_local
-    print '  Current_a: ', current_a
+    print('  n_local: ', n_local)
+    print('  Current_a: ', current_a)
     outFile.attrs['n_particles_local'] = n_local
     # outFile.attrs['N_DM_file'] = np.float(nPart)
     outFile.create_dataset( 'mass', data=mass_l )
@@ -81,4 +81,4 @@ def expand_data_particles_to_cholla( proc_grid, box_size, grid_size, inFileName,
     outFile.create_dataset( 'vel_y', data=vel_y_l * np.sqrt( current_a ) )
     outFile.create_dataset( 'vel_z', data=vel_z_l * np.sqrt( current_a ) )
     outFile.close()
-    print ''
+    print('')

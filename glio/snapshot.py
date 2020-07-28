@@ -63,7 +63,7 @@ class SnapshotHeader(object):
 
     def init_fields(self):
         """Reset all header attributes to zero-like values."""
-        for (name, fmt) in self._schema.items():
+        for (name, fmt) in list(self._schema.items()):
             dtype, size = fmt
             data = np.zeros(size, dtype=dtype)
             if size == 1:
@@ -81,7 +81,7 @@ class SnapshotHeader(object):
 
     def to_array(self):
         """Return a structured array representing the header data."""
-        dtype = [(k, dt, size) for k, (dt, size) in self._schema.items()]
+        dtype = [(k, dt, size) for k, (dt, size) in list(self._schema.items())]
         values = tuple(getattr(self, name) for name in self.fields)
         return np.array(values, dtype=dtype)
 
@@ -112,7 +112,7 @@ class SnapshotHeader(object):
         An empty list indicates that the header is valid.
         """
         malformed = []
-        for (name, fmt) in self._schema.items():
+        for (name, fmt) in list(self._schema.items()):
             dtype, size = fmt
             data = getattr(self, name)
 
@@ -144,7 +144,7 @@ class SnapshotHeader(object):
         """
 
         self._ptypes = 0
-        for (name, fmt) in self._schema.items():
+        for (name, fmt) in list(self._schema.items()):
             # So that these are defined even for an invalid formatter
             dtype, size = ('f4', 1)
             if len(fmt) == 2:
@@ -175,12 +175,12 @@ class SnapshotHeader(object):
             self._schema[name] = (dtype, size)
             self._ptypes = max(size, self._ptypes)
 
-        self._fields = self._schema.keys()
+        self._fields = list(self._schema.keys())
 
     def _load(self, ffile):
         raw_header = ffile.read_record('b1')
         offset = 0
-        for (name, fmt) in self._schema.items():
+        for (name, fmt) in list(self._schema.items()):
             dtype, size = fmt
             bytewords = dtype.itemsize * size
             # Must be non-scalar ndarray, hence wrap in np.array()
@@ -328,7 +328,7 @@ class SnapshotBase(object):
         Contains all valid particle types, some of which may not have any
         associated data in the snapshot.
         """
-        return range(self._ptypes)
+        return list(range(self._ptypes))
 
     @ptype_indices.setter
     def ptype_indices(self, value):
@@ -342,7 +342,7 @@ class SnapshotBase(object):
 
     def init_fields(self):
         """Reset all data attributes to zero-like values."""
-        for (name, fmt) in self._schema.items():
+        for (name, fmt) in list(self._schema.items()):
             dtype, ndims, ptypes, _ = fmt
             pdata = self._null_block(dtype, ndims, ptypes)
             setattr(self, name, pdata)
@@ -404,7 +404,7 @@ class SnapshotBase(object):
             arrays = [a for a in getattr(self, name) if a is not None]
             for a in arrays:
                 if a.dtype != dtype or (a.ndim > 1 and a.shape[-1] != ndims):
-                    print( name, a.dtype, dtype )
+                    print(( name, a.dtype, dtype ))
                     malformed.append(name)
                     # Don't want duplicates; one problem is sufficient.
                     break
@@ -434,7 +434,7 @@ class SnapshotBase(object):
 
         Only blocks with flags resolving to True are loaded from the file.
         """
-        for (name, fmt) in self._schema.items():
+        for (name, fmt) in list(self._schema.items()):
             dtype, ndims, ptypes, flag = fmt
             if self._block_exists(name, ptypes) and self._get_flag(flag):
                 block_data = self._load_block(ffile, name, dtype)
@@ -515,7 +515,7 @@ class SnapshotBase(object):
         """
 
         max_ptype = -1
-        for (name, fmt) in self._schema.items():
+        for (name, fmt) in list(self._schema.items()):
             # So that these are defined even for an invalid formatter.
             dtype, ndims, ptypes, flag = ('f4', 1, [None, ], True)
             if len(fmt) == 4:
@@ -553,9 +553,9 @@ class SnapshotBase(object):
         # For any block which had no ptypes set, assume it is valid for all
         # ptypes.
         self._ptypes = max_ptype + 1
-        for (name, fmt) in self._schema.items():
+        for (name, fmt) in list(self._schema.items()):
             _, _, ptype, _ = fmt
             if ptypes == [None]:
                 self._schema[name] = self.ptype_indices
 
-        self._fields = self._schema.keys()
+        self._fields = list(self._schema.keys())

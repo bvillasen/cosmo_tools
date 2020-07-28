@@ -60,7 +60,7 @@ proc_snapshots = np.array([ rank + i*nprocs for i in range(n_proc_snapshots) ])
 proc_snapshots = proc_snapshots[ proc_snapshots < n_snapshots ]
 if len(proc_snapshots) == 0: exit()
 
-print "{0}: {1}".format( rank, proc_snapshots)
+print("{0}: {1}".format( rank, proc_snapshots))
 
 
 for nSnap in proc_snapshots:
@@ -85,15 +85,15 @@ for nSnap in proc_snapshots:
   ds = group_field.create_dataset( 'projection', data=proj )
   ds.attrs['max'] = proj.max()
   ds.attrs['min'] = proj.min()
-  print " {0}: min={1}  max={2}".format( field , ds.attrs['min'], ds.attrs['max'])
+  print(" {0}: min={1}  max={2}".format( field , ds.attrs['min'], ds.attrs['max']))
 
   ds = group_field.create_dataset( 'projection_weighted', data=proj_weight )
   ds.attrs['max'] = proj_weight.max()
   ds.attrs['min'] = proj_weight.min()
 
-  print " weight {0}: min={1}  max={2}".format( field , ds.attrs['min'], ds.attrs['max'])
+  print(" weight {0}: min={1}  max={2}".format( field , ds.attrs['min'], ds.attrs['max']))
 
   outFile.close()
-  print "Saved File: {0} \n".format( outputFile_name )
+  print("Saved File: {0} \n".format( outputFile_name ))
 
 

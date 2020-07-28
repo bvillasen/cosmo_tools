@@ -26,7 +26,7 @@ from palettable.cmocean.sequential import Deep_20_r, Deep_20
 
 if len(sys.argv) == 1: terminal_param = -1
 else: terminal_param = int(sys.argv[1])
-print 'Parameter: ', terminal_param
+print('Parameter: ', terminal_param)
 
 cosmo_dir = os.path.dirname(os.path.dirname(os.getcwd())) + '/'
 subDirectories = [x[0] for x in os.walk(cosmo_dir)]
@@ -101,7 +101,7 @@ n_proc_snaps= (n_index_total-1) // nprocs + 1
 indices_to_generate = np.array([ rank + i*nprocs for i in range(n_proc_snaps) ])
 indices_to_generate = indices_to_generate[ indices_to_generate < n_index_total ]
 if len(indices_to_generate) == 0: exit()
-print 'Generating: {0} {1}\n'.format( rank, indices_to_generate) 
+print('Generating: {0} {1}\n'.format( rank, indices_to_generate)) 
 
 # Get the global statistics
 # get_statistics = True
@@ -121,7 +121,7 @@ if get_statistics:
   for frame_index in indices_to_generate:
   # for frame_index in [0]:
     file_name = input_dir + 'projection_{2}_{3}_{0}_{1}.h5'.format( nSnap, frame_index, data_type, field ) 
-    print 'Loading File: {0}'.format(  file_name )
+    print('Loading File: {0}'.format(  file_name ))
     file = h5.File( file_name, 'r' )
     for projection_type in projection_types:
       projection = file[data_type][field][projection_type]
@@ -147,7 +147,7 @@ if normalize == 'global':
   file_pickle.close()
 
 
-if not use_mpi: indices_to_generate = range(100)
+if not use_mpi: indices_to_generate = list(range(100))
 
 
 for frame_index in indices_to_generate:
@@ -157,7 +157,7 @@ for frame_index in indices_to_generate:
 
   # Load Projection file for the given field
   file_name = input_dir + 'projection_{2}_{3}_{0}_{1}.h5'.format( nSnap, frame_index, data_type, field )
-  print ('Loading File: {0}'.format(  file_name ))
+  print(('Loading File: {0}'.format(  file_name )))
   file = h5.File( file_name, 'r' )
 
   # Get the color projection
@@ -210,7 +210,7 @@ for frame_index in indices_to_generate:
       min_val = np.min( statistics['alpha']['min']  )
       max_val = np.max( statistics['alpha']['max']  ) * 1.0
       
-  print  min_val, max_val
+  print(min_val, max_val)
 
   # transparency = normalize_data( alpha, min_alpha, max_alpha )
   transparency = alpha / max_alpha
@@ -260,7 +260,7 @@ for frame_index in indices_to_generate:
 
     out_file_name = output_dir + 'img_background.png'
     img_black.save( out_file_name )
-    print( "Saved Image: " + out_file_name)
+    print(( "Saved Image: " + out_file_name))
   
   # if use_mpi: comm.Barrier()
 
@@ -271,7 +271,7 @@ for frame_index in indices_to_generate:
   command = os.popen(command)
   command.read()
   command.close()
-  print( "Saved Image: " + image_file_name )
+  print(( "Saved Image: " + image_file_name ))
 
   # Delete the alpha image
   command = 'rm {1}proj_alpha_{0}.png'.format(frame_index, output_dir)

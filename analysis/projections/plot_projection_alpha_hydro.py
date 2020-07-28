@@ -143,7 +143,7 @@ for frame_index in indices_to_generate:
 
   # Load Projection file for the given field
   file_name = input_dir + 'projection_{2}_{3}_{0}_{1}.h5'.format( nSnap, frame_index, data_type, field )
-  print ('Loading File: {0}'.format(  file_name ))
+  print(('Loading File: {0}'.format(  file_name )))
   file = h5.File( file_name, 'r' )
 
   # Get the color projection
@@ -216,7 +216,7 @@ for frame_index in indices_to_generate:
 
     out_file_name = output_dir + 'img_background.png'
     img_black.save( out_file_name )
-    print( "Saved Image: " + out_file_name)
+    print(( "Saved Image: " + out_file_name))
   
   save_background = False 
   if use_mpi: comm.Barrier()
@@ -228,7 +228,7 @@ for frame_index in indices_to_generate:
   command = os.popen(command)
   command.read()
   command.close()
-  print( "Saved Image: " + image_file_name )
+  print(( "Saved Image: " + image_file_name ))
 
   # Delete the alpha image
   command = 'rm {1}proj_alpha_{0}.png'.format(frame_index, output_dir)

@@ -14,7 +14,7 @@ import time
 
 if len(sys.argv) == 1: index = 0
 else: index = int(sys.argv[1])
-print 'Index: ', index
+print('Index: ', index)
 
 # dataDir = '/home/bruno/Desktop/ssd_0/data/'
 dataDir = '/data/groups/comp-astro/bruno/'
@@ -33,8 +33,8 @@ def split_name( file_name, part=False):
     nSnapshot = nSnapshot[:indx]
   return [int(nSnapshot), int(nBox)]
   
-print( 'Input Dir: ' + inDir )
-print( 'Output Dir: ' + outDir )
+print(( 'Input Dir: ' + inDir ))
+print(( 'Output Dir: ' + outDir ))
 create_directory( outDir )
 print("")
 
@@ -57,8 +57,8 @@ snapshots_all.sort()
 nSnapshots = len( snapshots_all )
 nBoxes = len( boxes )
 
-print( "Number of snapshots: {0}".format(nSnapshots) )
-print( "Number of files per snapshot: {0}".format(nBoxes) )
+print(( "Number of snapshots: {0}".format(nSnapshots) ))
+print(( "Number of files per snapshot: {0}".format(nBoxes) ))
 
 
 #Set wich snapshots to compress
@@ -69,8 +69,8 @@ n_to_compress = len(snapshots_to_compress)
 
 # snapshots_to_compress = [0]
 
-print( "\nNumber of snapshots to compres: {0}".format(n_to_compress) )
-print( ' {0}: {1}'.format( index, snapshots_to_compress ) )
+print(( "\nNumber of snapshots to compres: {0}".format(n_to_compress) ))
+print(( ' {0}: {1}'.format( index, snapshots_to_compress ) ))
 
 # 
 # n_proc_runs = (n_to_compress-1) // nprocs + 1
@@ -89,20 +89,20 @@ print( ' {0}: {1}'.format( index, snapshots_to_compress ) )
 # hydro_fields = ['density' ,  'HI_density', 'temperature']
 # hydro_fields = ['density' ]
 hydro_fields = ['density' , 'momentum_x', 'momentum_y', 'momentum_z' ]
-print( "\nHydro fields: {0}".format(hydro_fields))
+print(( "\nHydro fields: {0}".format(hydro_fields)))
 
 #available Particles Fields:
 #[ density, pos_x, pos_y, pos_z, vel_x, vel_y, vel_z, mass, particle_IDs ]
 # particles_fields = 'all'
 # particles_fields = ['density', 'vel_x', 'vel_y', 'vel_z' ]
 particles_fields = ['density']
-print( "\nParticles fields: {0}".format(particles_fields))
+print(( "\nParticles fields: {0}".format(particles_fields)))
 
 
 precision = np.float64
 # precision = np.float32
 # precision = np.float16
-print( "\nPrecision: {0}".format( precision ))
+print(( "\nPrecision: {0}".format( precision )))
 
 print( "\nCompressing Snapshots..." )
 for nSnap in snapshots_to_compress:
@@ -114,7 +114,7 @@ for nSnap in snapshots_to_compress:
     out_base_name = 'particles_' 
     compress_particles( nSnap, nBoxes, name_base, out_base_name, inDir, outDir, particles_fields, precision=precision )
   end = time.time()
-  print( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) )
+  print(( ' Elapsed Time: {0:.2f} min'.format((end - start)/60.) ))
   
   # exit()
 # 

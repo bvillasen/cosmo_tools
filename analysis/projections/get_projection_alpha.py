@@ -110,14 +110,14 @@ n_proc_snaps= (n_index_total-1) // nprocs + 1
 index_start_range = np.array([ rank + i*nprocs for i in range(n_proc_snaps) ])
 index_start_range = index_start_range[ index_start_range < n_index_total ]
 if len(index_start_range) == 0: exit()
-print 'Generating: {0} {1}\n'.format( rank, index_start_range) 
+print('Generating: {0} {1}\n'.format( rank, index_start_range)) 
 
 
 if not use_mpi:
   index_start_range = [0]
 
 for indx_start in index_start_range: 
-  print "Index: {0}".format(indx_start)
+  print("Index: {0}".format(indx_start))
 
 
   grid_complete_size = [ 2048, 2048, 2048 ]
@@ -154,7 +154,7 @@ for indx_start in index_start_range:
 
   current_z = data_snapshot['current_z']
   data = data_snapshot[data_type][field]
-  if show_progess: print ''
+  if show_progess: print('')
   
   
   
@@ -210,7 +210,7 @@ for indx_start in index_start_range:
       sys.stdout. write(terminalString)
       sys.stdout.flush() 
   
-  if show_progess: print ""
+  if show_progess: print("")
   #Write the projection to a file:
   out_file_name = output_dir + 'projection_{2}_{3}_{0}_{1}.h5'.format( nSnap, indx_start, data_type, field )
   out_file = h5.File( out_file_name, 'w')
@@ -233,7 +233,7 @@ for indx_start in index_start_range:
   data_set.attrs['min'] = projection_alpha.min()
   
   out_file.close()
-  print "Saved File: {0}\n".format( out_file_name )
+  print("Saved File: {0}\n".format( out_file_name ))
   
   
   

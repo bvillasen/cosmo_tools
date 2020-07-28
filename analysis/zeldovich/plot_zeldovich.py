@@ -192,7 +192,7 @@ ax.text(0.03, 0.95, text, transform=ax.transAxes, fontsize=figure_text_size,
 ax.legend(loc=0, fontsize=legend_font_size, frameon=False)
 ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in')
 ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
-[i.set_linewidth(border_width) for i in ax.spines.itervalues()]
+[i.set_linewidth(border_width) for i in ax.spines.values()]
 
 ax = ax_list[1]
 ax.set_xlim(0,64)
@@ -201,7 +201,7 @@ ax.set_ylabel(r'$v \,\,[\,10^3 \,\, \mathrm{km\,s}^{-1}\,]$ ', fontsize=label_si
 ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in')
 ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
 # ax.ticklabel_format( style='sci' )
-[i.set_linewidth(border_width) for i in ax.spines.itervalues()]
+[i.set_linewidth(border_width) for i in ax.spines.values()]
 
 
 
@@ -213,7 +213,7 @@ ax.set_ylabel(r'$T \,\,[\, K \,]$', fontsize=label_size, labelpad=4, )
 ax.set_xlabel(r'$x$   $\,\,[\, h^{-1}\mathrm{Mpc}\, ]$', fontsize=label_size )
 ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in' )
 ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
-[i.set_linewidth(border_width) for i in ax.spines.itervalues()]
+[i.set_linewidth(border_width) for i in ax.spines.values()]
 
 
 
@@ -224,7 +224,7 @@ out_file_name = 'zeldovich.pdf'
 fig.tight_layout()
 plt.subplots_adjust( wspace=0, hspace=0)
 fig.savefig( outDir + out_file_name, dpi=fig_dpi)
-print( "Saved image: " + outDir + out_file_name)
+print(( "Saved image: " + outDir + out_file_name))
 
 
 # np.savetxt('outputs_zeldovich.txt', a_list )

@@ -54,8 +54,8 @@ n_skewers_local = n_skewers_total / n_proc_total
 n_skewer_pixels = 2048
 
 if print_out:
-  print "N Skewers Total: ",  n_skewers_total
-  print "N Skewers Local: ",  n_skewers_local
+  print("N Skewers Total: ",  n_skewers_total)
+  print("N Skewers Local: ",  n_skewers_local)
 
 for axis in axis_list:
 
@@ -67,7 +67,7 @@ for axis in axis_list:
   p_id = rank
 
 
-  if print_out: print "Loading Particles Indices "
+  if print_out: print("Loading Particles Indices ")
   inFileName = input_dir + 'indices_1D/{0}_indices_{1}.h5.{2}'.format(nSnap, axis, p_id)
   inFile = h5.File( inFileName, 'r')
   domain_x = inFile.attrs['domain_x']
@@ -79,7 +79,7 @@ for axis in axis_list:
 
 
   data = {}
-  if print_out: print "Loading Particles Data "
+  if print_out: print("Loading Particles Data ")
   in_file_name = input_dir + 'snapshot_{0}_complete.h5'.format(nSnap)
   inFile = h5.File( in_file_name, 'r' )
 
@@ -98,7 +98,7 @@ for axis in axis_list:
 
   fields = [ 'mass', 'rho', 'u', 'hsml', 'pos_x', 'pos_y', 'pos_z', 'Nh', 'HeI', 'HeII' , vel_los_key ]
   for field in fields:
-    if print_out:  print " Loading Field ", field
+    if print_out:  print(" Loading Field ", field)
     data[field] = inFile[field][...]
     data[field] = data[field][indices]
   inFile.close()
@@ -126,7 +126,7 @@ for axis in axis_list:
   HeIII_rho = Y * rho - HeI_rho - HeII_rho
   mu = rho / ( HI_rho + 2*HII_rho + ( HeI_rho + 2*HeII_rho + 3*HeIII_rho) / 4 )
 
-  if print_out: print 'Building Tree'
+  if print_out: print('Building Tree')
   tree = KDTree( pos )
 
 
@@ -139,7 +139,7 @@ for axis in axis_list:
 
   #Create Output File 
   outFileName =  output_dir + 'skewers_{0}_{1}.h5.{2}'.format( axis, nSnap, rank )
-  if print_out: print "Saving to File: ", outFileName 
+  if print_out: print("Saving to File: ", outFileName) 
   outFile = h5.File( outFileName, 'w' )
   outFile.attrs['current_z'] = current_z
   outFile.attrs['n'] = n_skewers_local
@@ -242,5 +242,5 @@ for axis in axis_list:
 
   if use_mpi: comm.Barrier()
 
-  print "\nSaved File: ", outFileName 
+  print("\nSaved File: ", outFileName) 
   outFile.close()

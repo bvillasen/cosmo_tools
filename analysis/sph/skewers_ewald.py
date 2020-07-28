@@ -66,7 +66,7 @@ class spectra:
       
       curpos = specfile.tell()
       if curpos != endpos:
-        print("WARNING: not reading the whole file", curpos, "of", endpos)
+        print(("WARNING: not reading the whole file", curpos, "of", endpos))
       
       specfile.close()
 

@@ -45,7 +45,7 @@ n_snaps = 56
 snapshots = list(range(0,n_snaps, 2))
 if n_snaps-1 not in snapshots: snapshots.append(n_snaps-1)
 nSnap_out = 1
-print snapshots
+print(snapshots)
 
 nSnap_out = 1
 
@@ -110,9 +110,9 @@ for nSnap in snapshots:
   base_name = 'snapshot'
   fileName = outDir + base_name + snapKey + '.h5'
   
-  print (' Writing file: {0}'.format( fileName ))
+  print((' Writing file: {0}'.format( fileName )))
   h5_file = h5.File( fileName, 'w')
-  print( '  nSnap: {0}     current_a: {1}'.format(nSnap, current_a ))
+  print(( '  nSnap: {0}     current_a: {1}'.format(nSnap, current_a )))
   h5_file.attrs['current_a'] = current_a
   h5_file.attrs['current_z'] = current_z
   

@@ -254,7 +254,7 @@ line = draw.line( [(lx0, ly), (lx1, ly) ], fill=color_white, width=lw )
 
 image_out_name = output_dir + 'image_composed.png'
 image_out.save( image_out_name )
-print 'Saved Image: ', image_out_name
+print('Saved Image: ', image_out_name)
 
 
 draw = ImageDraw.Draw( image_out )

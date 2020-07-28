@@ -33,7 +33,7 @@ rho_0 = 0.97
 r_start = 0.2
 M = 4./3*np.pi*rho_0*r_start**3
 t_collapse = np.pi * r_start**2 / ( 2 * np.sqrt( 2*Gconst*M * r_start )  )
-print t_collapse
+print(t_collapse)
 
 G = Gconst*M
 R = r_start
@@ -56,7 +56,7 @@ nSnap = 0
 nSnapshots = 56;
 for nSnap in range(nSnapshots):
 # for nSnap in [53, 54, 55, 56]:
-  print ' Plotting snap: {0}'.format( nSnap )
+  print(' Plotting snap: {0}'.format( nSnap ))
 
 
   file_name = inputDir + 'grid_{0:03}.h5'.format( nSnap )

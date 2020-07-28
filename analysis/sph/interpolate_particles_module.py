@@ -38,7 +38,7 @@ create_directory( output_dir )
 nSnap = 12
 
 in_file_name = inDir + 'snapshot_{0}_complete.h5'.format(nSnap)
-if print_out: print "Loading File: ", in_file_name
+if print_out: print("Loading File: ", in_file_name)
 inFile = h5.File( in_file_name, 'r' )
 
 
@@ -53,7 +53,7 @@ h = inFile.attrs['h']
 mass = inFile['mass'][...]
 N_gas = len(mass)
 
-print "N_gas: ", N_gas
+print("N_gas: ", N_gas)
 
 pos_x = inFile['pos_x'][...]
 pos_y = inFile['pos_y'][...]
@@ -72,6 +72,6 @@ hsml_max = hsml.max()
 
 
 
-print 'Building Tree'
+print('Building Tree')
 tree = KDTree( pos )
 

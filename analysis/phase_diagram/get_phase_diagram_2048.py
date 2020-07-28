@@ -105,7 +105,7 @@ if use_mpi:
   dens_mean_global = np.mean( dens_mean_all)
 else:
   dens_mean_global = dens_mean_local
-if rank == 0: print 'Dens Mean = {0}'.format(dens_mean_global) 
+if rank == 0: print('Dens Mean = {0}'.format(dens_mean_global)) 
 
 #Get Overdensity
 density = density / dens_mean_global
@@ -127,7 +127,7 @@ bins_dens = np.logspace( dens_start, dens_end, nbins, base=10 )
 bins_temp = np.logspace( temp_start, temp_end, nbins, base=10 )
 
 #Get the phase diagram
-if rank == 0: print " Generating Phase Diagram,   n_bins:{0}".format(nbins)
+if rank == 0: print(" Generating Phase Diagram,   n_bins:{0}".format(nbins))
 centers_dens, centers_temp, phase = get_phase_diagram_bins( density, temperature, bins_dens, bins_temp, nbins, ncells )
 
 if use_mpi:
@@ -145,7 +145,7 @@ if rank == 0:
   else:
     phase_sum = phase_all
   
-  print "Phase sum: {0} / {1}".format(phase_sum.sum(), ncells)
+  print("Phase sum: {0} / {1}".format(phase_sum.sum(), ncells))
 
   #Write the data to a file
   outFileName = output_dir + 'phase_diagram_data_{0}.h5'.format(nSnap)
@@ -157,7 +157,7 @@ if rank == 0:
   outFile.create_dataset( 'centers_dens', data = centers_dens )
   outFile.create_dataset( 'centers_temp', data = centers_temp )
   outFile.close()
-  print "Saved File: ", outFileName
+  print("Saved File: ", outFileName)
 
 if use_mpi:comm.Barrier()
 

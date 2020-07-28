@@ -77,7 +77,7 @@ n_snapshots = 170
 n_proc_snaps= (n_snapshots-1) // nprocs + 1
 proc_snaps= np.array([ rank + i*nprocs for i in range(n_proc_snaps) ])
 proc_snaps= proc_snaps[ proc_snaps < n_snapshots ]
-print( ' {0}: {1}'.format( rank, proc_snaps) )
+print(( ' {0}: {1}'.format( rank, proc_snaps) ))
 time.sleep(1)
 comm.Barrier()
 if len(proc_snaps) == 0: exit()
@@ -106,7 +106,7 @@ for nSnap in proc_snaps:
     
 
     inFileName = input_dir + 'phase_diagram_data_{0}.h5'.format(nSnap)
-    print 'Loading File: ', inFileName
+    print('Loading File: ', inFileName)
     inFile = h5.File( inFileName, 'r')
     current_z = inFile.attrs['current_z']
     phase = inFile['phase'][...]
@@ -182,7 +182,7 @@ for nSnap in proc_snaps:
 
   fileName = output_dir + 'phase_diagram_{0}.png'.format(nSnap)
   fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
-  print 'Saved Image: ', fileName
+  print('Saved Image: ', fileName)
 
 
   # 

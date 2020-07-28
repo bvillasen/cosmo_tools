@@ -43,6 +43,6 @@ plt.grid()
 
 fileName = output_dir + 'velocity_distance_conversion.png'
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=200)
-print 'Saved Image: ', fileName
+print('Saved Image: ', fileName)
 
 
