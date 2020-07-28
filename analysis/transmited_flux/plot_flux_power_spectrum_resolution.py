@@ -219,7 +219,7 @@ ax.plot( data[512]['k_vals'],  data[512]['power_mean']*factor, label=label, c='C
 ax.text(0.90, 0.95, 'z={0:.1f}'.format(current_z), horizontalalignment='center',  verticalalignment='center', transform=ax.transAxes, fontsize=17, color=text_color) 
 
 
-leg = ax.legend( loc=3, fontsize=14, frameon=False )
+leg = ax.legend( loc=3, fontsize=legend_font_size, frameon=False )
 for text in leg.get_texts():
   plt.setp(text, color = text_color)
     
