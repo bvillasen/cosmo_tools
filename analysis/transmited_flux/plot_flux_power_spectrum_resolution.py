@@ -205,15 +205,15 @@ lw=3
 
 factor = 1.1
 
-label = r'$\Delta x= {0:.0f}  $'.format(data[2048]['dx']) + r'$\,\, \mathrm{ckpc}/h$'
+label = r'$\Delta x= {0:.0f}  $'.format(data[2048]['dx']) + r'$\,\, h^{-1} \mathrm{ckpc}$'
 ax.plot( data[2048]['k_vals'],  data[2048]['power_mean']*factor, label=label, c=c_0,  lw=lw)
 
 
-label = r'$\Delta x= {0:.0f}  $'.format(data[1024]['dx']) + r'$\,\, \mathrm{ckpc}/h$'
+label = r'$\Delta x= {0:.0f}  $'.format(data[1024]['dx']) + r'$\,\, h^{-1} \mathrm{ckpc}$'
 ax.plot( data[1024]['k_vals'],  data[1024]['power_mean']*factor, label=label, c='C1',  lw=lw)
 
 
-label = r'$\Delta x= {0:.0f}  $'.format(data[512]['dx']) + r'$\,\, \mathrm{ckpc}/h$'
+label = r'$\Delta x= {0:.0f}  $'.format(data[512]['dx']) + r'$\,\, h^{-1} \mathrm{ckpc}$'
 ax.plot( data[512]['k_vals'],  data[512]['power_mean']*factor, label=label, c='C0',  lw=lw  )
 
 ax.text(0.90, 0.95, 'z={0:.1f}'.format(current_z), horizontalalignment='center',  verticalalignment='center', transform=ax.transAxes, fontsize=17, color=text_color) 
