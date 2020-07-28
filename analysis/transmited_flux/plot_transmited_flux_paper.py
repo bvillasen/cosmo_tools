@@ -2,7 +2,7 @@ import sys, os
 import numpy as np
 import h5py as h5
 import matplotlib as mpl
-mpl.use('Agg')
+# mpl.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from scipy.interpolate import interp1d
