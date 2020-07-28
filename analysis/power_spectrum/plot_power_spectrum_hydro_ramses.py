@@ -42,7 +42,32 @@ import matplotlib
 matplotlib.font_manager.findSystemFonts(fontpaths=['/home/bruno/Downloads'], fontext='ttf')
 matplotlib.rcParams['font.sans-serif'] = "Helvetica"
 matplotlib.rcParams['font.family'] = "sans-serif"
+matplotlib.rcParams['mathtext.fontset'] = 'cm'
+matplotlib.rcParams['mathtext.rm'] = 'serif'
 
+
+from matplotlib import rc
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+# rc('text', usetex=True)
+hfont = matplotlib.font_manager.FontProperties(family='sans-serif', style='normal', size=12, weight='normal', stretch='normal')
+
+
+fig_width = 8
+fig_dpi = 300
+
+label_size = 18
+
+figure_text_size = 18
+
+legend_font_size = 16
+
+tick_label_size_major = 15
+tick_label_size_minor = 13
+tick_size_major = 5
+tick_size_minor = 3
+tick_width_major = 1.5
+tick_width_minor = 1
+border_width = 1
 
 
 nPoints = 256
@@ -51,7 +76,6 @@ nPoints = 256
 ps_dir = dataDir + 'power_spectrum/hydro/'
 outDir = figuresDir + 'power_spectrum/'
 create_directory( outDir )
-out_file_name = 'ps_{0}_hydro_ramses_2.pdf'.format( nPoints)
 
 
 n_plots = 1
@@ -73,17 +97,17 @@ code_label = ['Ramses', 'Ramses']
 
 box_text = {}
 box_text[0] = {}
-box_text[0]['text'] = 'Gas Power Spectrum\nComparison to Ramses'
-box_text[0]['pos'] = (0.96, 0.93)
+box_text[0]['text'] = 'Cholla - Ramses'
+box_text[0]['pos'] = (0.96, 0.95)
 
 box_text[1] = {}
 box_text[1]['text'] = 'Gas Matter Power Spectrum\nComparison to Ramses'
 box_text[1]['pos'] = (0.96, 0.93)
 
-diff_max_list = [ 0.1, 0.1]
+diff_max_list = [ 0.102, 0.102]
 
 fig = plt.figure(0)
-fig.set_size_inches(8*n_plots,8)
+fig.set_size_inches(fig_width,9)
 fig.clf()
 
 
@@ -97,8 +121,10 @@ if n_plots > 1:
   ax4 = plt.subplot(gs[4:5, 1])
   ax_list.append(( ax3, ax4))
 
-colors = ['k', 'k', 'k', 'k', 'w', 'w', 'w', 'w', 'w',  'w', ]
+colors = ['k', 'k', 'k', 'w', 'w', 'w', 'w', 'w', 'w',  'w', ]
 
+
+n_skip = 8
 
 for i in range( n_plots ):
   
@@ -112,18 +138,40 @@ for i in range( n_plots ):
   diff_max = diff_max_list[i]
   
   n_lines=n_snapshots
-  ax1.set_prop_cycle('color', palettable.cmocean.sequential.Haline_10_r.mpl_colors)
-  ax2.set_prop_cycle('color', palettable.cmocean.sequential.Haline_10_r.mpl_colors)
   
+  colormap = palettable.cmocean.sequential.Haline_10_r.mpl_colors
+  colormap = palettable.cmocean.sequential.Dense_15.mpl_colors
+  colormap = palettable.cmocean.sequential.Ice_12_r.mpl_colors
+  colormap = palettable.scientific.sequential.Devon_12_r.mpl_colors
+  colormap = palettable.cmocean.sequential.Tempo_12.mpl_colors
+  colormap = palettable.cmocean.sequential.Matter_12.mpl_colors
+  colormap = palettable.cmocean.sequential.Deep_12.mpl_colors
+  colormap = palettable.cmocean.sequential.Thermal_12_r.mpl_colors
+  
+  out_file_name = 'ps_hydro_comparison_thermal.pdf'.format( nPoints)
+
+  
+  ax1.set_prop_cycle('color', colormap )
+  ax2.set_prop_cycle('color', colormap )
+  
+  n_colors = len(colormap)
+  counter = 0
+  offset = 2
   for n in range(n_snapshots):
-    if n==0: ax1.plot( k_vals, ps_1[n], '--', c='k', linewidth=1, label=code_label[i] )
-    # c = colors[n]
-    label = 'z = {0:.1f}'.format(z_0[n])
-    ax1.plot( k_vals, ps_0[n],  linewidth=3, label=label)
-    ax2.plot( k_vals, diff[n] , alpha=0.9)
+    if n == n_skip: continue
+    if n==0: ax1.plot( k_vals, ps_1[n], '--', c='k', linewidth=1, label=code_label[i],  )
+    label = r'$z =  {0:.1f}$'.format(z_0[n])
+    print label
+    # color = colormap[n_colors - counter - 1 + offset ]
+    color = colormap[counter + offset]
+    ax1.plot( k_vals, ps_0[n],  linewidth=3, label=label, color=color )
+    ax2.plot( k_vals, diff[n] , alpha=0.9, color=color)
+    counter += 1 
+
 
   ax1.set_prop_cycle('color', palettable.cmocean.sequential.Gray_10.mpl_colors)
   for n in range(n_snapshots):
+    if n == n_skip: continue
     ax1.plot( k_vals, ps_1[n], '--', c=colors[n], linewidth=1)
     
   
@@ -142,10 +190,23 @@ for i in range( n_plots ):
   #     label.set_fontproperties(ticks_font)
       
 
-  ax1.tick_params(axis='both', which='major', labelsize=13, size=5)
-  ax1.tick_params(axis='both', which='minor', labelsize=10, size=3)
-  ax2.tick_params(axis='both', which='major', labelsize=13, size=5)
-  ax2.tick_params(axis='both', which='minor', labelsize=10, size=3)
+
+  ax1.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in')
+  ax1.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
+
+  ax2.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in')
+  ax2.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
+  
+  ax1.tick_params(axis='x', which='major', labelsize=0, size=5, direction='in')
+  # 
+  # [ label.set_fontproperties(hfont) for label in ax1.get_xticklabels() ]
+  # [ label.set_fontproperties(hfont) for label in ax1.get_yticklabels() ]
+  [ label.set_family('sans-serif') for label in ax1.get_xticklabels() ]
+  [ label.set_family('sans-serif') for label in ax1.get_yticklabels() ]
+  # [ label.set_fontname('Helvetica') for label in ax1.get_yticklabels() ]
+  
+  
+  
   # ax2.ticklabel_format( style='sci', scilimits=(0, 1))
 
   # labels = [item.get_text() for item in ax2.get_yticklabels()]
@@ -157,14 +218,16 @@ for i in range( n_plots ):
   ax1.set_yscale('log')
   ax2.set_xscale('log')
 
-  ax1.legend( loc=3, fontsize=11, frameon=False)
-  ax2.set_xlabel( r'$k \, \, \, \,[h \mathrm{Mpc}^{-1}]$', fontsize=17)
+  ax1.legend( loc=3, fontsize=legend_font_size, frameon=False, ncol=2 ) 
+  ax2.set_xlabel( r'$k \, \, \, \,[\,h \mathrm{Mpc}^{-1}\,]$', fontsize=17)
 
   if i == 0:
-    ax1.set_ylabel( r'$P(k)$   $[h^3$Mpc$^{-3}]$', fontsize=17)
-    ax2.set_ylabel( r'$\frac{\Delta P(k)}{P(k)}$', fontsize=17)
+    ax1.set_ylabel( r'$P\,(k)$   $\,\,[\,h^3\mathrm{Mpc}^{-3}\,]$', fontsize=17)
+    ax2.set_ylabel( r'$\Delta P\,(k)/P\,(k)$', fontsize=17, labelpad=1)
 
+  [i.set_linewidth(border_width) for i in ax1.spines.itervalues()]
+  [i.set_linewidth(border_width) for i in ax2.spines.itervalues()]
 
 fileName = outDir + out_file_name
-fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=300)
+fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=fig_dpi)
 print 'Saved Image: ', fileName

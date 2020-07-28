@@ -27,6 +27,7 @@ outputs = np.loadtxt( outputs_file )
 dataDir = '/data/groups/comp-astro/bruno/'
 
 simulation = 'cholla_2048'
+# simulation = 'ewald_512'
 
 if simulation == 'cholla_2048':
   #Cosmological Parameters 
@@ -38,14 +39,12 @@ if simulation == 'cholla_2048':
 
   #Box parameters
   Lbox = 50.0 #Mpc/h
-  nPoints = 2048
-
-  # dataDir = '/home/bruno/Desktop/ssd_0/data/'
+  
 
   # uvb = 'pchw18'
   uvb = 'hm12'
-  input_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/skewers_{1}/'.format(nPoints, uvb,  )
-  output_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/optical_depth_{1}/multiple_axis/'.format(nPoints, uvb, )
+  input_dir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/skewers_{0}/'.format(uvb)
+  output_dir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/optical_depth_{0}/multiple_axis/'.format(uvb)
   snapshots_indices = range( 74, 170, 1)
 
 
@@ -58,22 +57,14 @@ if simulation == 'ewald_512':
 
   #Box parameters
   Lbox = data_ewald['BoxSize'] #Mpc/h
-  nPoints = 512
   
   sph_grid_method = 'scatter'
 
-  input_dir = dataDir + 'cosmo_sims/ewald_512/skewers/'
-  output_dir = dataDir + 'cosmo_sims/ewald_512/optical_depth/'
+  input_dir = dataDir + 'cosmo_sims/ewald_512/skewers_1D/'
+  output_dir = dataDir + 'cosmo_sims/ewald_512/optical_depth/multiple_axis/'
   snapshots_indices = [ 11, 12 ]
 
 
-
-create_directory( output_dir )
-
-nx = nPoints
-ny = nPoints
-nz = nPoints
-ncells = nx * ny * nz
 
 use_mpi = True
 
@@ -85,6 +76,9 @@ if use_mpi :
 else:
   rank = 0
   nprocs = 1
+
+if rank == 0: create_directory( output_dir )
+
 
 
 nSnap = snapshots_indices[rank]
@@ -100,14 +94,22 @@ n_skewers_list = [ 2000, 2000, 2000 ]
 data_skewers = load_skewers_multiple_axis( axis_list, n_skewers_list, nSnap, input_dir, set_random_seed=True)
 current_z = data_skewers['current_z']
 n_skewers = data_skewers['n_skewers']
+current_a = 1. / ( current_z + 1 )
 comm.Barrier()
 
 
 
-cosmo_spaces = [ 'real', 'redshift' ]
+# cosmo_spaces = [ 'real', 'redshift' ]
+cosmo_spaces = [ 'redshift' ]
+
+factor_sqrta = True 
+
+if rank == 0 and factor_sqrta: print "Warning: Usning sqrt(a) factor for peculiar velocities" 
+comm.Barrier()
+
 
 outputFileName = output_dir + 'optical_depth_{0}.h5'.format(nSnap )
-# if interpolate: outputFileName = output_dir + 'optical_depth_{0}_interpolated.h5'.format(nSnap)
+if factor_sqrta: outputFileName = output_dir + 'optical_depth_sqrta_{0}.h5'.format(nSnap )
 outFile = h5.File( outputFileName, 'w')
 
 
@@ -121,16 +123,17 @@ for space in cosmo_spaces:
   F_mean_vals = []
 
   for i in range(n_skewers):
-    #Load skewer data
 
     if i%(n_skewers/100)==0: 
       text = ' Skewer {0}/{1}'.format(i, n_skewers)
       if rank==0:print_line_flush( text )
 
+    #Load skewer data
     density = data_skewers['density'][i]
     HI_density = data_skewers['HI_density'][i]
     temperature = data_skewers['temperature'][i]
-    velocity = data_skewers['velocity'][i]
+    velocity = data_skewers['velocity'][i] 
+    if factor_sqrta: velocity *= np.sqrt( current_a )
 
     x_comov, vel_Hubble, n_HI_los, tau = compute_optical_depth( H0, cosmo_h, Omega_M, Omega_L, Lbox, current_z, HI_density, temperature, velocity, space=space, method='error_function', turbulence_boost=0.0 )
 

@@ -1,4 +1,4 @@
-import sys
+import sys, os
 import numpy as np
 import matplotlib.pyplot as plt
 import h5py as h5
@@ -11,14 +11,15 @@ import matplotlib
 matplotlib.font_manager.findSystemFonts(fontpaths=['/home/bruno/Downloads'], fontext='ttf')
 matplotlib.rcParams['font.sans-serif'] = "Helvetica"
 matplotlib.rcParams['font.family'] = "sans-serif"
-
+matplotlib.rcParams['mathtext.fontset'] = 'cm'
+matplotlib.rcParams['mathtext.rm'] = 'serif'
 # hfont = {'fontname':'Helvetica'}
 # 
 # plt.rc('text', usetex=True)
 # plt.rc('font', family='serif')
 
 from matplotlib import rc
-# rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
 # rc('text', usetex=True)
 # plt.rcParams['font.size'] = 12
 # matplotlib.rcParams['axes.unicode_minus'] = False
@@ -30,18 +31,41 @@ cosmo_sims = dev_dir + 'cosmo_sims/'
 loadDataDirectory = cosmo_tools + "load_data/"
 toolsDirectory = cosmo_sims + "tools/"
 analysisDirectory = cosmo_sims + "analysis/"
-sys.path.extend([ loadDataDirectory, toolsDirectory, analysisDirectory ] )
+cosmo_dir = os.path.dirname(os.path.dirname(os.getcwd())) + '/'
+subDirectories = [x[0] for x in os.walk(cosmo_dir)]
+sys.path.extend(subDirectories)
 from tools import *
 from load_data_cholla import load_snapshot_data
 from internal_energy import  get_temp 
 
-from mpi4py import MPI
+# from mpi4py import MPI
+# 
+# comm = MPI.COMM_WORLD
+# rank = comm.Get_rank()
 
-comm = MPI.COMM_WORLD
-rank = comm.Get_rank()
+rank = 0
 nSnap = 78
 
-# rank = 0
+
+
+fig_width = 8
+fig_dpi = 300
+
+label_size = 18
+
+figure_text_size = 18
+
+legend_font_size = 16
+
+tick_label_size_major = 15
+tick_label_size_minor = 13
+tick_size_major = 5
+tick_size_minor = 3
+tick_width_major = 1.5
+tick_width_minor = 1
+border_width = 1
+ 
+
 
 
 # dataDir = '/raid/bruno/data/'
@@ -110,31 +134,12 @@ temp = get_temp(gas_u / gas_dens * 1e6, mu=mu)
 Ekin = 0.5 * gas_dens * gas_vel * gas_vel
 gas_E = Ekin + gas_u
 data_en = [ gas_dens, gas_vel, temp,  gas_u, gas_E, Ekin ]
-# 
-# file_name = enzoDir_1 + 'DD{0:04}/data{0:04}'.format(nSnap)
-# ds = yt.load( file_name )
-# data = ds.all_data()
-# h = ds.hubble_constant
-# current_z = ds.current_redshift
-# current_a = 1./(current_z + 1)
-# x = data[('gas', 'x')].in_units('Mpc/h').v / current_a
-# gas_dens = data[ ('gas', 'density')].in_units('msun/kpc**3').v*current_a**3/h**2
-# gas_temp = data[ ('gas', 'temperature')].v
-# gas_vel = data[ ('gas', 'velocity_x')].in_units('km/s').v
-# gas_u = data[('gas', 'thermal_energy' )].v * 1e-10 *gas_dens #km^2/s^2
-# mu = data[('gas', 'mean_molecular_weight' )]
-# temp = get_temp(gas_u / gas_dens * 1e6, mu=mu)
-# Ekin = 0.5 * gas_dens * gas_vel * gas_vel
-# gas_E = Ekin + gas_u
-# data_en_1 = [ gas_dens, gas_vel, temp,  gas_u, gas_E, Ekin ]
-# 
 
 n_rows = 3
 n_cols = 1
-fig, ax_list = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=(8*n_cols,2.5*n_rows), sharex=True )
+fig, ax_list = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=(fig_width*n_cols,2.5*n_rows), sharex=True )
 
 text = r'$z = {0:.02f}$'.format(current_z)
-# props = dict(boxstyle='round', facecolor='gray', alpha=0.3)
 
 
 
@@ -142,9 +147,6 @@ colors = palettable.cmocean.sequential.Haline_10_r.mpl_colors
 colors_1 = palettable.colorbrewer.sequential.PuBu_9.mpl_colors
 
 c_0 = colors[-1]
-# c_1 = colors_1[3]
-# c_1 = colors_1[4]
-
 
 colors = palettable.cmocean.sequential.Haline_10_r.mpl_colors
 colors = palettable.colorbrewer.sequential.GnBu_9.mpl_colors
@@ -157,16 +159,13 @@ lw = 6
 color = c_0
 ax = ax_list[0]
 ax.plot( x, data_en[0], color=color, linewidth=lw, label='Enzo'    )
-# ax.plot( x, data_en_1[0], linewidth=1, label='Enzo_HLLC noDE'    )
 
 
 ax = ax_list[1]
-ax.plot( x, data_en[1], color=color, linewidth=lw )
-# ax.plot( x, data_en_1[1], linewidth=1 )
+ax.plot( x, data_en[1]/1000, color=color, linewidth=lw )
 
 ax = ax_list[2]
 ax.plot( x, data_en[2], color=color, linewidth=lw )
-# ax.plot( x, data_en_1[2], linewidth=1 )
 
 
 lw = 2
@@ -178,49 +177,53 @@ for n in range(n_cholla_files):
   ax.plot( x, data_ch[0], c=color, label=cholla_label_all[n] , linewidth=lw )
 
   ax = ax_list[1]
-  ax.plot( x, data_ch[1],  c=color, linewidth=lw )
+  ax.plot( x, data_ch[1]/1000,  c=color, linewidth=lw )
 
   ax = ax_list[2]
   ax.plot( x, data_ch[2],  c=color, linewidth=lw )
 
 
-fs = 15
-
 ax = ax_list[0]
 ax.set_yscale('log')
 ax.set_xlim(0,64)
-ax.set_ylabel(r'Density  [ $h^2$M$_{\odot}$kpc$^{-3}$ ]', fontsize=fs, labelpad=20, )
-ax.text(0.03, 0.9, text, transform=ax.transAxes, fontsize=18,
+ax.set_ylabel(r'$\rho_b \,\,[\,h^2\mathrm{M}_{\odot}\mathrm{kpc}^{-3}\,]$', fontsize=label_size, labelpad=5, )
+ax.text(0.03, 0.95, text, transform=ax.transAxes, fontsize=figure_text_size,
           verticalalignment='top')
-ax.legend(loc=0, fontsize=16, frameon=False)
-ax.tick_params(axis='both', which='major', labelsize=13, size=5)
-ax.tick_params(axis='both', which='minor', labelsize=10, size=3)
-
+ax.legend(loc=0, fontsize=legend_font_size, frameon=False)
+ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in')
+ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
+[i.set_linewidth(border_width) for i in ax.spines.itervalues()]
 
 ax = ax_list[1]
 ax.set_xlim(0,64)
-ax.set_ylim(-1900, 1900)
-ax.set_ylabel(r'Velocity  [ km/s ]', fontsize=fs, )
-ax.tick_params(axis='both', which='major', labelsize=13, size=5)
-ax.tick_params(axis='both', which='minor', labelsize=10, size=3)
-# ax.ticklabel_format( axis='both', style='sci', scilimits=(0,0)) 
+ax.set_ylim(-1.95, 1.95)
+ax.set_ylabel(r'$v \,\,[\,10^3 \,\, \mathrm{km\,s}^{-1}\,]$ ', fontsize=label_size,  labelpad=12, )
+ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in')
+ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
+# ax.ticklabel_format( style='sci' )
+[i.set_linewidth(border_width) for i in ax.spines.itervalues()]
+
+
 
 ax = ax_list[2]
 ax.set_yscale('log')
 ax.set_xlim(0,64)
-ax.set_ylabel(r'Temperature  [ K ]', fontsize=fs, labelpad=20, )
-ax.set_xlabel(r'$X$   [ $h^{-1}$Mpc ]', fontsize=fs )
-ax.tick_params(axis='both', which='major', labelsize=13, size=5)
-ax.tick_params(axis='both', which='minor', labelsize=10, size=3)
+ax.set_ylim(0.02,3e8)
+ax.set_ylabel(r'$T \,\,[\, K \,]$', fontsize=label_size, labelpad=4, )
+ax.set_xlabel(r'$x$   $\,\,[\, h^{-1}\mathrm{Mpc}\, ]$', fontsize=label_size )
+ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in' )
+ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
+[i.set_linewidth(border_width) for i in ax.spines.itervalues()]
 
 
 
-out_file_name = 'zeldovich_{0}_new.pdf'.format( nSnap )
+# out_file_name = 'zeldovich_{0}_new.pdf'.format( nSnap )
+out_file_name = 'zeldovich.pdf'
 # out_file_name = 'zeldovich_{0}_dashed.png'.format( nSnap )
 
 fig.tight_layout()
 plt.subplots_adjust( wspace=0, hspace=0)
-fig.savefig( outDir + out_file_name, dpi=300)
+fig.savefig( outDir + out_file_name, dpi=fig_dpi)
 print( "Saved image: " + outDir + out_file_name)
 
 

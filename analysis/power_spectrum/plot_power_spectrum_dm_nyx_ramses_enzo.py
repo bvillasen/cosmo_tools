@@ -33,13 +33,33 @@ from tools import *
 # matplotlib.rcParams['font.sans-serif'] = "Helvetica"
 # # Then, "ALWAYS use sans-serif fonts"
 # matplotlib.rcParams['font.family'] = "sans-serif"
-
 import matplotlib
 # set some global options
 matplotlib.font_manager.findSystemFonts(fontpaths=['/home/bruno/Downloads'], fontext='ttf')
 matplotlib.rcParams['font.sans-serif'] = "Helvetica"
 matplotlib.rcParams['font.family'] = "sans-serif"
+matplotlib.rcParams['mathtext.fontset'] = 'cm'
+matplotlib.rcParams['mathtext.rm'] = 'serif'
+# from matplotlib import rc
+# rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+# rc('text', usetex=True)
 
+fig_width = 2*8
+fig_dpi = 300
+
+label_size = 16
+
+figure_text_size = 18
+
+legend_font_size = 16
+
+tick_label_size_major = 13
+tick_label_size_minor = 13
+tick_size_major = 5
+tick_size_minor = 3
+tick_width_major = 1.5
+tick_width_minor = 1
+border_width = 1
 
 
 
@@ -49,7 +69,7 @@ nPoints = 256
 ps_dir = dataDir + 'power_spectrum/dm_only/'
 outDir = figuresDir + 'power_spectrum/'
 create_directory( outDir )
-out_file_name = 'ps_{0}_dmOnly_ramses_nyx_enzo.pdf'.format( nPoints)
+out_file_name = 'ps_dm_comparison.pdf'.format( nPoints)
 
 
 n_plots = 3
@@ -68,25 +88,27 @@ k_vals = np.loadtxt( ps_dir + 'ps_{0}_k_values.dat'.format( nPoints ) )
 data_all_list = [ data_0, data_1, data_2 ]
 code_label = ['Nyx', 'Ramses', 'Enzo']
 
+colormap = palettable.cmocean.sequential.Thermal_12_r.mpl_colors
+
 
 
 box_text = {}
 box_text[0] = {}
-box_text[0]['text'] = 'Dark Matter Power Spectrum\nComparison to Nyx'
-box_text[0]['pos'] = (0.96, 0.93)
+box_text[0]['text'] = 'Cholla - Nyx'
+box_text[0]['pos'] = (0.96, 0.95)
 
 box_text[1] = {}
-box_text[1]['text'] = 'Dark Matter Power Spectrum\nComparison to Ramses'
-box_text[1]['pos'] = (0.96, 0.93)
+box_text[1]['text'] = 'Cholla - Ramses'
+box_text[1]['pos'] = (0.96, 0.95)
 
 box_text[2] = {}
-box_text[2]['text'] = 'Dark Matter Power Spectrum\nComparison to Enzo'
-box_text[2]['pos'] = (0.96, 0.93)
+box_text[2]['text'] = 'Cholla - Enzo'
+box_text[2]['pos'] = (0.96, 0.95)
 
-diff_max_list = [ 0.001, 0.01, 0.35]
+diff_max_list = [ 0.001, 0.01, 0.0024]
 
 fig = plt.figure(0)
-fig.set_size_inches(6*n_plots,6)
+fig.set_size_inches(fig_width,7)
 fig.clf()
 
 
@@ -107,6 +129,7 @@ if n_plots > 2:
 
 colors = ['k', 'k', 'k', 'k', 'w', 'w', 'w', 'w', 'w',  'w', ]
 
+n_skip = 2
 
 for i in range( n_plots ):
   
@@ -120,24 +143,39 @@ for i in range( n_plots ):
   diff_max = diff_max_list[i]
   
   n_lines=n_snapshots
-  ax1.set_prop_cycle('color', palettable.cmocean.sequential.Haline_10_r.mpl_colors)
-  ax2.set_prop_cycle('color', palettable.cmocean.sequential.Haline_10_r.mpl_colors)
+  ax1.set_prop_cycle('color', colormap )
+  ax2.set_prop_cycle('color', colormap )
+  
+  n_colors = len(colormap)
+  counter = 0
+  offset = 2
+
+  
+  diff_factor = 1e-3
   
   for n in range(n_snapshots):
+    if n == n_skip : continue
     if n==0: ax1.plot( k_vals, ps_1[n], '--', c='k', linewidth=1, label=code_label[i] )
     # c = colors[n]
-    label = 'z = {0:.1f}'.format(z_0[n])
-    ax1.plot( k_vals, ps_0[n],  linewidth=3, label=label)
-    ax2.plot( k_vals, diff[n] , alpha=0.9)
+    label = r'$z = {0:.1f}$'.format(z_0[n])
+    color = colormap[counter + offset]
+    ax1.plot( k_vals, ps_0[n],  linewidth=3, label=label, c=color)
+    ax2.plot( k_vals, diff[n]/diff_factor , alpha=0.9, c=color)
+    counter += 1
 
-  ax1.set_prop_cycle('color', palettable.cmocean.sequential.Gray_10.mpl_colors)
+    # if n==4: 
+    #   ax1.plot( k_vals, ps_0[n],  c='w', linewidth=3, label='$ $ ', )
+      
   for n in range(n_snapshots):
+    if n == n_skip : continue
+    
     ax1.plot( k_vals, ps_1[n], '--', c=colors[n], linewidth=1)
+    
     
   
   ax2.axhline( y=0., color='r', linestyle='--',  )
-  ax2.set_ylim( -diff_max, diff_max)
-  ax2.ticklabel_format(axis='both', style='sci')
+  ax2.set_ylim( -diff_max/diff_factor, diff_max/diff_factor)
+  # ax2.ticklabel_format(axis='both', style='sci')
   
   text = box_text[i]
   ax1.text(text['pos'][0], text['pos'][1], text['text'], fontsize=14, horizontalalignment='right', verticalalignment='center', transform=ax1.transAxes )
@@ -150,11 +188,21 @@ for i in range( n_plots ):
   #     label.set_fontproperties(ticks_font)
       
 
-  ax1.tick_params(axis='both', which='major', labelsize=10, size=3)
-  ax1.tick_params(axis='both', which='minor', labelsize=10, size=3)
-  ax2.tick_params(axis='both', which='major', labelsize=10, size=3)
-  ax2.tick_params(axis='both', which='minor', labelsize=10, size=3)
+  ax1.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in')
+  ax1.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
+  ax2.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in')
+  ax2.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
+  
+  ax1.tick_params(axis='x', which='major', labelsize=0, size=5, direction='in')
+  
+  # 
+  # ax2.yaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter(useMathText=True, useOffset=False))
   # ax2.ticklabel_format( style='sci', scilimits=(0, 1))
+  
+
+  
+
+
 
   # labels = [item.get_text() for item in ax2.get_yticklabels()]
   # labels[0] = r'$-1 \times 10^{-3}$'
@@ -165,14 +213,16 @@ for i in range( n_plots ):
   ax1.set_yscale('log')
   ax2.set_xscale('log')
 
-  ax1.legend( loc=3, fontsize=8.5, frameon=False)
-  ax2.set_xlabel( r'$k \, \, \, \,[h \mathrm{Mpc}^{-1}]$', fontsize=13)
+  ax1.legend( loc=3, fontsize=11.5, frameon=False, ncol=2)
+  ax2.set_xlabel( r'$k \, \, \, \,[h \mathrm{Mpc}^{-1}]$', fontsize=label_size)
 
   if i == 0:
-    ax1.set_ylabel( r'$P(k)$   $[h^3$Mpc$^{-3}]$', fontsize=13)
-    ax2.set_ylabel( r'$\frac{\Delta P(k)}{P(k)}$', fontsize=13)
+    ax1.set_ylabel( r'$P\,(k)$   $[h^3\mathrm{Mpc}^{-3}]$', fontsize=label_size, labelpad=-2)
+    ax2.set_ylabel( r'$\Delta P\,(k)/P\,(k)  \,\,[\times 10^{-3}]$', fontsize=label_size, labelpad=5)
 
+  [i.set_linewidth(border_width) for i in ax1.spines.itervalues()]
+  [i.set_linewidth(border_width) for i in ax2.spines.itervalues()]
 
 fileName = outDir + out_file_name
-fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=300)
+fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=fig_dpi)
 print 'Saved Image: ', fileName

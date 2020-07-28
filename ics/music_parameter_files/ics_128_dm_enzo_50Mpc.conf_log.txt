@@ -1,0 +1,127 @@
+18:59:08 | info    | Opening log file 'music_parameter_files/ics_128_dm_enzo_50Mpc.conf_log.txt'.
+18:59:08 | info    | Running music!, version 1.53
+18:59:08 | info    | Log is for run started Wed May 20 18:59:08 2020 
+18:59:08 | info    | Code was compiled using FFTW version 3.x
+18:59:08 | info    | Code was compiled for multi-threaded FFTW
+18:59:08 | info    | Running with a maximum of 8 OpenMP threads
+18:59:08 | info    | Code was compiled for double precision.
+18:59:08 | info    | Using k-space sampled transfer functions...
+18:59:08 | info    | Selecting transfer function plug-in  : eisenstein
+18:59:08 | info    | Selecting region generator plug-in  : box
+18:59:08 | info    | Selecting random number generator plug-in  : MUSIC
+18:59:08 | info    | Grid structure for Poisson solver:
+18:59:08 | info    |    Domain shifted by      (    0,    0,    0)
+18:59:08 | info    |    Level   7 :   offset = (    0,    0,    0)
+18:59:08 | info    |                    size = (  128,  128,  128)
+18:59:08 | info    | Grid structure for density convolution:
+18:59:08 | info    |    Domain shifted by      (    0,    0,    0)
+18:59:08 | info    |    Level   7 :   offset = (    0,    0,    0)
+18:59:08 | info    |                    size = (  128,  128,  128)
+18:59:08 | warning | Old ENZO versions may require 'align_top=true'!
+18:59:08 | info    | Computing white noise...
+18:59:08 | info    | Found 0 density constraint(s) to be obeyed.
+18:59:08 | info    | Generating random numbers (2) with seed 12345
+18:59:08 | info    | Generating random numbers w/ sample cube size of 32
+18:59:08 | info    | Storing white noise field in file 'wnoise_0007.bin'...
+18:59:08 | info    | Entering 2LPT branch
+18:59:08 | info    | Computing velocities...
+18:59:08 | info    | Using k-space transfer function kernel.
+18:59:08 | info    | Performing noise convolution on level   7
+18:59:08 | info    | Loading white noise from file 'wnoise_0007.bin'...
+18:59:08 | info    | Performing kernel convolution on (  128,  128,  128) grid
+18:59:08 | info    | Performing forward FFT...
+18:59:08 | info    | Performing backward FFT...
+18:59:08 | info    | Finished computing the density field in 0.145985s
+18:59:08 | info    | Grid mean density is 6.92695e-310. Correcting...
+18:59:08 | info    | Global density extrema: 
+18:59:08 | info    |   minimum: delta=-0.268909 at (0.441406,0.832031,0.160156)
+18:59:08 | info    |        shifted back at (0.441406,0.832031,0.160156)
+18:59:08 | info    |   maximum: delta=0.261411 at (0.675781,0.105469,0.730469)
+18:59:08 | info    |        shifted back at (0.675781,0.105469,0.730469)
+18:59:08 | info    | Entering k-space Poisson solver...
+18:59:08 | info    | Performing forward transform.
+18:59:08 | info    | Performing backward transform.
+18:59:08 | info    | Done with k-space Poisson solver.
+18:59:08 | info    | Computing 2LPT term....
+18:59:08 | info    | Solving 2LPT Poisson equation
+18:59:08 | info    | Entering k-space Poisson solver...
+18:59:08 | info    | Performing forward transform.
+18:59:08 | info    | Performing backward transform.
+18:59:08 | info    | Done with k-space Poisson solver.
+18:59:08 | info    | Computing a gradient in k-space... 
+18:59:09 | info    | Done with k-space gradient. 
+18:59:09 | info    | Writing CDM velocities
+18:59:09 | info    | Computing a gradient in k-space... 
+18:59:09 | info    | Done with k-space gradient. 
+18:59:09 | info    | Writing CDM velocities
+18:59:09 | info    | Computing a gradient in k-space... 
+18:59:09 | info    | Done with k-space gradient. 
+18:59:09 | info    | Writing CDM velocities
+18:59:09 | info    | Computing dark matter displacements...
+18:59:09 | info    | Computing a gradient in k-space... 
+18:59:09 | info    | Done with k-space gradient. 
+18:59:09 | info    | max. x-displacement of HR particles is 0.377826 [mean dx]
+18:59:09 | info    | Writing CDM displacements
+18:59:09 | info    | Computing a gradient in k-space... 
+18:59:09 | info    | Done with k-space gradient. 
+18:59:09 | info    | max. y-displacement of HR particles is 0.487980 [mean dx]
+18:59:09 | info    | Writing CDM displacements
+18:59:09 | info    | Computing a gradient in k-space... 
+18:59:09 | info    | Done with k-space gradient. 
+18:59:09 | info    | max. z-displacement of HR particles is 0.383572 [mean dx]
+18:59:09 | info    | Writing CDM displacements
+18:59:10 | info    | Wrote output file '/home/bruno/Desktop/ssd_0/data/cosmo_sims/enzo/128_dm_50Mpc'.
+18:59:10 | info    | Run finished succesfully on Wed May 20 18:59:10 2020 
+18:59:10 | info    | List of all configuration options:
+18:59:10 | info    |               cosmology/H0 = 67.66
+18:59:10 | info    |          cosmology/Omega_L = 0.6889
+18:59:10 | info    |          cosmology/Omega_b = 0.0497
+18:59:10 | info    |          cosmology/Omega_m = 0.3111
+18:59:10 | info    |              cosmology/YHe = 0
+18:59:10 | info    |            cosmology/dplus = 0.0126038118707
+18:59:10 | info    |            cosmology/nspec = 0.9665
+18:59:10 | info    |            cosmology/pnorm = 1.92646721499
+18:59:10 | info    |          cosmology/sigma_8 = 0.8102
+18:59:10 | info    |         cosmology/transfer = eisenstein
+18:59:10 | info    |            cosmology/vfact = 560.545215537
+18:59:10 | info    |               cosmology/w0 = -1.0
+18:59:10 | info    |               cosmology/wa = 0.0
+18:59:10 | info    |            output/filename = /home/bruno/Desktop/ssd_0/data/cosmo_sims/enzo/128_dm_50Mpc
+18:59:10 | info    |              output/format = enzo
+18:59:10 | info    |           poisson/accuracy = 1e-5
+18:59:10 | info    |           poisson/fft_fine = yes
+18:59:10 | info    |         poisson/grad_order = 6
+18:59:10 | info    |      poisson/laplace_order = 6
+18:59:10 | info    |        poisson/post_smooth = 3
+18:59:10 | info    |         poisson/pre_smooth = 3
+18:59:10 | info    |           poisson/smoother = gs
+18:59:10 | info    |    random/UnitLength_in_cm = 3.08568025e21
+18:59:10 | info    |       random/UnitMass_in_g = 1.989e43
+18:59:10 | info    |   random/UnitVelocity_in_cm_per_s = 1e5
+18:59:10 | info    |            random/seed[10] = 45678
+18:59:10 | info    |            random/seed[11] = 56789
+18:59:10 | info    |            random/seed[12] = 67890
+18:59:10 | info    |             random/seed[7] = 12345
+18:59:10 | info    |             random/seed[8] = 23456
+18:59:10 | info    |             random/seed[9] = 34567
+18:59:10 | info    |            setup/align_top = no
+18:59:10 | info    |              setup/baryons = no
+18:59:10 | info    |            setup/boxlength = 50
+18:59:10 | info    |            setup/kspace_TF = yes
+18:59:10 | info    |             setup/levelmax = 7
+18:59:10 | info    |             setup/levelmin = 7
+18:59:10 | info    |          setup/levelmin_TF = 7
+18:59:10 | info    |             setup/no_shift = yes
+18:59:10 | info    |          setup/offset(7,0) = 0
+18:59:10 | info    |          setup/offset(7,1) = 0
+18:59:10 | info    |          setup/offset(7,2) = 0
+18:59:10 | info    |          setup/periodic_TF = yes
+18:59:10 | info    |              setup/shift_x = 0
+18:59:10 | info    |              setup/shift_y = 0
+18:59:10 | info    |              setup/shift_z = 0
+18:59:10 | info    |            setup/size(7,0) = 128
+18:59:10 | info    |            setup/size(7,1) = 128
+18:59:10 | info    |            setup/size(7,2) = 128
+18:59:10 | info    |             setup/use_2LPT = yes
+18:59:10 | info    |              setup/use_LLA = yes
+18:59:10 | info    |               setup/zstart = 100

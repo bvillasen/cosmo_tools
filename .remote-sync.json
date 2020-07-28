@@ -5,8 +5,7 @@
   "uploadOnSave": true,
   "useAtomicWrites": false,
   "deleteLocal": false,
-  "hostname": "lux.ucsc.edu",
-  "port": "22",
+  "hostname": "lux-1.ucsc.edu",
   "target": "/data/groups/comp-astro/bruno/cosmo_tools",
   "ignore": [
     ".remote-sync.json",
@@ -15,5 +14,6 @@
   "username": "brvillas",
   "watch": [],
   "transport": "scp",
+  "port": "22",
   "password": "c0Nch@_1088g"
 }

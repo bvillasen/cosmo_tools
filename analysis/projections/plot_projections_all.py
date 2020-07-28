@@ -10,7 +10,8 @@ import matplotlib
 matplotlib.font_manager.findSystemFonts(fontpaths=['/home/bruno/Downloads'], fontext='ttf')
 matplotlib.rcParams['font.sans-serif'] = "Helvetica"
 matplotlib.rcParams['font.family'] = "sans-serif"
-
+matplotlib.rcParams['mathtext.fontset'] = 'cm'
+matplotlib.rcParams['mathtext.rm'] = 'serif'
 
 # set some global options
 # matplotlib.font_manager.findSystemFonts(fontpaths=['/home/bruno/Downloads'], fontext='ttf')
@@ -48,7 +49,7 @@ show_labels = False
 
 colormaps = [ 'inferno', Deep_20_r.mpl_colormap, 'cividis', 'gist_heat' ]
 # colormaps = [ Matter_20_r.mpl_colormap, Deep_20_r.mpl_colormap, 'cividis', 'gist_heat' ]
-fileName = 'projection_deep_1.pdf'
+fileName = 'projection_comparison.pdf'
 if show_labels: fileName = 'projection_deep_labels.png'
 
 
@@ -56,13 +57,13 @@ if show_labels: fileName = 'projection_deep_labels.png'
 outDir = figuresDir + 'projections/'
 create_directory( outDir )
 
-from mpi4py import MPI
+# from mpi4py import MPI
+# 
+# comm = MPI.COMM_WORLD
+# rank = comm.Get_rank()
+# nSnap = rank
 
-comm = MPI.COMM_WORLD
-rank = comm.Get_rank()
-nSnap = rank
-
-dataDir = '/home/bruno/Desktop/data/'
+dataDir = '/home/bruno/Desktop/ssd_0/data/'
 # dataDir = '/raid/bruno/data/'
 
 eta_1 = 0.001
@@ -89,8 +90,9 @@ nPoints = 256
 Lbox = 50000.
 
 data_name = 'SIMPLE_PPMP_eta0.035_beta0.00_grav4'
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_cool_uv_50Mpc/'.format(nPoints)
-chollaDir_uv = chollaDir +  'data_{0}/'.format( data_name )
+chollaDir = dataDir + 'cosmo_sims/{0}_cool_uv_50Mpc/'.format(nPoints)
+# chollaDir_uv = chollaDir +  'data_{0}/'.format( data_name )
+chollaDir_uv = chollaDir +  'snapshots/'
 
 enzoDir = dataDir + 'cosmo_sims/enzo/'
 enzoDir_uv = enzoDir + '{0}_cool_uv_50Mpc_HLLC_grav4/h5_files/'.format(nPoints)
@@ -125,7 +127,7 @@ fields = [ 'density_dm', 'density', 'HI_density', 'temperature' ]
 
 ticks_list = [  [1.5, 5.0], [0.5, 4], [-5.5, -1.5],  [3.5, 7 ]]
 
-cbar_labels = [ r'$\log_{10}$ Density  $[ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$', r'$\log_{10}$ Density  $[ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$',  r'$\log_{10}$ Density  $[ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$',  r'$\log_{10}$ Temperature $[K ]$']
+cbar_labels = [ r'$\log_{10}\,\,\, \mathrm{Density}  \,\,\,[ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$', r'$\log_{10} \,\,\, \mathrm{Density} \,\,\,  [ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$',  r'$\log_{10}  \,\,\, \mathrm{Density} \,\,\, [ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$',  r'$\log_{10} \,\,\, \mathrm{Temperature} \,\,\, [K\, ]$']
 field_labels = [ r'$\rho_{DM}$', r'$\rho_{b}$', r'$\rho_{HI}$', r'$T$',   ]
 code_labels = [' (Enzo)', ' (Cholla)']
 
@@ -251,12 +253,12 @@ for i in range( n_cols):
     cax = divider.append_axes("right", size="5%", pad=0.05)
     cb = fig.colorbar( im, cax=cax, ticks=ticks_list[i] )
     cb.ax.set_yticklabels(['{0:.1f}'.format(float(x)) for x in ticks_list[i]])
-    cb.ax.tick_params(labelsize=23, size=7,)
-    cb_fs = 25
-    if i ==0:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-30)
-    if i ==1:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-30)
-    if i ==2:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-40)
-    if i ==3:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-30)
+    cb.ax.tick_params(labelsize=25, size=8, width=2)
+    cb_fs = 30
+    if i ==0:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-35)
+    if i ==1:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-35)
+    if i ==2:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-45)
+    if i ==3:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-35)
 
     if show_labels:
       fs_label = 17
@@ -274,7 +276,7 @@ for i in range( n_cols):
     #Scale Bar
     bar_coords = [ [ 37.5, 47.5 ], [45, 45]]
     ax.errorbar( bar_coords[0], bar_coords[1], yerr=0.75, linewidth=5, color='w', alpha=0.9 )
-    ax.text(0.925, 0.93, '10 Mpc', color='w', alpha=1, fontsize=30, horizontalalignment='right', verticalalignment='center', transform=ax.transAxes )
+    ax.text(0.95, 0.94, r'$10\, \mathrm{Mpc}/h$', color='w', alpha=1, fontsize=30, horizontalalignment='right', verticalalignment='center', transform=ax.transAxes )
     
     # plt.text( 5, 0.05, '10kpc',  horizontalalignment='center', verticalalignment='top', transform=trans )
     
@@ -283,6 +285,6 @@ for i in range( n_cols):
 
 # 
 fig.tight_layout()
-fig.savefig( outDir + fileName,  bbox_inches='tight', dpi=100 )
+fig.savefig( outDir + fileName,  bbox_inches='tight', dpi=200 )
 print 'Saved image: ', fileName
 print ''

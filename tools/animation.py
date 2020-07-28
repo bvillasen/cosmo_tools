@@ -23,7 +23,8 @@ eta_2  = .050
 # inDir = '/home/bruno/Desktop/ssd_0/data/cosmo_sims/2048_hydro_50Mpc/figures/phase_diagram_black/anim/'
 # inDir = '/home/bruno/Desktop/cpu_anim/'
 # inDir = '/home/bruno/Desktop/ssd_0/data/cosmo_sims/256_dm_50Mpc/figures/images_for_anim/'
-inDir = '/home/bruno/Desktop/ssd_0/data/cosmo_sims/2048_hydro_50Mpc/projections_pchw18/figures_dens_temp_dm/'
+# inDir = '/home/bruno/Desktop/ssd_0/data/cosmo_sims/2048_hydro_50Mpc/projections_pchw18/figures_dens_temp_dm/'
+inDir = '/home/bruno/Desktop/ssd_0/data/cosmo_sims/256_hydro_50Mpc/figures/velocity_comparison/'
 # inDir = '/home/bruno/Desktop/ssd_0/data/cosmo_sims/2048_hydro_50Mpc/projections_pchw18/dens/figures_anim/'
 # inDir = '/home/bruno/Desktop/ssd_0/data/cosmo_sims/zeldovich/figures_black/'
 
@@ -47,7 +48,8 @@ outDir = '/home/bruno/Desktop/'
 # image_name = 'collapse'
 # image_name = 'projection'
 # image_name = 'image'
-image_name = 'proj'
+# image_name = 'proj'
+image_name = 'dens_vel_distribution'
 
 # out_anim_name = 'chemistry_128_difference'.format(eta_2)
 # out_anim_name = 'phase_diagram_2048_hm12'
@@ -59,12 +61,13 @@ image_name = 'proj'
 # out_anim_name = 'spherical_collapse'
 # out_anim_name = 'phase_diagram_uvb_comparison_balck'
 # out_anim_name = 'quantum_turbulence_2'
-out_anim_name = 'cosmo_fly_4k_gas_time_dens_temp_dm'
+# out_anim_name = 'cosmo_fly_4k_gas_time_dens_temp_dm'
+out_anim_name = 'dens_vel_distribution_comparison'
 
-cmd = 'ffmpeg -framerate 60  '
+cmd = 'ffmpeg -framerate 1  '
 # cmd += ' -start_number 316'
 cmd += ' -i {0}{1}_%d.png '.format( inDir, image_name )
-cmd += ' -pix_fmt yuv420p '
+# cmd += ' -pix_fmt yuv420p '
 # cmd += ' -vcodec libx264 '
 # cmd += '-b 9100k '
 cmd += '{0}{1}.mp4'.format( outDir, out_anim_name )

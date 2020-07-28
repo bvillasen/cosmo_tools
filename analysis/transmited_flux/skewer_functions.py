@@ -19,8 +19,12 @@ from load_tabulated_data import load_power_spectrum_table, load_tabulated_data_b
 from parameters_ewald import *
 
 
+# dataDir = '/data/groups/comp-astro/bruno/'
+# input_dir = dataDir + 'cosmo_sims/ewald_512/skewers_1D/'
 
-def load_skewers_single_axis(  n_skewers, skewer_axis,  nSnap, input_dir, set_random_seed=True ):
+
+
+def load_skewers_single_axis(  n_skewers, skewer_axis,  nSnap, input_dir, set_random_seed=True, print_out=True ):
 
   # print "nSnap: {0}".format(nSnap)
 
@@ -31,7 +35,7 @@ def load_skewers_single_axis(  n_skewers, skewer_axis,  nSnap, input_dir, set_ra
 
   if set_random_seed:   np.random.seed(12345)
   skewer_ids = np.random.randint(0, n_total, n_skewers)
-  print " Loading {0} skewers {1} axis".format(n_skewers, skewer_axis)
+  if print_out: print " Loading {0} skewers {1} axis".format(n_skewers, skewer_axis)
 
   skewers_dens, skewers_temp, skewers_HI, skewers_vel = [], [], [], []
 
@@ -57,7 +61,7 @@ def load_skewers_single_axis(  n_skewers, skewer_axis,  nSnap, input_dir, set_ra
 
 
 
-def load_skewers_multiple_axis( axis_list, n_skewers_list, nSnap, input_dir, set_random_seed=True):
+def load_skewers_multiple_axis( axis_list, n_skewers_list, nSnap, input_dir, set_random_seed=True, print_out=True):
   n_axis = len(axis_list)
 
   dens_list, HI_list, temp_list, vel_list = [], [], [], []
@@ -65,7 +69,7 @@ def load_skewers_multiple_axis( axis_list, n_skewers_list, nSnap, input_dir, set
   for i in range( n_axis ):
     skewer_axis = axis_list[i]
     n_skewers = n_skewers_list[i]
-    current_z, skewers_dens, skewers_HI, skewers_temp, skewers_vel = load_skewers_single_axis( n_skewers, skewer_axis,  nSnap, input_dir, set_random_seed=set_random_seed )
+    current_z, skewers_dens, skewers_HI, skewers_temp, skewers_vel = load_skewers_single_axis( n_skewers, skewer_axis,  nSnap, input_dir, set_random_seed=set_random_seed, print_out=print_out )
     dens_list.append( skewers_dens )
     HI_list.append( skewers_HI )
     temp_list.append( skewers_temp )

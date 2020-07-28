@@ -20,12 +20,12 @@ from expand_data_grid import expand_data_grid_to_cholla
 from domain_decomposition import get_domain_block, get_domain_parent
 from tools import create_directory
 
-# dataDir = '/home/bruno/Desktop/data/'
+dataDir = '/home/bruno/Desktop/ssd_0/data/'
 # dataDir = '/raid/bruno/data/'
-dataDir = '/gpfs/alpine/proj-shared/ast149/'
+# dataDir = '/gpfs/alpine/proj-shared/ast149/'
 enzoDir = dataDir + 'cosmo_sims/enzo/256_hydro_50Mpc/ics/'
 inDir = enzoDir
-outputDir = dataDir + 'cosmo_sims/256_cool_uv_50Mpc/ics/ics_single/'
+outputDir = dataDir + 'cosmo_sims/256_hydro_50Mpc/ics_enzo_8/'
 create_directory( outputDir )
 nSnap_enzo = 0
 
@@ -82,9 +82,9 @@ data_enzo['gas']['GasEnergy'] = gas_u
 data_enzo['gas']['Energy'] = gas_E
 
 
-Lbox = 50000
 
-proc_grid = [ 1, 1, 1]
+Lbox = 50000.0
+proc_grid = [ 2, 2, 2]
 box_size = [ Lbox, Lbox, Lbox ]
 grid_size = [ 256, 256, 256 ]
 outputBaseName = '{0}_particles.h5'.format(nSnap)

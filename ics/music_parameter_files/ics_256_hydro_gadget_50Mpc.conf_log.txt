@@ -1,0 +1,205 @@
+11:21:48 | info    | Opening log file 'music_parameter_files/ics_256_hydro_gadget_50Mpc.conf_log.txt'.
+11:21:48 | info    | Running music!, version 1.53
+11:21:48 | info    | Log is for run started Thu May 28 11:21:48 2020 
+11:21:48 | info    | Code was compiled using FFTW version 3.x
+11:21:48 | info    | Code was compiled for multi-threaded FFTW
+11:21:48 | info    | Running with a maximum of 8 OpenMP threads
+11:21:48 | info    | Code was compiled for double precision.
+11:21:48 | info    | Using k-space sampled transfer functions...
+11:21:48 | info    | Selecting transfer function plug-in  : eisenstein
+11:21:48 | info    | Selecting region generator plug-in  : box
+11:21:48 | info    | Selecting random number generator plug-in  : MUSIC
+11:21:48 | info    | Grid structure for Poisson solver:
+11:21:48 | info    |    Domain shifted by      (    0,    0,    0)
+11:21:48 | info    |    Level   8 :   offset = (    0,    0,    0)
+11:21:48 | info    |                    size = (  256,  256,  256)
+11:21:48 | info    | Grid structure for density convolution:
+11:21:48 | info    |    Domain shifted by      (    0,    0,    0)
+11:21:48 | info    |    Level   8 :   offset = (    0,    0,    0)
+11:21:48 | info    |                    size = (  256,  256,  256)
+11:21:48 | info    | Computing white noise...
+11:21:48 | info    | Found 0 density constraint(s) to be obeyed.
+11:21:48 | info    | Generating random numbers (2) with seed 12345
+11:21:48 | info    | Generating random numbers w/ sample cube size of 32
+11:21:48 | info    | Generating random numbers w/ sample cube size of 32
+11:21:48 | info    | Generating a constrained random number set with seed 23456     using coarse mode replacement...
+11:21:49 | info    | Storing white noise field in file 'wnoise_0008.bin'...
+11:21:49 | info    | Entering 2LPT branch
+11:21:49 | info    | Computing velocities...
+11:21:49 | info    | Using k-space transfer function kernel.
+11:21:49 | info    | Performing noise convolution on level   8
+11:21:49 | info    | Loading white noise from file 'wnoise_0008.bin'...
+11:21:50 | info    | Performing kernel convolution on (  256,  256,  256) grid
+11:21:50 | info    | Performing forward FFT...
+11:21:51 | info    | Performing backward FFT...
+11:21:51 | info    | Finished computing the density field in 1.451954s
+11:21:51 | info    | Grid mean density is 6.91724e-310. Correcting...
+11:21:51 | info    | Entering k-space Poisson solver...
+11:21:51 | info    | Performing forward transform.
+11:21:51 | info    | Performing backward transform.
+11:21:51 | info    | Done with k-space Poisson solver.
+11:21:51 | info    | Computing 2LPT term....
+11:21:53 | info    | Solving 2LPT Poisson equation
+11:21:53 | info    | Entering k-space Poisson solver...
+11:21:53 | info    | Performing forward transform.
+11:21:53 | info    | Performing backward transform.
+11:21:53 | info    | Done with k-space Poisson solver.
+11:21:53 | info    | Computing a gradient in k-space... 
+11:21:53 | info    | Done with k-space gradient. 
+11:21:53 | info    | Writing CDM velocities
+11:21:54 | info    | Computing a gradient in k-space... 
+11:21:54 | info    | Done with k-space gradient. 
+11:21:54 | info    | Writing CDM velocities
+11:21:54 | info    | Computing a gradient in k-space... 
+11:21:54 | info    | Done with k-space gradient. 
+11:21:55 | info    | Writing CDM velocities
+11:21:55 | info    | Computing baryon displacements...
+11:21:55 | info    | Using k-space transfer function kernel.
+11:21:55 | info    | Performing noise convolution on level   8
+11:21:55 | info    | Loading white noise from file 'wnoise_0008.bin'...
+11:21:55 | info    | Performing kernel convolution on (  256,  256,  256) grid
+11:21:55 | info    | Performing forward FFT...
+11:21:55 | info    | Performing staggering shift for SPH
+11:21:56 | info    | Performing backward FFT...
+11:21:56 | info    | Finished computing the density field in 1.350091s
+11:21:56 | info    | Grid mean density is 6.91724e-310. Correcting...
+11:21:56 | info    | Entering k-space Poisson solver...
+11:21:56 | info    | Performing forward transform.
+11:21:56 | info    | Performing backward transform.
+11:21:57 | info    | Done with k-space Poisson solver.
+11:21:57 | info    | Writing baryon potential
+11:21:58 | info    | Entering k-space Poisson solver...
+11:21:58 | info    | Performing forward transform.
+11:21:58 | info    | Performing backward transform.
+11:21:58 | info    | Done with k-space Poisson solver.
+11:21:58 | info    | Computing a gradient in k-space... 
+11:21:59 | info    | Done with k-space gradient. 
+11:21:59 | info    | Writing baryon velocities
+11:21:59 | info    | Computing a gradient in k-space... 
+11:21:59 | info    | Done with k-space gradient. 
+11:21:59 | info    | Writing baryon velocities
+11:22:00 | info    | Computing a gradient in k-space... 
+11:22:00 | info    | Done with k-space gradient. 
+11:22:00 | info    | Writing baryon velocities
+11:22:00 | info    | Computing dark matter displacements...
+11:22:00 | info    | Using k-space transfer function kernel.
+11:22:00 | info    | Performing noise convolution on level   8
+11:22:00 | info    | Loading white noise from file 'wnoise_0008.bin'...
+11:22:00 | info    | Performing kernel convolution on (  256,  256,  256) grid
+11:22:00 | info    | Performing forward FFT...
+11:22:01 | info    | Performing backward FFT...
+11:22:01 | info    | Finished computing the density field in 1.262969s
+11:22:02 | info    | Grid mean density is 6.91724e-310. Correcting...
+11:22:02 | info    | Writing CDM data
+11:22:02 | info    | Entering k-space Poisson solver...
+11:22:02 | info    | Performing forward transform.
+11:22:02 | info    | Performing backward transform.
+11:22:02 | info    | Done with k-space Poisson solver.
+11:22:03 | info    | Entering k-space Poisson solver...
+11:22:03 | info    | Performing forward transform.
+11:22:04 | info    | Performing backward transform.
+11:22:04 | info    | Done with k-space Poisson solver.
+11:22:04 | info    | Computing a gradient in k-space... 
+11:22:04 | info    | Done with k-space gradient. 
+11:22:04 | info    | max. x-displacement of HR particles is 0.774082 [mean dx]
+11:22:04 | info    | Writing CDM displacements
+11:22:04 | info    | Computing a gradient in k-space... 
+11:22:05 | info    | Done with k-space gradient. 
+11:22:05 | info    | max. y-displacement of HR particles is 0.996698 [mean dx]
+11:22:05 | info    | Writing CDM displacements
+11:22:05 | info    | Computing a gradient in k-space... 
+11:22:05 | info    | Done with k-space gradient. 
+11:22:05 | info    | max. z-displacement of HR particles is 0.779709 [mean dx]
+11:22:05 | info    | Writing CDM displacements
+11:22:06 | info    | Computing baryon displacements...
+11:22:06 | info    | Using k-space transfer function kernel.
+11:22:06 | info    | Performing noise convolution on level   8
+11:22:06 | info    | Loading white noise from file 'wnoise_0008.bin'...
+11:22:06 | info    | Performing kernel convolution on (  256,  256,  256) grid
+11:22:06 | info    | Performing forward FFT...
+11:22:06 | info    | Performing staggering shift for SPH
+11:22:07 | info    | Performing backward FFT...
+11:22:07 | info    | Finished computing the density field in 1.368536s
+11:22:07 | info    | Grid mean density is 6.91724e-310. Correcting...
+11:22:07 | info    | Writing baryon density
+11:22:07 | info    | Entering k-space Poisson solver...
+11:22:07 | info    | Performing forward transform.
+11:22:07 | info    | Performing backward transform.
+11:22:08 | info    | Done with k-space Poisson solver.
+11:22:09 | info    | Entering k-space Poisson solver...
+11:22:09 | info    | Performing forward transform.
+11:22:09 | info    | Performing backward transform.
+11:22:10 | info    | Done with k-space Poisson solver.
+11:22:10 | info    | Computing a gradient in k-space... 
+11:22:10 | info    | Done with k-space gradient. 
+11:22:10 | info    | Writing baryon displacements
+11:22:10 | info    | Computing a gradient in k-space... 
+11:22:11 | info    | Done with k-space gradient. 
+11:22:11 | info    | Writing baryon displacements
+11:22:11 | info    | Computing a gradient in k-space... 
+11:22:11 | info    | Done with k-space gradient. 
+11:22:11 | info    | Writing baryon displacements
+11:22:12 | info    |       type   0 :     16777216 [m=0.0102764]
+11:22:12 | info    |       type   1 :     16777216 [m=0.0540492]
+11:22:18 | info    | Gadget2 : set initial gas temperature to 171.48 K/mu
+11:22:18 | info    | Wrote output file '/home/bruno/Desktop/ssd_0/data/cosmo_sims/gadget/256_hydro_50Mpc/ics_gadget_hydro'.
+11:22:18 | info    | Run finished succesfully on Thu May 28 11:22:18 2020 
+11:22:18 | info    | List of all configuration options:
+11:22:18 | info    |               cosmology/H0 = 67.66
+11:22:18 | info    |          cosmology/Omega_L = 0.6889
+11:22:18 | info    |          cosmology/Omega_b = 0.0497
+11:22:18 | info    |          cosmology/Omega_m = 0.3111
+11:22:18 | info    |              cosmology/YHe = 0
+11:22:18 | info    |            cosmology/dplus = 0.0126038118707
+11:22:18 | info    |            cosmology/nspec = 0.9665
+11:22:18 | info    |            cosmology/pnorm = 1.92646721499
+11:22:18 | info    |          cosmology/sigma_8 = 0.8102
+11:22:18 | info    |         cosmology/transfer = eisenstein
+11:22:18 | info    |            cosmology/vfact = 560.545215537
+11:22:18 | info    |               cosmology/w0 = -1.0
+11:22:18 | info    |               cosmology/wa = 0.0
+11:22:18 | info    |    output/UnitLength_in_cm = 3.08568025e21
+11:22:18 | info    |       output/UnitMass_in_g = 1.989e43
+11:22:18 | info    |   output/UnitVelocity_in_cm_per_s = 1e5
+11:22:18 | info    |            output/filename = /home/bruno/Desktop/ssd_0/data/cosmo_sims/gadget/256_hydro_50Mpc/ics_gadget_hydro
+11:22:18 | info    |              output/format = gadget2
+11:22:18 | info    |        output/gadget_lunit = kpc
+11:22:18 | info    |    output/gadget_num_files = 1
+11:22:18 | info    |           poisson/accuracy = 1e-5
+11:22:18 | info    |           poisson/fft_fine = yes
+11:22:18 | info    |         poisson/grad_order = 6
+11:22:18 | info    |      poisson/laplace_order = 6
+11:22:18 | info    |        poisson/post_smooth = 3
+11:22:18 | info    |         poisson/pre_smooth = 3
+11:22:18 | info    |           poisson/smoother = gs
+11:22:18 | info    |    random/UnitLength_in_cm = 3.08568025e21
+11:22:18 | info    |       random/UnitMass_in_g = 1.989e43
+11:22:18 | info    |   random/UnitVelocity_in_cm_per_s = 1e5
+11:22:18 | info    |            random/seed[10] = 45678
+11:22:18 | info    |            random/seed[11] = 56789
+11:22:18 | info    |            random/seed[12] = 67890
+11:22:18 | info    |             random/seed[7] = 12345
+11:22:18 | info    |             random/seed[8] = 23456
+11:22:18 | info    |             random/seed[9] = 34567
+11:22:18 | info    |            setup/align_top = no
+11:22:18 | info    |              setup/baryons = yes
+11:22:18 | info    |            setup/boxlength = 50
+11:22:18 | info    |               setup/do_SPH = yes
+11:22:18 | info    |            setup/kspace_TF = yes
+11:22:18 | info    |             setup/levelmax = 8
+11:22:18 | info    |             setup/levelmin = 8
+11:22:18 | info    |          setup/levelmin_TF = 8
+11:22:18 | info    |             setup/no_shift = yes
+11:22:18 | info    |          setup/offset(8,0) = 0
+11:22:18 | info    |          setup/offset(8,1) = 0
+11:22:18 | info    |          setup/offset(8,2) = 0
+11:22:18 | info    |          setup/periodic_TF = yes
+11:22:18 | info    |              setup/shift_x = 0
+11:22:18 | info    |              setup/shift_y = 0
+11:22:18 | info    |              setup/shift_z = 0
+11:22:18 | info    |            setup/size(8,0) = 256
+11:22:18 | info    |            setup/size(8,1) = 256
+11:22:18 | info    |            setup/size(8,2) = 256
+11:22:18 | info    |             setup/use_2LPT = yes
+11:22:18 | info    |              setup/use_LLA = yes
+11:22:18 | info    |               setup/zstart = 100

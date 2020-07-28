@@ -4,13 +4,25 @@ import matplotlib.pyplot as plt
 import matplotlib
 import palettable
 
-
+import matplotlib
+# set some global options
+matplotlib.font_manager.findSystemFonts(fontpaths=['/home/bruno/Downloads'], fontext='ttf')
+matplotlib.rcParams['font.sans-serif'] = "Helvetica"
+matplotlib.rcParams['font.family'] = "sans-serif"
+matplotlib.rcParams['mathtext.fontset'] = 'cm'
+matplotlib.rcParams['mathtext.rm'] = 'serif'
+# hfont = {'fontname':'Helvetica'}
+# 
 
 data = np.loadtxt( 'scaling_summit_adiabatic.dat').T
+n_per_gpu = np.array([ 128, 128, 128, 128, 128, 128, 256, 256, 256, 256, 256, 256, 128, 256, 128, 256, 128, 256])
+data = data[:, :-2]
+n_per_gpu = n_per_gpu[:-2]
+
+
 #n_proc  nx  ny  nz  n_omp  n_steps  dt  hydo  bound  grav_pot  pot_bound  part_dens  part_bound  part_dens_boud  part_adv_1  part_adv_2  total  
 n_procs = data[0]
 nx, ny, nz =  data[1:4]
-n_per_gpu = np.array([ 128, 128, 128, 128, 128, 128, 256, 256, 256, 256, 256, 256, 128, 256, 128, 256, 128, 256])
 t_dt = data[6]
 t_hydro = data[7]
 t_bound = data[8]
@@ -60,31 +72,21 @@ c_grav = 'C3'
 c_particles = 'C2'
 c_total = 'k'
 
-# ax.plot( n_procs_128, t_hydro_128, c=c_hydro, alpha=0.6, linewidth=1)
-# ax.plot( n_procs_128, t_mpi_128, c=c_mpi, linewidth=1, alpha=0.6)
-# ax.plot( n_procs_128, t_grav_128, c=c_grav, linewidth=1, alpha=0.6)
-# ax.plot( n_procs_128, t_particles_128, c=c_particles, linewidth=1, alpha=0.6)
-# ax.plot( n_procs_128, t_total_128, c=c_total, linewidth=1, alpha=0.6)
 
 
 ms = 4
-ax.plot( n_procs_128, t_hydro_128, c=c_hydro,  alpha=0.8, marker='o', markersize=ms)
-ax.plot( n_procs_128, t_mpi_128, c=c_mpi, alpha=0.8, marker='o', markersize=ms)
-ax.plot( n_procs_128, t_grav_128, c=c_grav, alpha=0.8, marker='o', markersize=ms)
-ax.plot( n_procs_128, t_particles_128, c=c_particles,  alpha=0.8, marker='o', markersize=ms)
-ax.plot( n_procs_128, t_total_128, c=c_total,  alpha=0.8, marker='o', markersize=ms, label=r'128$^3$ / GPU')
+ax.plot( n_procs_128, t_hydro_128, '--', c=c_hydro,  alpha=0.8, marker='o', markersize=ms)
+ax.plot( n_procs_128, t_mpi_128, '--', c=c_mpi, alpha=0.8, marker='o', markersize=ms)
+ax.plot( n_procs_128, t_grav_128, '--', c=c_grav, alpha=0.8, marker='o', markersize=ms)
+ax.plot( n_procs_128, t_particles_128, '--', c=c_particles,  alpha=0.8, marker='o', markersize=ms)
+ax.plot( n_procs_128, t_total_128, '--', c=c_total,  alpha=0.8, marker='o', markersize=ms, label=r'128$^3$ / GPU')
 
-# ax.plot( n_procs_256, t_hydro_256, '--', c=c_hydro, alpha=0.6, linewidth=1)
-# ax.plot( n_procs_256, t_mpi_256, '--', c=c_mpi, alpha=0.6, linewidth=1)
-# ax.plot( n_procs_256, t_grav_256, '--', c=c_grav, alpha=0.6, linewidth=1)
-# ax.plot( n_procs_256, t_particles_256, '--', c=c_particles, alpha=0.6, linewidth=1)
-# ax.plot( n_procs_256, t_total_256, '--', c=c_total, alpha=0.6, linewidth=1)
 
-ax.plot( n_procs_256, t_hydro_256, '--', c=c_hydro, alpha=0.6, marker='D', markersize=ms)
-ax.plot( n_procs_256, t_mpi_256, '--', c=c_mpi, alpha=0.6, marker='D', markersize=ms)
-ax.plot( n_procs_256, t_grav_256, '--', c=c_grav, alpha=0.6, marker='D', markersize=ms)
-ax.plot( n_procs_256, t_particles_256, '--', c=c_particles, alpha=0.6, marker='D', markersize=ms)
-ax.plot( n_procs_256, t_total_256, '--', c=c_total, alpha=0.6, marker='D', markersize=ms,  label=r'256$^3$ / GPU')
+ax.plot( n_procs_256, t_hydro_256, c=c_hydro, alpha=0.6, marker='D', markersize=ms)
+ax.plot( n_procs_256, t_mpi_256, c=c_mpi, alpha=0.6, marker='D', markersize=ms)
+ax.plot( n_procs_256, t_grav_256, c=c_grav, alpha=0.6, marker='D', markersize=ms)
+ax.plot( n_procs_256, t_particles_256, c=c_particles, alpha=0.6, marker='D', markersize=ms)
+ax.plot( n_procs_256, t_total_256, c=c_total, alpha=0.6, marker='D', markersize=ms,  label=r'256$^3$ / GPU')
 
 ax.legend( loc=2, frameon=False, fontsize=9)
 
@@ -98,7 +100,7 @@ ax.text(0.05, 0.17, 'Particles', fontsize=fs, color=c_particles, horizontalalign
 ax.text(0.05, 0.34, 'Poisson', fontsize=fs, color=c_grav, horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
 ax.text(0.05, 0.67, 'Total', fontsize=fs, color=c_total, horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
 
-ax.text(0.37, 0.93, 'Cholla Weak Scaling on Summit', fontsize=12, color=c_total, horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
+ax.text(0.45, 0.93, 'Cholla Weak Scaling on Summit', fontsize=12, color=c_total, horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
 
 
 ax.set_ylim(0, 550)
@@ -108,6 +110,8 @@ ax.set_ylabel( r'Milliseconds / 128$^3$ Cells / GPU', fontsize=fs)
 ax.set_xlabel( r'Number of GPUs', fontsize=fs)
 ax.set_xscale('log')
 
-fileName = 'scaling_summit_adiabatic.png'
+output_dir = '/home/bruno/Desktop/'
+
+fileName = output_dir + 'scaling_summit_adiabatic.png'
 fig.savefig(  fileName ,  bbox_inches='tight', dpi=300)
 

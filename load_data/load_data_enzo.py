@@ -33,7 +33,7 @@ def load_snapshot_enzo( nSnap, inDir, dm=False, particles=False, cool=False, met
     # data['gas']['momentum_y'] = data_gas['momentum_y']
     # data['gas']['momentum_z'] = data_gas['momentum_z']
     # data['gas']['Energy'] = data_gas['Energy']
-    data['gas']['GasEnergy'] = data_gas['GasEnergy']
+    # data['gas']['GasEnergy'] = data_gas['GasEnergy']
     
   if temp: data['gas']['temperature'] = data_gas['temperature']
 
@@ -53,9 +53,9 @@ def load_snapshot_enzo( nSnap, inDir, dm=False, particles=False, cool=False, met
     data['dm']['pos_x'] = data_dm['pos_x']
     data['dm']['pos_y'] = data_dm['pos_y']
     data['dm']['pos_z'] = data_dm['pos_z']
-    # data['dm']['vel_x'] = data_dm['vel_x']
-    # data['dm']['vel_y'] = data_dm['vel_y']
-    # data['dm']['vel_z'] = data_dm['vel_z']
+    data['dm']['vel_x'] = data_dm['vel_x']
+    data['dm']['vel_y'] = data_dm['vel_y']
+    data['dm']['vel_z'] = data_dm['vel_z']
 
   if dm:
     density_file_name = 'grid_CIC_{0:03}.h5'.format(nSnap)
@@ -71,7 +71,7 @@ def load_snapshot_enzo( nSnap, inDir, dm=False, particles=False, cool=False, met
   return data
 
 
-def load_snapshot_enzo_yt( nSnap, inDir, cooling=False, metals=False, hydro=True  ):
+def load_snapshot_enzo_yt( nSnap, inDir, cooling=False, metals=False, hydro=True,  dm=True ):
   import yt
   snapKey = '{0:03}'.format(nSnap)
   inFileName = 'DD0{0}/data0{0}'.format( snapKey)
@@ -108,26 +108,28 @@ def load_snapshot_enzo_yt( nSnap, inDir, cooling=False, metals=False, hydro=True
   if metals:
     metal_dens = data_grid[ ('gas', 'metal_density')].in_units('msun/kpc**3')*current_a**3/h**2
 
-  p_mass = data[('all', 'particle_mass')].in_units('msun')*h
-  p_pos_x = data[('all', 'particle_position_x')].in_units('kpc')/current_a*h
-  p_pos_y = data[('all', 'particle_position_y')].in_units('kpc')/current_a*h
-  p_pos_z = data[('all', 'particle_position_z')].in_units('kpc')/current_a*h
-  p_vel_x = data[('all', 'particle_velocity_x')].in_units('km/s')
-  p_vel_y = data[('all', 'particle_velocity_y')].in_units('km/s')
-  p_vel_z = data[('all', 'particle_velocity_z')].in_units('km/s')
+  if dm: 
+    p_mass = data[('all', 'particle_mass')].in_units('msun')*h
+    p_pos_x = data[('all', 'particle_position_x')].in_units('kpc')/current_a*h
+    p_pos_y = data[('all', 'particle_position_y')].in_units('kpc')/current_a*h
+    p_pos_z = data[('all', 'particle_position_z')].in_units('kpc')/current_a*h
+    p_vel_x = data[('all', 'particle_velocity_x')].in_units('km/s')
+    p_vel_y = data[('all', 'particle_velocity_y')].in_units('km/s')
+    p_vel_z = data[('all', 'particle_velocity_z')].in_units('km/s')
 
   data_dic = {'dm':{}, 'gas':{}}
   # data_dic['omega_l'] = ds.omega_lambda
   # data_dic['omega_m'] = ds.omega_matter
   data_dic['current_a'] = current_a
   data_dic['current_z'] = current_z
-  data_dic['dm']['mass'] = p_mass.v
-  data_dic['dm']['pos_x'] = p_pos_x.v
-  data_dic['dm']['pos_y'] = p_pos_y.v
-  data_dic['dm']['pos_z'] = p_pos_z.v
-  data_dic['dm']['vel_x'] = p_vel_x.v
-  data_dic['dm']['vel_y'] = p_vel_y.v
-  data_dic['dm']['vel_z'] = p_vel_z.v
+  if dm:
+    data_dic['dm']['mass'] = p_mass.v
+    data_dic['dm']['pos_x'] = p_pos_x.v
+    data_dic['dm']['pos_y'] = p_pos_y.v
+    data_dic['dm']['pos_z'] = p_pos_z.v
+    data_dic['dm']['vel_x'] = p_vel_x.v
+    data_dic['dm']['vel_y'] = p_vel_y.v
+    data_dic['dm']['vel_z'] = p_vel_z.v
 
   if hydro:
     data_dic['gas']['density'] = gas_dens.v

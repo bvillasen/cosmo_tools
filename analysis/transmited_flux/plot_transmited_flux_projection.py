@@ -316,10 +316,10 @@ for ax in axes:
 
 fig.subplots_adjust( wspace=0 )
 fig.tight_layout()
-outputFileName = 'transmited_flux_{0}_{1}_projection_{2}errf.png'.format(uvb, nSnap, background)
+outputFileName = 'transmited_flux_skewer.pdf'.format(uvb, nSnap, background)
 if not transparent: fig.savefig( output_dir + outputFileName, bbox_inches='tight',  facecolor=fig.get_facecolor(), dpi=200 )
 else: fig.savefig( output_dir + outputFileName, bbox_inches='tight',  transparent=True, dpi=200 )
-print 'Saved image: ', output_dir + outputFileName
+print( 'Saved image: ' + output_dir + outputFileName )
 
 
 

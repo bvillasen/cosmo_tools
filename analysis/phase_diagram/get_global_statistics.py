@@ -15,11 +15,16 @@ from load_data_cholla import load_snapshot_data_distributed
 from domain_decomposition import get_domain_block
 
 
+use_mpi = False
 
-from mpi4py import MPI
-comm = MPI.COMM_WORLD
-rank = comm.Get_rank()
-nprocs = comm.Get_size()
+if use_mpi: 
+  from mpi4py import MPI
+  comm = MPI.COMM_WORLD
+  rank = comm.Get_rank()
+  nprocs = comm.Get_size()
+else:
+  rank = 0
+  nprocs = 1
 
 
 dataDir = '/data/groups/comp-astro/bruno/'
@@ -50,14 +55,15 @@ grid_size = [ 2048, 2048, 2048 ]
 domain = get_domain_block( proc_grid, box_size, grid_size )
 
 
-subgrid_x = [ 0, 2048 ]
-subgrid_y = [ 0, 2048 ]
-subgrid_z = [ 0, 2048 ]
+subgrid_x = [ 0, 256 ]
+subgrid_y = [ 0, 256 ]
+subgrid_z = [ 0, 256 ]
 subgrid = [ subgrid_x, subgrid_y, subgrid_z ]
 
 
 z_all = []
 T0_all = []
+gamma_all = []
 dens_mean_all = []
 dens_HI_mean_all = []
 dens_HeI_mean_all = []
@@ -76,7 +82,7 @@ proc_snaps = snap_indices[proc_snaps]
 if len(proc_snaps) == 0: exit()
 print( ' {0}: {1}'.format( rank, proc_snaps) )
 time.sleep(1)
-comm.Barrier()
+if use_mpi: comm.Barrier()
 
 nSnap = 169
 for nSnap in proc_snaps:
@@ -137,22 +143,27 @@ for nSnap in proc_snaps:
   mcmc_gamma_sigma = mcmc_stats['gamma']['standard deviation']
   
   T0 = 10**mcmc_T0
+  gamma = mcmc_gamma + 1
+  if current_z > 15: gamma = 1 + 0.015*gamma
   T0_all.append( T0 )
+  gamma_all.append( gamma )
+  
+  # 
+  # data_local = np.array([ current_z, T0, dens_mean, dens_HI_mean, dens_HeI_mean, dens_HeII_mean ])
   
   
-  data_local = np.array([ current_z, T0, dens_mean, dens_HI_mean, dens_HeI_mean, dens_HeII_mean ])
-  
-  
-  outFileName = output_dir + 'global_statistics_{0}_{1}.txt'.format( uvb, nSnap )
-  np.savetxt( outFileName, data_local )
-  print "Saved File: ", output_dir + outFileName 
+  # 
+  # outFileName = output_dir + 'global_statistics_{0}_{1}.txt'.format( uvb, nSnap )
+  # np.savetxt( outFileName, data_local )
+  # print "Saved File: ", output_dir + outFileName 
 
 
 # data_all = np.array([ z_all, T0_all, dens_mean_all, dens_HI_mean_all,  dens_HeI_mean_all,  dens_HeII_mean_all ]).T
+data_all = np.array([ z_all, T0_all, gamma_all ]).T
 # 
-# 
-# outFileName = output_dir + 'global_statistics_{0}.txt'.format( uvb )
-# np.savetxt( outFileName, data_all )
-# print "Saved File: ", output_dir + outFileName 
+
+outFileName = output_dir + 'thermal_history_{0}.txt'.format( uvb )
+np.savetxt( outFileName, data_all )
+print "Saved File: ", output_dir + outFileName 
 # 
 # 

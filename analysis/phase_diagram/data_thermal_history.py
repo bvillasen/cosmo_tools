@@ -46,6 +46,18 @@ data_thermal_history_Boera_2019 = {
 
 }
 
+
+data_thermal_history_Gaikwad_2020 = {
+'name': 'Gaikwad+2020',
+'z': np.array([ 5.4, 5.6, 5.8 ]),
+'T0': np.array([ 11000, 10500, 12000 ]),
+'T0_sigma_plus':  np.array([ 1600, 2100, 2200 ]) ,
+'T0_sigma_minus': np.array([ 1600, 2100, 2200 ]) ,
+'gamma': np.array([ 1.20, 1.28, 1.04 ]),
+'gamma_sigma_plus': np.array([ 0.18, 0.19, 0.22 ]),
+'gamma_sigma_minus': np.array([ 0.18, 0.19, 0.22]),
+}
+
 # 
 # data_thermal_history_Lidz_2010 = {
 # 'name': "Lidz+ 2010",
