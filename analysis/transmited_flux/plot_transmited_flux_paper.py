@@ -41,13 +41,26 @@ background = 'white'
 
 
 
-# 
-# from matplotlib import rc, font_manager
-# rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
-# # rc('font',**{'family':'Helvetica'})
-# rc('text', usetex=False)
-# hfont = {'fontname':'Helvetica'}
 
+fig_width = 8
+fig_dpi = 300
+
+label_size = 18
+
+figure_text_size = 18
+
+legend_font_size = 16
+
+factor = 2
+tick_label_size_major = 16 * factor
+tick_label_size_minor = 13 * factor
+tick_size_major = 6 * factor
+tick_size_minor = 3 * factor
+tick_width_major = 2 * factor
+tick_width_minor = 1 * factor
+border_width = 1.5 * factor
+
+# 
 #Cosmological Parameters 
 H0 = 67.66 
 cosmo_h = H0 / 100
@@ -63,7 +76,8 @@ ny = nPoints
 nz = nPoints
 ncells = nx * ny * nz
 
-dataDir = '/data/groups/comp-astro/bruno/'
+# dataDir = '/data/groups/comp-astro/bruno/'
+dataDir = '/home/bruno/Desktop/ssd_0/data/'
 
 uvb = 'pchw18'
 # uvb = 'hm12'
@@ -185,7 +199,7 @@ N_HI_los = n_HI_los * dr_cm
 
 n_slice = 2
 n_height = 256
-data_projection = HI_density[:, id_j-n_height/2: id_j+n_height/2, id_i-n_slice/2: id_i+n_slice/2  ] 
+data_projection = HI_density[:, id_j-n_height//2: id_j+n_height//2, id_i-n_slice//2: id_i+n_slice//2  ] 
 
 proj2_sum = ( data_projection * data_projection ).sum(axis=2).T
 proj_sum = data_projection.sum(axis=2).T
@@ -230,16 +244,20 @@ index = 0
 ax = plt.subplot(gs1[index*n_per_subplot:(index+1)*n_per_subplot])
 # ax.set_title( r"Simulated Ly-$\alpha$ Forest Spectra    z={0:.2f}".format(current_z), fontsize=font_size)
 ax.xaxis.tick_top()
-ax.set_title(r'Comoving Distance [$h^{-1} \mathrm{Mpc}$]', fontsize=font_size, pad = 60, color=text_color)
+ax.set_title(r'$ x \,\,\,[h^{-1} \mathrm{Mpc}]$', fontsize=font_size, pad = 60, color=text_color)
 ax.xaxis.label_position ='top'
 ax.imshow( np.log10(projection), cmap=colormap, extent=[0,Lbox, 0, Lbox/nPoints*n_height] )
 ax.axhline( Lbox/nPoints*n_height/2.0, linestyle='--',  c='k', alpha=0.5, linewidth =5 )
 # ax.set_yscale('log')
 # ax.set_ylabel( r'$n_{HI}  \,\,\, [cm^{-3}]$ ', fontsize=font_size)
 ax.tick_params(axis='both', which='major', labelsize=tick_size_0, length=10, width=5  )
-ax.set_ylabel( r'$\rho_\mathrm{HI} $ ', fontsize=font_size, labelpad=50, color=text_color)
-ax.text(0.95, 0.85, 'z={0:.1f}'.format(current_z), horizontalalignment='center',  verticalalignment='center', transform=ax.transAxes, fontsize=40, color='k') 
+ax.set_ylabel( r'$\rho_\mathrm{HI} $ ', fontsize=font_size, labelpad=60, color=text_color)
+ax.text(0.95, 0.85, r'$z={0:.1f}$'.format(current_z), horizontalalignment='center',  verticalalignment='center', transform=ax.transAxes, fontsize=50, color='k') 
+ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in' )
+ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
 ax.tick_params(axis='y', which='major', labelsize=0, length=0, width=0)
+[sp.set_linewidth(border_width) for sp in ax.spines.values()]
+
 # ax.get_yaxis().set_visible(False)
 axes.append(ax)
 
@@ -253,10 +271,14 @@ ax.plot( vel_Hubble, N_HI_los, linewidth=line_width, c=color)
 # ax.plot( vel_Hubble_interp, N_HI_interp, '--', linewidth=2, c='C3')
 ax.set_yscale('log')
 ax.set_xlim( vel_Hubble.min(), vel_Hubble.max())
-ax.set_ylabel( r'$N_\mathrm{HI}  \,\,\, [cm^{-2}]$ ', fontsize=font_size, color=text_color)
-ax.tick_params(axis='both', which='major', labelsize=tick_size_0, length=10, width=5)
+ax.set_ylabel( r'$N_\mathrm{HI}  \,\,\,\,\, [cm^{-2}]$ ', fontsize=font_size, color=text_color)
+# ax.tick_params(axis='both', which='major', labelsize=tick_size_0, length=10, width=5)
+# ax.tick_params(axis='both', which='minor', labelsize=tick_size_1)
+ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in' )
+ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
 ax.tick_params(axis='x', which='major', labelsize=0,)
-ax.tick_params(axis='both', which='minor', labelsize=tick_size_1)
+[sp.set_linewidth(border_width) for sp in ax.spines.values()]
+
 axes.append(ax)
 if not transparent: ax.set_facecolor(background)
 
@@ -289,16 +311,19 @@ ax = plt.subplot(gs1[index*n_per_subplot:(index+1)*n_per_subplot])
 ax.plot( vel_Hubble, tau_redshift, linewidth=line_width, c=color, label='Redshift Space')
 ax.plot( vel_Hubble, tau_real, '--', linewidth=line_width_1, c=color_real, label='Real Space')
 ax.set_xlim( vel_Hubble.min(), vel_Hubble.max())
-ax.set_ylabel( r'$\tau$ ', fontsize=font_size, color=text_color)
-ax.tick_params(axis='both', which='major', labelsize=tick_size_0, length=10, width=5)
-ax.tick_params(axis='x', which='major', labelsize=0,)
-ax.tick_params(axis='both', which='minor', labelsize=tick_size_1)
+ax.set_ylabel( r'$\tau$ ', fontsize=font_size, color=text_color,labelpad=10)
+# ax.tick_params(axis='both', which='major', labelsize=tick_size_0, length=10, width=5)
+# ax.tick_params(axis='both', which='minor', labelsize=tick_size_1)
 ax.set_yscale( 'log')
-leg = ax.legend(fontsize=25, frameon=False, loc=2)
+leg = ax.legend(fontsize=32, frameon=False, loc=2)
 for text in leg.get_texts():
     plt.setp(text, color = text_color)
 axes.append(ax)
 if not transparent: ax.set_facecolor(background)
+ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in' )
+ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
+ax.tick_params(axis='x', which='major', labelsize=0,)
+[sp.set_linewidth(border_width) for sp in ax.spines.values()]
 
 
 index = 3
@@ -314,8 +339,9 @@ ax.set_ylim( 0, 1)
 # ax.legend(fontsize=19, frameon=False, loc=2)
 axes.append(ax)
 if not transparent: ax.set_facecolor(background)
-
-
+ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in' )
+ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
+[sp.set_linewidth(border_width) for sp in ax.spines.values()]
 
 # Set the borders to a given color...
 for ax in axes:
