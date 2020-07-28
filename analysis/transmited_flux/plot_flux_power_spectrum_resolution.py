@@ -210,7 +210,7 @@ ax.plot( data[2048]['k_vals'],  data[2048]['power_mean']*factor, label=label, c=
 
 
 label = r'$\Delta x= {0:.0f}  $'.format(data[1024]['dx']) + r'$\,\, h^{-1} \mathrm{ckpc}$'
-ax.plot( data[1024]['k_vals'],  data[1024]['power_mean']*factor, label=label, c='C4',  lw=lw)
+ax.plot( data[1024]['k_vals'],  data[1024]['power_mean']*factor, label=label, c='C3',  lw=lw)
 
 
 label = r'$\Delta x= {0:.0f}  $'.format(data[512]['dx']) + r'$\,\, h^{-1} \mathrm{ckpc}$'
