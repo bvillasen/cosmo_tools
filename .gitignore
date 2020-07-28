@@ -1,2 +1,5 @@
 figures
 *.pyc
+tools/glio
+halo_finding/consistent-trees
+halo_finding/rockstar
