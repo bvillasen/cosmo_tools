@@ -179,7 +179,7 @@ for nPoints in nPoints_list:
 
 nrows = 1
 ncols = 1
-fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(8*ncols,6*nrows))
+fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(fig_width,6*nrows))
 # plt.subplots_adjust( hspace = 0.05, wspace=0.1)
 
 
@@ -227,8 +227,13 @@ for spine in list(ax.spines.values()):
 
 fs = 16
 
+ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in' )
+ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
+
 ax.set_xlabel( r'$ k $    [s/km]', fontsize=fs, color= text_color )
 ax.set_ylabel( r' $\Delta_F^2(k)$', fontsize=fs, color= text_color )
+
+[sp.set_linewidth(border_width) for sp in ax.spines.values()]
 
 if not transparent and black_background: ax.set_facecolor('k')
 
