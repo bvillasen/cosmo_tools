@@ -216,7 +216,7 @@ ax.plot( data[1024]['k_vals'],  data[1024]['power_mean']*factor, label=label, c=
 label = r'$\Delta x= {0:.0f}  $'.format(data[512]['dx']) + r'$\,\, h^{-1} \mathrm{ckpc}$'
 ax.plot( data[512]['k_vals'],  data[512]['power_mean']*factor, label=label, c='C0',  lw=lw  )
 
-ax.text(0.90, 0.95, 'z={0:.1f}'.format(current_z), horizontalalignment='center',  verticalalignment='center', transform=ax.transAxes, fontsize=17, color=text_color) 
+ax.text(0.90, 0.95, r'$z={0:.1f}$'.format(current_z), horizontalalignment='center',  verticalalignment='center', transform=ax.transAxes, fontsize=figure_text_size, color=text_color) 
 
 
 leg = ax.legend( loc=3, fontsize=legend_font_size, frameon=False )
@@ -238,7 +238,7 @@ fs = 16
 ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in' )
 ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
 
-ax.set_xlabel( r'$ k $    [s/km]',  fontsize=label_size, color= text_color )
+ax.set_xlabel( r'$ k   \,\,\,   [s\,km^{-1}]',  fontsize=label_size, color= text_color )
 ax.set_ylabel( r' $\Delta_F^2(k)$', fontsize=label_size, color= text_color )
 
 [sp.set_linewidth(border_width) for sp in ax.spines.values()]
