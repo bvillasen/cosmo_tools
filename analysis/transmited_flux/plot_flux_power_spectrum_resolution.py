@@ -24,6 +24,25 @@ black_background = False
 transparent = False
 
 
+fig_width = 8
+fig_dpi = 300
+
+label_size = 18
+
+figure_text_size = 18
+
+legend_font_size = 16
+
+tick_label_size_major = 15
+tick_label_size_minor = 13
+tick_size_major = 5
+tick_size_minor = 3
+tick_width_major = 1.5
+tick_width_minor = 1
+border_width = 1
+ 
+
+
 def smooth_line( x_vals, y_vals, x_new, log=False ):
   if log:
     x_vals = np.log10( x_vals ) 
@@ -213,15 +232,15 @@ ax.set_ylabel( r' $\Delta_F^2(k)$', fontsize=fs, color= text_color )
 
 if not transparent and black_background: ax.set_facecolor('k')
 
-fileName = output_dir + 'flux_power_spectrum_resolution_{0}'.format(nSnap)
+fileName = output_dir + 'flux_power_spectrum_resolution'
 
 
 if black_background: fileName += '_black'
 if transparent: fileName += '_transparent'
 
 
-fileName += '.png'
-if not transparent: fig.savefig( fileName,  pad_inches=0.1, facecolor=fig.get_facecolor(), bbox_inches='tight', dpi=200)
+fileName += '.pdf'
+if not transparent: fig.savefig( fileName,  pad_inches=0.1, facecolor=fig.get_facecolor(), bbox_inches='tight', dpi=fig_dpi)
 else: fig.savefig( fileName,  pad_inches=0.1, transparent=True, bbox_inches='tight', dpi=200)
 print('Saved Image: ', fileName)
 
