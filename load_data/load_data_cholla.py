@@ -168,6 +168,7 @@ def load_snapshot_data_distributed( nSnap, inDir, data_type, fields, subgrid, do
           added_header = True
           
         if show_progess:
+          print( ' Loading: ' + inDir + inFileName )
           terminalString  = '\r Loading File: {0}/{1}   {2}'.format(i, n_to_load, field)
           sys.stdout. write(terminalString)
           sys.stdout.flush() 
