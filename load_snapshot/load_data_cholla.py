@@ -97,6 +97,7 @@ def load_snapshot_data_distributed( nSnap, inDir, data_type, field, subgrid, dom
     if data_type == 'hydro': inFileName = '{0}.{1}.{2}'.format(nSnap, name_base, nBox)
     
     inFile = h5.File( inDir + inFileName, 'r')
+    print( ' Loading: ' + inDir + inFileName )
     head = inFile.attrs
     if added_header == False:
       for h_key in list(head.keys()):
