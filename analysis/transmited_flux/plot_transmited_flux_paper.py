@@ -21,6 +21,14 @@ from palettable.cmocean.sequential import Deep_20_r, Deep_20
 colormap = Deep_20.mpl_colormap
 # colormap = 'cividis'
 
+import matplotlib
+# set some global options
+matplotlib.font_manager.findSystemFonts(fontpaths=['/home/bruno/Downloads'], fontext='ttf')
+matplotlib.rcParams['font.sans-serif'] = "Helvetica"
+matplotlib.rcParams['font.family'] = "sans-serif"
+matplotlib.rcParams['mathtext.fontset'] = 'cm'
+matplotlib.rcParams['mathtext.rm'] = 'serif'
+
 
 outputs_file = '../../scale_outputs/outputs_cosmo_2048.txt'
 outputs = np.loadtxt( outputs_file )
@@ -320,7 +328,7 @@ fig.tight_layout()
 outputFileName = 'transmited_flux_skewer.pdf'.format(uvb, nSnap, background)
 if not transparent: fig.savefig( output_dir + outputFileName, bbox_inches='tight',  facecolor=fig.get_facecolor(), dpi=200 )
 else: fig.savefig( output_dir + outputFileName, bbox_inches='tight',  transparent=True, dpi=200 )
-print('Saved image: ', output_dir + outputFileName)
+print('Saved image: ' + output_dir + outputFileName)
 
 
 
