@@ -24,6 +24,14 @@ black_background = False
 transparent = False
 
 
+import matplotlib
+# set some global options
+matplotlib.font_manager.findSystemFonts(fontpaths=['/home/bruno/Downloads'], fontext='ttf')
+matplotlib.rcParams['font.sans-serif'] = "Helvetica"
+matplotlib.rcParams['font.family'] = "sans-serif"
+matplotlib.rcParams['mathtext.fontset'] = 'cm'
+matplotlib.rcParams['mathtext.rm'] = 'serif'
+
 fig_width = 8
 fig_dpi = 300
 
