@@ -66,9 +66,9 @@ cosmo_h = H0 / 100
 
 
 if rank == 0:
-print "H0: {0}".format( H0 )
-print "Omega_M: {0}".format( Omega_M )
-print "Omega_L: {0}".format( Omega_L )
+  print "H0: {0}".format( H0 )
+  print "Omega_M: {0}".format( Omega_M )
+  print "Omega_L: {0}".format( Omega_L )
 
 
 
