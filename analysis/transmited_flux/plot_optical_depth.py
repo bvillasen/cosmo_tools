@@ -25,7 +25,8 @@ import matplotlib
 matplotlib.font_manager.findSystemFonts(fontpaths=['/home/bruno/Downloads'], fontext='ttf')
 matplotlib.rcParams['font.sans-serif'] = "Helvetica"
 matplotlib.rcParams['font.family'] = "sans-serif"
-
+matplotlib.rcParams['mathtext.fontset'] = 'cm'
+matplotlib.rcParams['mathtext.rm'] = 'serif'
 
 outputs_file = '../../scale_outputs/outputs_cosmo_2048.txt'
 outputs = np.loadtxt( outputs_file )
@@ -33,6 +34,24 @@ outputs = np.loadtxt( outputs_file )
 black_background = False
 
 transparent = False
+
+fig_width = 8
+fig_dpi = 300
+
+label_size = 20
+
+figure_text_size = 18
+
+legend_font_size = 16
+
+tick_label_size_major = 15
+tick_label_size_minor = 13
+tick_size_major = 5
+tick_size_minor = 3
+tick_width_major = 1.5
+tick_width_minor = 1
+border_width = 1
+
 
 
 c_0 = pylab.cm.viridis(.7)
@@ -83,7 +102,7 @@ snapshots_indices = list(range(74, 170, 1))
 
 nrows = 1
 ncols = 1
-fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(10*ncols,8*nrows))
+fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(fig_width,7*nrows))
 fs = 22
 
 
@@ -219,20 +238,22 @@ for spine in list(ax.spines.values()):
     
 
 
-leg = ax.legend( loc=2, fontsize=16, frameon=False)
+leg = ax.legend( loc=2, fontsize=legend_font_size, frameon=False)
 for text in leg.get_texts():
     plt.setp(text, color = text_color)
 # ax.set_yscale('log')
 
-ax.set_ylabel( r'$\tau_{eff} $', fontsize=fs, color= text_color  )
-ax.set_xlabel('Redshift', fontsize=fs, color= text_color )
+ax.set_ylabel( r'$\tau_{eff} $', fontsize=label_size, color= text_color  )
+ax.set_xlabel(r'$z$', fontsize=label_size, color= text_color )
 
 ax.set_yscale('log')
 ax.set_xlim(2, 6.05)
 ax.set_ylim(.1, 10)
 
-ax.tick_params(axis='both', which='minor', labelsize=12, size=4, width=1.5, direction='in')
-ax.tick_params(axis='both', which='major', labelsize=12, size=6, width=1.5, direction='in')
+[sp.set_linewidth(border_width) for sp in ax.spines.values()]
+
+ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in' )
+ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
 
 if not transparent and black_background: ax.set_facecolor('k')
 

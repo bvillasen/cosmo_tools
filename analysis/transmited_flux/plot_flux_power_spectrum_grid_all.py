@@ -18,20 +18,34 @@ from spectra_functions import *
 from statistics_functions import get_highest_probability_interval
 from load_tabulated_data import load_power_spectrum_table, load_tabulated_data_boera, load_tabulated_data_viel, load_data_boss
 from cosmo_functions import convert_velocity_to_distance
+from power_spectra_functions import *
 outputs_file = '../../scale_outputs/outputs_cosmo_2048.txt'
 outputs = np.loadtxt( outputs_file )
-
-import matplotlib
-
 
 import matplotlib
 # set some global options
 matplotlib.font_manager.findSystemFonts(fontpaths=['/home/bruno/Downloads'], fontext='ttf')
 matplotlib.rcParams['font.sans-serif'] = "Helvetica"
 matplotlib.rcParams['font.family'] = "sans-serif"
+matplotlib.rcParams['mathtext.fontset'] = 'cm'
+matplotlib.rcParams['mathtext.rm'] = 'serif'
 
+fig_width = 8
+fig_dpi = 300
 
+label_size = 18
 
+figure_text_size = 18
+
+legend_font_size = 16
+
+tick_label_size_major = 15
+tick_label_size_minor = 13
+tick_size_major = 5
+tick_size_minor = 3
+tick_width_major = 1.5
+tick_width_minor = 1
+border_width = 1
 
 black_background = False
 transparent = False
@@ -39,7 +53,7 @@ transparent = False
 errorbar = True
 
 
-plot_boss = False
+plot_boss = True
 
 plot_cholla = True
 
@@ -68,52 +82,6 @@ data_z_v = data_viel['z_vals']
 
 
 
-
-def get_running_average( values, log=False, n_neig=1 ):
-  if log: values = np.log10(values)
-  n = len(values)
-  run_avrg = np.zeros_like(values)
-  run_avrg[0] = np.mean( values[0:n_neig+1] )
-  run_avrg[-1] = np.mean( values[-(n_neig+1):] )
-  for i in range( 1, n-1):
-    run_avrg[i] = np.mean( values[i-n_neig:i+n_neig+1] )
-  if log: run_avrg = 10**(run_avrg) 
-  return run_avrg
-
-# def smooth_line( x_vals, y_vals, x_new, log=False ):
-#   if log:
-#     x_vals = np.log10( x_vals ) 
-#     y_vals = np.log10( y_vals )
-#     x_new = np.log10( x_new )
-# 
-#   interpolation = interp1d( x_vals, y_vals, kind='cubic')
-# 
-#   y_new = interpolation( x_new )
-# 
-#   if log:
-#     x_new = 10**x_new
-#     y_new = 10**y_new
-#   return y_new 
-
-def smooth_line( values, x_vals, log=False, n_neig=3, order=2, interpolate=False,  n_interp=1000 ):
-  from scipy.signal import savgol_filter
-  if log: values = np.log10(values)
-  values_smooth = savgol_filter(values, n_neig, order)
-  
-  if interpolate:
-    if log: x_vals = np.log10(x_vals)
-    x_start, x_end = x_vals[0], x_vals[-1]
-    x_interp = np.linspace( x_start, x_end, n_interp )
-    interpolation = interp1d( x_vals, values_smooth, kind='cubic')
-    values_interp = interpolation( x_interp )
-  
-  if log: 
-    values_smooth = 10**values_smooth
-    if interpolate: 
-      x_interp = 10**x_interp
-      values_interp = 10**values_interp
-  if interpolate: return values_interp, x_interp
-  return values_smooth, x_vals
 
 #Cosmological Parameters 
 H0 = 67.66 
@@ -277,8 +245,8 @@ for uvb in uvb_list:
 
 nrows = 3
 ncols = 4
-fig, ax_l = plt.subplots(nrows=nrows, ncols=ncols, figsize=(4*ncols,5*nrows))
-plt.subplots_adjust( hspace = 0.02, wspace=0.05)
+fig, ax_l = plt.subplots(nrows=nrows, ncols=ncols, figsize=(2*fig_width,5*nrows))
+plt.subplots_adjust( hspace = 0.02, wspace=0.02)
 
 
 if not transparent: 
@@ -348,7 +316,7 @@ for uvb_index,uvb in enumerate(uvb_list):
     
 
     indx_j = snap_index % ncols
-    indx_i = snap_index/ncols
+    indx_i = snap_index//ncols
     
     current_z = data[nSnap]['current_z']
     
@@ -385,7 +353,7 @@ for uvb_index,uvb in enumerate(uvb_list):
       
       
           
-    ax.text(0.85, 0.95, 'z={0:.1f}'.format(current_z), horizontalalignment='center',  verticalalignment='center', transform=ax.transAxes, fontsize=16, color=text_color) 
+    ax.text(0.85, 0.95, r'$z={0:.1f}$'.format(current_z), horizontalalignment='center',  verticalalignment='center', transform=ax.transAxes, fontsize=figure_text_size, color=text_color) 
 
 
     if plot_data_observed :
@@ -479,24 +447,28 @@ for uvb_index,uvb in enumerate(uvb_list):
     ax.set_xscale('log')
     ax.set_yscale('log')
     
+    
+    [sp.set_linewidth(border_width) for sp in ax.spines.values()]
+    
     if indx_j > 0:ax.set_yticklabels([])
     if indx_i != nrows-1 :ax.set_xticklabels([])
     
-    ax.tick_params(axis='both', which='minor', labelsize=12, size=4, color=text_color, labelcolor=text_color, direction='in')
-    ax.tick_params(axis='both', which='major', labelsize=12, size=6, color=text_color, labelcolor=text_color, direction='in')
+    ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in' )
+    ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
 
-    if indx_j == 0: ax.set_ylabel( r' $\Delta_F^2(k)$', fontsize=fs, color= text_color )
-    if indx_i == nrows-1: ax.set_xlabel( r'$ k $    [s/km]', fontsize=fs, color= text_color )
+    if indx_j == 0: ax.set_ylabel( r' $\Delta_F^2(k)$', fontsize=label_size, color= text_color )
+    if indx_i == nrows-1: ax.set_xlabel( r'$ k   \,\,\, \,\,  [s\,km^{-1}] $',  fontsize=label_size, color= text_color )
+    
     
   
 
 if not transparent and black_background: ax.set_facecolor('k')
 # 
-fileName = output_dir + 'flux_power_spectrum_grid_doubleSmooth'
+fileName = output_dir + 'flux_power_spectrum_grid'
 
 if plot_boss: fileName += '_BOSS'
 
-if errorbar: fileName += '_errorbar'
+# if errorbar: fileName += '_errorbar'
 
 if black_background: fileName += '_black'
 if transparent: fileName += '_transparent'
@@ -511,7 +483,7 @@ if save_to_file:
 
 # fileName += '.png'
 fileName += '.pdf'
-if not transparent: fig.savefig( fileName,  pad_inches=0.1, facecolor=fig.get_facecolor(), bbox_inches='tight', dpi=200)
+if not transparent: fig.savefig( fileName,  pad_inches=0.1, facecolor=fig.get_facecolor(), bbox_inches='tight', dpi=fig_dpi)
 else: fig.savefig( fileName,  pad_inches=0.1, transparent=True, bbox_inches='tight', dpi=200)
 print('Saved Image: ', fileName)
 

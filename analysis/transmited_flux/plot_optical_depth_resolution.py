@@ -19,12 +19,38 @@ from load_tabulated_data import load_power_spectrum_table, load_tabulated_data_b
 from data_optical_depth import *
 from skewers_ewald import spectra
 
+
+import matplotlib
+# set some global options
+matplotlib.font_manager.findSystemFonts(fontpaths=['/home/bruno/Downloads'], fontext='ttf')
+matplotlib.rcParams['font.sans-serif'] = "Helvetica"
+matplotlib.rcParams['font.family'] = "sans-serif"
+matplotlib.rcParams['mathtext.fontset'] = 'cm'
+matplotlib.rcParams['mathtext.rm'] = 'serif'
+
 outputs_file = '../../scale_outputs/outputs_cosmo_2048.txt'
 outputs = np.loadtxt( outputs_file )
 
 black_background = False
 
 transparent = False
+
+fig_width = 8
+fig_dpi = 300
+
+label_size = 20
+
+figure_text_size = 18
+
+legend_font_size = 16
+
+tick_label_size_major = 15
+tick_label_size_minor = 13
+tick_size_major = 5
+tick_size_minor = 3
+tick_width_major = 1.5
+tick_width_minor = 1
+border_width = 1
 
 
 c_0 = pylab.cm.viridis(.7)
@@ -58,8 +84,8 @@ ny = nPoints
 nz = nPoints
 ncells = nx * ny * nz
 
-dataDir = '/data/groups/comp-astro/bruno/'
-# dataDir = '/home/bruno/Desktop/ssd_0/data/'
+# dataDir = '/data/groups/comp-astro/bruno/'
+dataDir = '/home/bruno/Desktop/ssd_0/data/'
 
 output_dir = dataDir + 'cosmo_sims/figures_resolution/'
 create_directory( output_dir )
@@ -137,7 +163,7 @@ for nPoints in nPoints_list:
 
 nrows = 1
 ncols = 1
-fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(10*ncols,7*nrows))
+fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(fig_width*ncols,6*nrows))
 fs = 20
 
 
@@ -154,24 +180,24 @@ if black_background: text_color ='white'
 
 nPoints = 512
 color_line = 'C0'
-label = r'$\Delta x= {0:.0f}  $'.format(data[nPoints]['dx']) + r'$\,\, \mathrm{ckpc}/h$'
+label = r'$\Delta x= {0:.0f}  $'.format(data[nPoints]['dx']) + r'$\,\, h^{-1}\, \mathrm{ckpc}$'
 ax.plot(  data[nPoints]['z'], data[nPoints]['mean'], color=color_line, label=label, lw=3 )
 # ax.fill_between( data[nPoints]['z'], data[nPoints]['plus'], data[nPoints]['minus'], facecolor=color_line, alpha=0.3,  )
 
 
 nPoints = 1024
-color_line = 'C1'
+color_line = 'C3'
 
-label = r'$\Delta x= {0:.0f}  $'.format(data[nPoints]['dx']) + r'$\,\, \mathrm{ckpc}/h$'
+label = r'$\Delta x= {0:.0f}  $'.format(data[nPoints]['dx']) + r'$\,\, h^{-1}\, \mathrm{ckpc}$'
 ax.plot(  data[nPoints]['z'], data[nPoints]['mean'], color=color_line, label=label, lw=3 )
 # ax.fill_between( data[nPoints]['z'], data[nPoints]['plus'], data[nPoints]['minus'], facecolor=color_line, alpha=0.3,  )
 
   
 
 nPoints = 2048 
-color_line = c_0
+color_line = 'C2'
 
-label = r'$\Delta x= {0:.0f}  $'.format(data[nPoints]['dx']) + r'$\,\, \mathrm{ckpc}/h$'
+label = r'$\Delta x= {0:.0f}  $'.format(data[nPoints]['dx']) + r'$\,\, h^{-1}\, \mathrm{ckpc}$'
 ax.plot(  data[nPoints]['z'], data[nPoints]['mean'], color=color_line, label=label, lw=3 )
 # ax.fill_between( data[nPoints]['z'], data[nPoints]['plus'], data[nPoints]['minus'], facecolor=color_line, alpha=0.3,  )
 
@@ -220,21 +246,26 @@ for spine in list(ax.spines.values()):
 
 
 
-leg = ax.legend( loc=2, fontsize=14, frameon=False)
+leg = ax.legend( loc=2, fontsize=legend_font_size, frameon=False)
 for text in leg.get_texts():
     plt.setp(text, color = text_color)
 # ax.set_yscale('log')
 # 
-ax.set_ylabel( r'$\tau_{eff} $', fontsize=fs, color= text_color  )
-ax.set_xlabel('Redshift', fontsize=fs, color= text_color )
+ax.set_ylabel( r'$\tau_{eff} $', fontsize=label_size, color= text_color  )
+ax.set_xlabel(r'$z$', fontsize=label_size, color= text_color )
 
 ax.set_yscale('log')
 ax.set_xlim(2, 6.05)
 ax.set_ylim(.1, 8)
+
+[sp.set_linewidth(border_width) for sp in ax.spines.values()]
+
+ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in' )
+ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
  
 if not transparent and black_background: ax.set_facecolor('k')
 
-fileName = output_dir + 'optical_depth_log_resolution_noerror'
+fileName = output_dir + 'optical_depth_log_resolution'
 
 if black_background: fileName += '_black'
 
@@ -242,8 +273,8 @@ if transparent: fileName += '_transparent'
 
 if plot_observed: fileName += '_data'
 
-fileName += '.png'
-if not transparent: fig.savefig( fileName ,  pad_inches=0.1, facecolor=fig.get_facecolor(), bbox_inches='tight', dpi=200)
+fileName += '.pdf'
+if not transparent: fig.savefig( fileName ,  pad_inches=0.1, facecolor=fig.get_facecolor(), bbox_inches='tight', dpi=fig_dpi)
 else: fig.savefig( fileName,  pad_inches=0.1, transparent=True, bbox_inches='tight', dpi=200)
 print('Saved Image: ', fileName)
 

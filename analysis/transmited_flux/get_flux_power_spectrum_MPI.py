@@ -30,11 +30,46 @@ else:
 print_out = False
 if rank == 0: print_out = True 
 
+
+cosmo_name = 'cosmo_0'
+
+
 #Cosmological Parameters 
-H0 = 67.66 
+if cosmo_name == '':
+  H0 = 67.66 
+  Omega_M = 0.3111
+  Omega_L = 0.6889
+  
+if cosmo_name == 'cosmo_0':
+  H0 = 68.35 
+  Omega_M = 0.3010
+  Omega_L = 0.6990
+  
+if cosmo_name == 'cosmo_1':
+  H0 = 69.17 
+  Omega_M = 0.2905
+  Omega_L = 0.7095
+  
+if cosmo_name == 'cosmo_2':
+  H0 = 70.01
+  Omega_M = 0.2808
+  Omega_L = 0.7192
+  
+if cosmo_name == 'cosmo_3':
+  H0 = 70.69
+  Omega_M = 0.2730
+  Omega_L = 0.7270
+  
+
 cosmo_h = H0 / 100
-Omega_M = 0.3111
-Omega_L = 0.6889
+
+
+
+
+print "H0: {0}".format( H0 )
+print "Omega_M: {0}".format( Omega_M )
+print "Omega_L: {0}".format( Omega_L )
+
 
 
 #Box parameters
@@ -56,33 +91,23 @@ high_res = True
 # uvb = 'pchw18'
 uvb = 'hm12'
 
-input_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/skewers_{1}/'.format(nPoints, uvb)
-optical_depth_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/optical_depth_{1}/multiple_axis/'.format(nPoints, uvb)
-output_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/transmited_flux_{1}/power_spectrum/multiple_axis/'.format(nPoints, uvb )
+
+ 
+
+input_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc_{2}/skewers_{1}/'.format(nPoints, uvb, cosmo_name)
+optical_depth_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc_{2}/optical_depth_{1}/multiple_axis/'.format(nPoints, uvb, cosmo_name)
+output_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc_{2}/transmited_flux_{1}/power_spectrum/multiple_axis/'.format(nPoints, uvb, cosmo_name )
 if high_res: output_dir += 'high_res/'
 if rank == 0: create_directory( output_dir )
 if use_mpi: comm.Barrier()
 
 
 
-# snapshots_indices = [83, 86, 90, 93, 96, 99, 102, 106, 110, 114, 119, 124, 130, 136, 143, 151, 159, 169 ]
-# snapshots_indices = [ 169 ]
-snapshots_indices = [83, 90,  96, 102, 106, 110, 114, 119, 124, 130, 136, 143, 151, 159, 169  ]
-# if high_res: snapshots_indices = [90]
+if cosmo_name == '': snapshots_indices = [83, 90,  96, 102, 106, 110, 114, 119, 124, 130, 136, 143, 151, 159, 169  ]
+else: snapshots_indices = list(range( 1, 16, 1))
 
-# snapshots_indices = [82, 91, 96, 106]
+
 snapshots_indices.reverse()
-# nSnap = 147
-# nSnap = snapshots_indices[rank]
-# nSnap = 147
-# nSnap =  169
-
-
-# n_skewers_total = 256**2
-# n_skewers = 128 * 128
-# n_skewers = 20
-# n_skewers_list = [ 2000, 2000, 2000 ]
-# print n_skewers
 
 n_skewers_total = 6000 
 n_skewers_axis = n_skewers_total/ 3 + 1 
@@ -109,11 +134,8 @@ if use_mpi: comm.Barrier()
 
 
 
-# snapshots_indices = [83]
-# 
-
 cosmo_spaces = [ 'redshift' ]
-# cosmo_space = 'redshift'
+
 
 
 for nSnap in snapshots_indices:
