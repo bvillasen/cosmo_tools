@@ -88,8 +88,8 @@ binning = 'log'
 
 high_res = True
 
-# uvb = 'pchw18'
-uvb = 'hm12'
+uvb = 'pchw18'
+# uvb = 'hm12'
 
 
  
