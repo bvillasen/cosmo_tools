@@ -31,7 +31,7 @@ print_out = False
 if rank == 0: print_out = True 
 
 
-cosmo_name = 'cosmo_0'
+cosmo_name = 'cosmo_1'
 
 
 #Cosmological Parameters 
@@ -144,7 +144,7 @@ cosmo_spaces = [ 'redshift' ]
 for nSnap in snapshots_indices:
   
   
-  if rank == 0: print("Computing Power Spectrum, snap: ", nSnap)
+  if rank == 0: print("\nComputing Power Spectrum, snap: ", nSnap)
   
   
   if rank == 0:
@@ -221,7 +221,7 @@ for nSnap in snapshots_indices:
     power_global = comm.gather( power_all, root=0 )
 
     if rank == 0: 
-      print("\n\nGathering All Power Spectra Samples")
+      print("\n\Gathering All Power Spectra Samples")
       power_global_all = []
       for i in range( nprocs ):
         power_global_all.extend( power_global[i])
