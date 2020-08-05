@@ -17,9 +17,9 @@ from load_data_cholla import load_snapshot_data_distributed
 from domain_decomposition import get_domain_block
 from tools import *
 
-from palettable.cmocean.sequential import Deep_20_r, Deep_20
+from palettable.cmocean.sequential import Deep_20_r, Deep_20, Ice_20
 colormap = Deep_20.mpl_colormap
-# colormap = 'cividis'
+colormap = Ice_20.mpl_colormap
 
 import matplotlib
 # set some global options
@@ -240,19 +240,26 @@ line_width = 4
 
 axes = []
 
+
+projection = np.log10(projection)
+vmax = projection.max()/40
+vmin = projection.min()
+
+print vmin, vmax
+
 index = 0
 ax = plt.subplot(gs1[index*n_per_subplot:(index+1)*n_per_subplot])
 # ax.set_title( r"Simulated Ly-$\alpha$ Forest Spectra    z={0:.2f}".format(current_z), fontsize=font_size)
 ax.xaxis.tick_top()
 ax.set_title(r'$ x \,\,\,[h^{-1} \mathrm{Mpc}]$', fontsize=font_size, pad = 60, color=text_color)
 ax.xaxis.label_position ='top'
-ax.imshow( np.log10(projection), cmap=colormap, extent=[0,Lbox, 0, Lbox/nPoints*n_height] )
-ax.axhline( Lbox/nPoints*n_height/2.0, linestyle='--',  c='k', alpha=0.5, linewidth =5 )
+ax.imshow( projection, cmap=colormap, extent=[0,Lbox, 0, Lbox/nPoints*n_height], vmax=vmax )
+ax.axhline( Lbox/nPoints*n_height/2.0, linestyle='--',  c='w', alpha=0.7, linewidth =4 )
 # ax.set_yscale('log')
 # ax.set_ylabel( r'$n_{HI}  \,\,\, [cm^{-3}]$ ', fontsize=font_size)
 ax.tick_params(axis='both', which='major', labelsize=tick_size_0, length=10, width=5  )
 ax.set_ylabel( r'$\rho_\mathrm{HI} $ ', fontsize=font_size, labelpad=60, color=text_color)
-ax.text(0.95, 0.85, r'$z={0:.1f}$'.format(current_z), horizontalalignment='center',  verticalalignment='center', transform=ax.transAxes, fontsize=50, color='k') 
+ax.text(0.95, 0.85, r'$z={0:.1f}$'.format(current_z), horizontalalignment='center',  verticalalignment='center', transform=ax.transAxes, fontsize=50, color='w') 
 ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in' )
 ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
 ax.tick_params(axis='y', which='major', labelsize=0, length=0, width=0)
@@ -352,7 +359,7 @@ for ax in axes:
 fig.subplots_adjust( wspace=0 )
 fig.tight_layout()
 outputFileName = 'transmited_flux_skewer.pdf'.format(uvb, nSnap, background)
-if not transparent: fig.savefig( output_dir + outputFileName, bbox_inches='tight',  facecolor=fig.get_facecolor(), dpi=200 )
+if not transparent: fig.savefig( output_dir + outputFileName, bbox_inches='tight',  facecolor=fig.get_facecolor(), dpi=fig_dpi )
 else: fig.savefig( output_dir + outputFileName, bbox_inches='tight',  transparent=True, dpi=200 )
 print('Saved image: ' + output_dir + outputFileName)
 

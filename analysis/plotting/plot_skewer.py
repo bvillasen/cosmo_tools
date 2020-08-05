@@ -20,8 +20,8 @@ from spectra_functions import *
 
 
 
-
-dataDir = '/data/groups/comp-astro/bruno/'
+# dataDir = '/data/groups/comp-astro/bruno/'
+dataDir = '/home/bruno/Desktop/ssd_0/data/'
 
 uvb = 'pchw18'
 
@@ -103,15 +103,22 @@ ncols = 1
 fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(size_x*ncols,size_y*nrows))
 
 
+alpha = 0.15
+
+fig.patch.set_alpha(alpha)
+
+
+
 fs = 12
 
 text_color = 'white'
 
 
-color =  Deep_20.mpl_colors[4]
+color =  Deep_20.mpl_colors[16]
 # color =  pylab.cm.viridis(.7)
+color = 'midnightblue'
 
-facecolor = pylab.cm.viridis(.3)
+# facecolor = pylab.cm.viridis(.3)
 
 
 ax.plot( F_skewer, c=color, linewidth=2 )
@@ -126,15 +133,19 @@ ax.axes.get_xaxis().set_visible(False)
 ax.axes.get_yaxis().set_visible(False)
 # ax.set_ylabel( r'$F$', fontsize=fs )
 
-ax.set_facecolor(facecolor)
+# ax.set_facecolor(facecolor)
 
 # 
 # ax.imshow( np.log10(density_proj) )
 # ax.set_yscale('log')
 
+ax.patch.set_facecolor('white')
+ax.patch.set_alpha(alpha)
+
+
 
 fileName = output_dir + 'skewer.png'
-fig.savefig( fileName,  pad_inches=-0.005,   bbox_inches='tight', dpi=300)
+fig.savefig( fileName,  pad_inches=-0.005, facecolor=fig.get_facecolor(),   bbox_inches='tight', dpi=300)
 print('Saved Image: ', fileName)
 
 

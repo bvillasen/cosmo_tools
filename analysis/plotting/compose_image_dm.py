@@ -9,6 +9,10 @@ sys.path.extend(subDirectories)
 from tools import *
 
 color_white = ( 255, 255, 255 )
+color_black = ( 0, 0, 0 )
+color_blue_dark = (102, 153, 255)
+color_orange = (255, 153, 0)
+color_blue = (0, 191, 255)
 
 
 
@@ -40,8 +44,8 @@ def plot_dashed_line( image, n_dashes, start, end, color, line_width ):
     draw.line( (start, end), fill=color, width=line_width )
 
 
-dataDir = '/data/groups/comp-astro/bruno/'
-# dataDir = '/home/bruno/Desktop/ssd_0/data/'
+# dataDir = '/data/groups/comp-astro/bruno/'
+dataDir = '/home/bruno/Desktop/ssd_0/data/'
 
 uvb = 'pchw18'
 
@@ -59,7 +63,7 @@ height_stripe = 400
 zoom_data_file_name = input_dir + 'zoom_data_{0}.pkl'.format(nSnap)
 zoom_data = pickle.load( open(zoom_data_file_name, 'rb') )
 
-image_background_name =input_dir + 'projection_density_{0}_{1}_full.png'.format(nSnap, n_depth)
+image_background_name =input_dir + 'projection_density_{0}_{1}_full_1.5.png'.format(nSnap, n_depth)
 image_background = Image.open( image_background_name )
 width, height = image_background.size
 
@@ -71,7 +75,7 @@ rescale_facor = 1.
 
 fnt = ImageFont.truetype('/home/brvillas/fonts/Helvetica.ttf', font_size)
 
-density_zoom = Image.open( input_dir +  'projection_density_{0}_{1}_zoom_{2:.1f}.png'.format(  nSnap, n_depth, expand_factor ) )
+density_zoom = Image.open( input_dir +  'projection_density_{0}_{1}_zoom_{2:.1f}_1.5.png'.format(  nSnap, n_depth, expand_factor ) )
 density_zoom_size = density_zoom.size
 new_size = ( int(density_zoom_size[0]*rescale_facor), int(density_zoom_size[1]*rescale_facor) )
 density_zoom = density_zoom.resize( new_size  )
@@ -102,7 +106,7 @@ density_dm_zoom.paste(img_text_dens, (text_offset_x,density_dm_zoom_size[1]-text
 
 
 
-temperature_zoom = Image.open( input_dir +  'projection_temperature_{0}_{1}_zoom_{2:.1f}.png'.format(  nSnap, n_depth, expand_factor ) )
+temperature_zoom = Image.open( input_dir +  'projection_temperature_{0}_{1}_zoom_{2:.1f}_1.1.png'.format(  nSnap, n_depth, expand_factor ) )
 temperature_zoom = temperature_zoom.resize( new_size  )
 temperature_zoom_size = temperature_zoom.size
 temperature_zoom_pos = ( 1400, density_zoom_pos[1] + temperature_zoom_size[1]  )
@@ -115,24 +119,29 @@ text_img_temp.text((0,0), text, font=fnt, fill=color_white)
 temperature_zoom.paste(img_text_temp, (text_offset_x,temperature_zoom_size[1]-text_offset_y), mask=img_text_temp)
 
 
-line_lenght = 330
-line_lenght_MPC =  50./ expand_factor /2048 * line_lenght
+z = 2.
+Lbox = 50. / ( z+1 )
+
+line_lenght = 1.2
+line_lenght_MPC =  expand_factor * 2048 / Lbox * line_lenght
+print line_lenght_MPC
 line_x = 30
 line_y = 120
 line_width = 10
 draw = ImageDraw.Draw( density_dm_zoom )
-line = draw.line( [(line_x, line_y), (line_x+line_lenght, line_y) ], fill=color_white, width=10 )
+line = draw.line( [(line_x, line_y), (line_x+line_lenght_MPC, line_y) ], fill=color_white, width=10 )
 
 
-img_text_len = Image.new('RGBA', (600, 200), color = (255, 255, 255, 0))
-text_img_len = ImageDraw.Draw(img_text_len)
-text = '{0:.0f} cMpc/h'.format(line_lenght_MPC)
-text_img_len.text((0,0), text, font=fnt, fill=color_white)
-density_dm_zoom.paste(img_text_len, (line_x+50, line_y - 70), mask=img_text_len)
+# img_text_len = Image.new('RGBA', (600, 200), color = (255, 255, 255, 0))
+# text_img_len = ImageDraw.Draw(img_text_len)
+# text = '{0:.0f} cMpc/h'.format(line_lenght_MPC)
+# text_img_len.text((0,0), text, font=fnt, fill=color_white)
+img_text_len = Image.open( input_dir + 'text/mpc_1.png' )
+density_dm_zoom.paste(img_text_len, (line_x+10, line_y - 80), mask=img_text_len)
 
 
 
-HI_density_zoom = Image.open( input_dir +  'projection_HI_density_{0}_{1}_zoom_{2:.1f}.png'.format(  nSnap, n_depth, expand_factor ) )
+HI_density_zoom = Image.open( input_dir +  'projection_HI_density_{0}_{1}_zoom_{2:.1f}_0.9.png'.format(  nSnap, n_depth, expand_factor ) )
 HI_density_zoom = HI_density_zoom.resize( new_size  )
 HI_density_zoom_size = HI_density_zoom.size
 HI_density_zoom_pos = ( 1400, density_zoom_pos[1] + HI_density_zoom_size[1] + temperature_zoom_size[1] )
@@ -149,7 +158,7 @@ n_dashes = 70
 start = ( 0, HI_density_zoom_size[1]/2)
 end = ( HI_density_zoom_size[0], HI_density_zoom_size[1]/2)
 color = color_white
-line_width = 3 
+line_width = 5 
 plot_dashed_line( HI_density_zoom, n_dashes, start, end, color, line_width )
 img_text_skewer = Image.new('RGBA', (600, 200), color = (255, 255, 255, 0))
 text_img_skewer = ImageDraw.Draw(img_text_skewer)
@@ -169,10 +178,12 @@ skewer_pos = ( HI_density_zoom_pos[0], HI_density_zoom_pos[1] + skewer_size[1] +
 img_text_sk = Image.new('RGBA', (600, 200), color = (255, 255, 255, 0))
 text_img_sk = ImageDraw.Draw(img_text_sk)
 text = 'Transmitted Flux'
+# text_img_sk.text((0,0), text, font=fnt, fill=color_white)
 text_img_sk.text((0,0), text, font=fnt, fill=color_white)
 skewer.paste(img_text_sk, (text_offset_x,HI_density_zoom_size[1]-text_offset_y), mask=img_text_sk)
 
-
+img_skewer = Image.new('RGBA', skewer.size)
+img_skewer.paste( skewer, (0,0) )
 
 image_stripe =  Image.new('RGBA', (width, height_stripe))
 image_stripe = image_background.crop( (0, 2048-height_stripe, width, 2048) ) 
@@ -220,46 +231,47 @@ draw_rectange( image_out, HI_density_zoom_pos, HI_density_zoom_size, color, widt
 # image_out.paste(img_text_dens, ( 200, height-200 ), mask=img_text_dens)
 
 
-
-
-
-line_lenght = 410
-line_lenght_MPC = 50./2048 * line_lenght
+line_lenght = 4
+line_lenght_MPC = int( 2048. / Lbox * line_lenght)
 line_x = 200
-line_y = 150
+line_y = image_out.size[1] - 120
 line_width = 10
 draw = ImageDraw.Draw( image_out )
-line = draw.line( [(line_x, line_y), (line_x+line_lenght, line_y) ], fill=color_white, width=10 )
+line = draw.line( [(line_x, line_y), (line_x+line_lenght_MPC, line_y) ], fill=color_white, width=10 )
 
 
-fnt = ImageFont.truetype('/home/brvillas/fonts/Helvetica.ttf', 70)
-img_text_len = Image.new('RGBA', (600, 200), color = (255, 255, 255, 0))
-text_img_len = ImageDraw.Draw(img_text_len)
-text = '{0:.0f} cMpc/h'.format(line_lenght_MPC)
-text_img_len.text((0,0), text, font=fnt, fill=color_white)
-image_out.paste(img_text_len, (line_x+50, line_y - 80), mask=img_text_len)
+# img_text_len = Image.new('RGBA', (600, 200), color = (255, 255, 255, 0))
+# text_img_len = ImageDraw.Draw(img_text_len)
+# text = '{0:.0f} cMpc/h'.format(line_lenght_MPC)
+# text_img_len.text((0,0), text, font=fnt, fill=color_white)
+img_text_len = Image.open( input_dir + 'text/mpc_4.png' )
+image_out.paste(img_text_len, (line_x+45, line_y - 110), mask=img_text_len)
 
 
-img_text_z = Image.new('RGBA', (600, 200), color = (255, 255, 255, 0))
-text_img_z = ImageDraw.Draw(img_text_z)
-text = 'z = 2.0'
-text_img_z.text((0,0), text, font=fnt, fill=color_white)
-image_out.paste(img_text_z, (line_x+650, line_y - 70), mask=img_text_z)
+# img_text_z = Image.new('RGBA', (600, 200), color = (255, 255, 255, 0))
+# text_img_z = ImageDraw.Draw(img_text_z)
+# text = 'z = 2.0'
+# text_img_z.text((0,0), text, font=fnt, fill=color_white)
+img_text_z = Image.open( input_dir + 'text/z_2.0.png' )
+image_out.paste(img_text_z, (240, 200), mask=img_text_z)
 
 
+fnt = ImageFont.truetype('/home/brvillas/fonts/Helvetica.ttf', 80)
 img_text_dens = Image.new('RGBA', (600, 200), color = (255, 255, 255, 0))
 text_img_dens = ImageDraw.Draw(img_text_dens)
 text = 'Gas Density'
 text_img_dens.text((0,0), text, font=fnt, fill=color_white)
-image_out.paste(img_text_dens, (200,image_out.size[1]-150), mask=img_text_dens)
+image_out.paste(img_text_dens, (180,100), mask=img_text_dens)
 
 
 
 
 
-image_out.paste(skewer, skewer_pos, mask=skewer)
+image_out.alpha_composite(img_skewer, skewer_pos )
 draw_rectange( image_out, skewer_pos, skewer_size, color, width, transpose=True )
 
+
+line_color = color_white
 
 img_text_n = Image.new('RGBA', (600, 200), color = (255, 255, 255, 0))
 text_img_n = ImageDraw.Draw(img_text_n)
@@ -273,7 +285,7 @@ lx1 = skewer_pos[0]+20
 delta_y = 10
 ly = skewer_pos[1] + skewer_size[1] - delta_y
 lw = 6
-line = draw.line( [(lx0, ly), (lx1, ly) ], fill=color_white, width=lw )
+line = draw.line( [(lx0, ly), (lx1, ly) ], fill=line_color, width=lw )
 
 
 img_text_n = Image.new('RGBA', (600, 200), color = (255, 255, 255, 0))
@@ -283,7 +295,7 @@ fnt = ImageFont.truetype('/home/brvillas/fonts/Helvetica.ttf', 50)
 text_img_n.text((0,0), text, font=fnt, fill=color_white)
 image_out.paste(img_text_n, (skewer_pos[0]-label_offset, skewer_pos[1] -10), mask=img_text_n)
 ly = skewer_pos[1] + delta_y
-line = draw.line( [(lx0, ly), (lx1, ly) ], fill=color_white, width=lw )
+line = draw.line( [(lx0, ly), (lx1, ly) ], fill=line_color, width=lw )
 
 
 img_text_n = Image.new('RGBA', (600, 200), color = (255, 255, 255, 0))
@@ -293,15 +305,15 @@ fnt = ImageFont.truetype('/home/brvillas/fonts/Helvetica.ttf', 50)
 text_img_n.text((0,0), text, font=fnt, fill=color_white)
 image_out.paste(img_text_n, (skewer_pos[0]-label_offset, skewer_pos[1] + skewer_size[1]/2 -20), mask=img_text_n)
 ly = skewer_pos[1] + + skewer_size[1]/2
-line = draw.line( [(lx0, ly), (lx1, ly) ], fill=color_white, width=lw )
+line = draw.line( [(lx0, ly), (lx1, ly) ], fill=line_color, width=lw )
 
 image_rgb = Image.new("RGB", image_out.size, (255, 255, 255) )
 image_rgb.paste( image_out, mask=image_out.split()[3] )
 
 image_out_name = output_dir + 'image_composed_dm_new'
 
-image_out.save( image_out_name + '.png', quality=100 )
-image_rgb.save( image_out_name + '.pdf', quality=100 )
+image_out.save( image_out_name + '.png', quality=200 )
+image_rgb.save( image_out_name + '.pdf', quality=300 )
 print('Saved Image: ', image_out_name)
 
 

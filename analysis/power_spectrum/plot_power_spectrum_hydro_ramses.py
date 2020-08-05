@@ -97,8 +97,8 @@ code_label = ['Ramses', 'Ramses']
 
 box_text = {}
 box_text[0] = {}
-box_text[0]['text'] = 'Cholla - Ramses'
-box_text[0]['pos'] = (0.96, 0.95)
+box_text[0]['text'] = 'Hydro\nCholla - Ramses'
+box_text[0]['pos'] = (0.78, 0.93)
 
 box_text[1] = {}
 box_text[1]['text'] = 'Gas Matter Power Spectrum\nComparison to Ramses'
@@ -148,7 +148,7 @@ for i in range( n_plots ):
   colormap = palettable.cmocean.sequential.Deep_12.mpl_colors
   colormap = palettable.cmocean.sequential.Thermal_12_r.mpl_colors
   
-  out_file_name = 'ps_hydro_comparison_thermal.pdf'.format( nPoints)
+  out_file_name = 'ps_hydro_comparison.pdf'.format( nPoints)
 
   
   ax1.set_prop_cycle('color', colormap )
@@ -180,7 +180,7 @@ for i in range( n_plots ):
   ax2.ticklabel_format(axis='both', style='sci')
   
   text = box_text[i]
-  ax1.text(text['pos'][0], text['pos'][1], text['text'], fontsize=17, horizontalalignment='right', verticalalignment='center', transform=ax1.transAxes )
+  ax1.text(text['pos'][0], text['pos'][1], text['text'], fontsize=17, horizontalalignment='center', verticalalignment='center', transform=ax1.transAxes )
 
 
   # for label in ax1.get_xticklabels():
@@ -219,10 +219,10 @@ for i in range( n_plots ):
   ax2.set_xscale('log')
 
   ax1.legend( loc=3, fontsize=legend_font_size, frameon=False, ncol=2 ) 
-  ax2.set_xlabel( r'$k \, \, \, \,[\,h \mathrm{Mpc}^{-1}\,]$', fontsize=17)
+  ax2.set_xlabel( r'$k \, \, [\,h \mathrm{Mpc}^{-1}\,]$', fontsize=17)
 
   if i == 0:
-    ax1.set_ylabel( r'$P\,(k)$   $\,\,[\,h^3\mathrm{Mpc}^{-3}\,]$', fontsize=17)
+    ax1.set_ylabel( r'$P\,(k)\,\,[\,h^3\mathrm{Mpc}^{-3}\,]$', fontsize=17)
     ax2.set_ylabel( r'$\Delta P\,(k)/P\,(k)$', fontsize=17, labelpad=1)
 
   [i.set_linewidth(border_width) for i in ax1.spines.values()]

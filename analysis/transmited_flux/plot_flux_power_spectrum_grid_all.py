@@ -298,11 +298,11 @@ for uvb_index,uvb in enumerate(uvb_list):
 
   if uvb == 'pchw18':
     color_line = c_pchw18
-    label = 'PCHW19'
+    label = 'NAME.P19'
 
   if uvb == 'hm12':
     color_line = c_hm12
-    label = 'HM12'
+    label = 'NAME.HM12'
     
   z_vals_out = []
 
@@ -370,7 +370,7 @@ for uvb_index,uvb in enumerate(uvb_list):
           data_k = data_boss[data_index]['k_vals']
           data_delta_power = data_boss[data_index]['delta_power']
           data_delta_power_error = data_boss[data_index]['delta_power_error']
-          ax.errorbar( data_k, data_delta_power, yerr=data_delta_power_error, fmt='o', c=c_boss, label='BOSS 2019' )
+          ax.errorbar( data_k, data_delta_power, yerr=data_delta_power_error, fmt='o', c=c_boss, label='eBOSS (2019)' )
         
         
       else:
@@ -385,7 +385,7 @@ for uvb_index,uvb in enumerate(uvb_list):
           data_k = data_walther[data_index]['k_vals']
           data_delta_power = data_walther[data_index]['delta_power']
           data_delta_power_error = data_walther[data_index]['delta_power_error']
-          ax.errorbar( data_k, data_delta_power, yerr=data_delta_power_error, fmt='o', c=c_walther, label='Walther+2018' )
+          ax.errorbar( data_k, data_delta_power, yerr=data_delta_power_error, fmt='o', c=c_walther, label='Walther et al. (2018)' )
 
 
 
@@ -399,7 +399,7 @@ for uvb_index,uvb in enumerate(uvb_list):
           data_k = data_boera[data_index]['k_vals']
           data_delta_power = data_boera[data_index]['delta_power']
           data_delta_power_error = data_boera[data_index]['delta_power_error']
-          ax.errorbar( data_k, data_delta_power, yerr=data_delta_power_error, fmt='o', c=c_boera, label='Boera+2019' )
+          ax.errorbar( data_k, data_delta_power, yerr=data_delta_power_error, fmt='o', c=c_boera, label='Boera et al. (2019)' )
           
           
         # Add Viel data
@@ -412,7 +412,7 @@ for uvb_index,uvb in enumerate(uvb_list):
           data_k = data_viel[data_index]['k_vals']
           data_delta_power = data_viel[data_index]['delta_power']
           data_delta_power_error = data_viel[data_index]['delta_power_error']
-          ax.errorbar( data_k, data_delta_power, yerr=data_delta_power_error, fmt='o', c=c_viel, label='Viel+2013' )
+          ax.errorbar( data_k, data_delta_power, yerr=data_delta_power_error, fmt='o', c=c_viel, label='Viel et al. (2013)' )
         # plot_data_observed = False
 
 

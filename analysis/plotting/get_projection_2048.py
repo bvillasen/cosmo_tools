@@ -21,8 +21,8 @@ output_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/projections_pchw18/'.format(n
 create_directory( output_dir )
 
 show_progess = True
-# data_type = 'hydro'
-data_type = 'particles'
+data_type = 'hydro'
+# data_type = 'particles'
 
 
 nSnap = 169

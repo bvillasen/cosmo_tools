@@ -31,7 +31,7 @@ print_out = False
 if rank == 0: print_out = True 
 
 
-cosmo_name = 'cosmo_3'
+cosmo_name = ''
 
 
 #Cosmological Parameters 
@@ -86,7 +86,9 @@ dataDir = '/data/groups/comp-astro/bruno/'
 # n_kSamples = 12
 binning = 'log'
 
-high_res = True
+high_res = False
+
+fixed_k = True
 
 uvb = 'pchw18'
 # uvb = 'hm12'
@@ -98,9 +100,9 @@ input_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc_{2}/skewers_{1}/'.format(nPoin
 optical_depth_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc_{2}/optical_depth_{1}/multiple_axis/'.format(nPoints, uvb, cosmo_name)
 output_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc_{2}/transmited_flux_{1}/power_spectrum/multiple_axis/'.format(nPoints, uvb, cosmo_name )
 if high_res: output_dir += 'high_res/'
+if fixed_k: output_dir += 'fixed_k/'
 if rank == 0: create_directory( output_dir )
 if use_mpi: comm.Barrier()
-
 
 
 if cosmo_name == '': snapshots_indices = [83, 90,  96, 102, 106, 110, 114, 119, 124, 130, 136, 143, 151, 159, 169  ]
@@ -203,9 +205,15 @@ for nSnap in snapshots_indices:
       # Flux fluctuations
       delta_F = ( F - F_avrg ) / F_avrg 
     
-      d_log_k = 0.25
-      if high_res: d_log_k = 0.1
-      bin_centers, skewer_power_spectrum = get_skewer_flux_power_spectrum(vel_Hubble, delta_F, d_log_k=d_log_k )
+      if fixed_k:
+        n_points = 27
+        k_edges = np.logspace( -2.6, -0.0, nPoints )
+        bin_centers, skewer_power_spectrum = get_skewer_flux_power_spectrum(vel_Hubble, delta_F, k_edges=k_edges )
+      else:  
+        d_log_k = 0.25
+        if high_res: d_log_k = 0.1
+        bin_centers, skewer_power_spectrum = get_skewer_flux_power_spectrum(vel_Hubble, delta_F, d_log_k=d_log_k )
+      
       power_all.append(skewer_power_spectrum)
     
     #Send the power spectrum to root process

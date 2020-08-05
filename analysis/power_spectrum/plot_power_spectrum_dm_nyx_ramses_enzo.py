@@ -94,16 +94,16 @@ colormap = palettable.cmocean.sequential.Thermal_12_r.mpl_colors
 
 box_text = {}
 box_text[0] = {}
-box_text[0]['text'] = 'Cholla - Nyx'
-box_text[0]['pos'] = (0.96, 0.95)
+box_text[0]['text'] = 'DM Only\nCholla - Nyx'
+box_text[0]['pos'] = (0.82, 0.93)
 
 box_text[1] = {}
-box_text[1]['text'] = 'Cholla - Ramses'
-box_text[1]['pos'] = (0.96, 0.95)
+box_text[1]['text'] = 'DM Only\nCholla - Ramses'
+box_text[1]['pos'] = (0.78, 0.93)
 
 box_text[2] = {}
-box_text[2]['text'] = 'Cholla - Enzo'
-box_text[2]['pos'] = (0.96, 0.95)
+box_text[2]['text'] = 'DM Only\nCholla - Enzo'
+box_text[2]['pos'] = (0.82, 0.93)
 
 diff_max_list = [ 0.001, 0.01, 0.0024]
 
@@ -178,7 +178,7 @@ for i in range( n_plots ):
   # ax2.ticklabel_format(axis='both', style='sci')
   
   text = box_text[i]
-  ax1.text(text['pos'][0], text['pos'][1], text['text'], fontsize=14, horizontalalignment='right', verticalalignment='center', transform=ax1.transAxes )
+  ax1.text(text['pos'][0], text['pos'][1], text['text'], fontsize=14, horizontalalignment='center', verticalalignment='center', transform=ax1.transAxes )
 
 
   # for label in ax1.get_xticklabels():
@@ -214,10 +214,10 @@ for i in range( n_plots ):
   ax2.set_xscale('log')
 
   ax1.legend( loc=3, fontsize=11.5, frameon=False, ncol=2)
-  ax2.set_xlabel( r'$k \, \, \, \,[h \mathrm{Mpc}^{-1}]$', fontsize=label_size)
+  ax2.set_xlabel( r'$k \, \, [h \mathrm{Mpc}^{-1}]$', fontsize=label_size)
 
   if i == 0:
-    ax1.set_ylabel( r'$P\,(k)$   $[h^3\mathrm{Mpc}^{-3}]$', fontsize=label_size, labelpad=-2)
+    ax1.set_ylabel( r'$P\,(k) \,\, [h^3\mathrm{Mpc}^{-3}]$', fontsize=label_size, labelpad=-2)
     ax2.set_ylabel( r'$\Delta P\,(k)/P\,(k)  \,\,[\times 10^{-3}]$', fontsize=label_size, labelpad=5)
 
   [i.set_linewidth(border_width) for i in ax1.spines.values()]

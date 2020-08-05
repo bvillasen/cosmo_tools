@@ -210,7 +210,7 @@ ax.set_yscale('log')
 ax.set_xlim(0,64)
 ax.set_ylim(0.02,3e8)
 ax.set_ylabel(r'$T \,\,[\, K \,]$', fontsize=label_size, labelpad=4, )
-ax.set_xlabel(r'$x$   $\,\,[\, h^{-1}\mathrm{Mpc}\, ]$', fontsize=label_size )
+ax.set_xlabel(r'$x \,\,  [\, h^{-1}\mathrm{Mpc}\, ]$', fontsize=label_size )
 ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in' )
 ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
 [i.set_linewidth(border_width) for i in ax.spines.values()]

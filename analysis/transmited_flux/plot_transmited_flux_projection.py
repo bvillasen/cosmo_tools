@@ -56,7 +56,9 @@ ny = nPoints
 nz = nPoints
 ncells = nx * ny * nz
 
-dataDir = '/data/groups/comp-astro/bruno/'
+# dataDir = '/data/groups/comp-astro/bruno/'
+dataDir = '/home/bruno/Desktop/ssd_0/data/'
+
 
 uvb = 'pchw18'
 # uvb = 'hm12'
@@ -319,7 +321,7 @@ for ax in axes:
 fig.subplots_adjust( wspace=0 )
 fig.tight_layout()
 outputFileName = 'transmited_flux_skewer.pdf'.format(uvb, nSnap, background)
-if not transparent: fig.savefig( output_dir + outputFileName, bbox_inches='tight',  facecolor=fig.get_facecolor(), dpi=200 )
+if not transparent: fig.savefig( output_dir + outputFileName, bbox_inches='tight',  facecolor=fig.get_facecolor(), dpi=300 )
 else: fig.savefig( output_dir + outputFileName, bbox_inches='tight',  transparent=True, dpi=200 )
 print(( 'Saved image: ' + output_dir + outputFileName ))
 

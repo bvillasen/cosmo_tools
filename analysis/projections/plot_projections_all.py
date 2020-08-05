@@ -43,13 +43,21 @@ from tools import *
 
 from palettable.cmocean.sequential import Deep_20_r
 from palettable.cmocean.sequential import Tempo_20_r
+from palettable.cmocean.sequential import Dense_20_r
+from palettable.cmocean.sequential import Ice_20
+from palettable.scientific.sequential import LaJolla_20_r
+from palettable.scientific.sequential import Oslo_20
+from palettable.scientific.sequential import Devon_20
+from palettable.scientific.sequential import Davos_20
 
 
 show_labels = False
 
-colormaps = [ 'inferno', Deep_20_r.mpl_colormap, 'cividis', 'gist_heat' ]
-# colormaps = [ Matter_20_r.mpl_colormap, Deep_20_r.mpl_colormap, 'cividis', 'gist_heat' ]
+colormaps = [ 'inferno', Deep_20_r.mpl_colormap, Ice_20.mpl_colormap, 'gist_heat' ]
 fileName = 'projection_comparison.pdf'
+
+
+
 if show_labels: fileName = 'projection_deep_labels.png'
 
 
@@ -125,11 +133,11 @@ proj_depth = 100
 # fields = ['density_dm', 'density', 'HI_density',  'temperature' ]
 fields = [ 'density_dm', 'density', 'HI_density', 'temperature' ]
 
-ticks_list = [  [1.5, 5.0], [0.5, 4], [-5.5, -1.5],  [3.5, 7 ]]
+ticks_list = [  [1.5, 5.0], [0.5, 4], [-6.0, -1.5],  [3.5, 7 ]]
 
 cbar_labels = [ r'$\log_{10}\,\,\, \mathrm{Density}  \,\,\,[ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$', r'$\log_{10} \,\,\, \mathrm{Density} \,\,\,  [ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$',  r'$\log_{10}  \,\,\, \mathrm{Density} \,\,\, [ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$',  r'$\log_{10} \,\,\, \mathrm{Temperature} \,\,\, [K\, ]$']
 field_labels = [ r'$\rho_{DM}$', r'$\rho_{b}$', r'$\rho_{HI}$', r'$T$',   ]
-code_labels = [' (Enzo)', ' (Cholla)']
+code_labels = [' (Cholla)', ' (Enzo)']
 
 nSnap = 33
 # n_snapshots = 10
@@ -174,7 +182,8 @@ for i,field in enumerate(fields):
   
   else:
     data = data_enzo['gas'][field][...]
-    if field == 'HI_density': data[data>data.mean()*2000] = data.mean()*2000
+    if field == 'HI_density': 
+      data[data>data.mean()*2000] = data.mean()*2000
     weight = data_enzo['gas']['density']
   data_weight = data * weight
   proj_data_wheight = get_projection( data_weight, proj_offset, proj_depth, log=False )
@@ -182,6 +191,7 @@ for i,field in enumerate(fields):
   proj = proj_data_wheight / proj_weight
   # proj = get_projection( data, proj_offset, proj_depth ) 
   proj = np.log10( proj )
+  if field == 'HI_density': proj *= 1.08
   data_en[field] = {}
   data_en[field]['proj'] = proj
   data_en[field]['max'] = proj.max()
@@ -206,13 +216,13 @@ for i,field in enumerate(fields):
 
 
 
-data_all = [ data_en, data_ch, data_diff ]
+data_all = [ data_ch, data_en, data_diff ]
 
 n_rows = 2
 n_cols = len(fields)
-fig, ax_list = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=(10*n_cols,9.2*n_rows))
+fig, ax_list = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=(4.9*n_cols,4.4*n_rows))
 
-plt.subplots_adjust(  wspace=0.5, hspace=0.3)
+plt.subplots_adjust(  wspace=0.08, hspace=0.03)
 # titles = [ 'Z={0:.2f}   DM Density'.format(current_z_ch), 'Gas Density',  'HI', 'HII', 'Temperature' ]
 titles = [ 'DM Density', 'Gas Density',  'HI Density', 'Temperature' ]
 y_labels = [' Enzo', 'Cholla', 'DIFFERENCE' ]
@@ -250,15 +260,15 @@ for i in range( n_cols):
     
     
     divider = make_axes_locatable(ax)
-    cax = divider.append_axes("right", size="5%", pad=0.05)
+    cax = divider.append_axes("right", size="5%", pad=0.03)
     cb = fig.colorbar( im, cax=cax, ticks=ticks_list[i] )
     cb.ax.set_yticklabels(['{0:.1f}'.format(float(x)) for x in ticks_list[i]])
-    cb.ax.tick_params(labelsize=25, size=8, width=2)
-    cb_fs = 30
-    if i ==0:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-35)
-    if i ==1:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-35)
-    if i ==2:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-45)
-    if i ==3:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-35)
+    cb.ax.tick_params(labelsize=10, size=6, width=1.5, direction='in')
+    cb_fs = 13
+    if i ==0:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-15)
+    if i ==1:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-15)
+    if i ==2:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-17.5)
+    if i ==3:cb.set_label(cbar_labels[i], fontsize=cb_fs,  labelpad=-15)
 
     if show_labels:
       fs_label = 17
@@ -271,12 +281,12 @@ for i in range( n_cols):
     # if n == 0: ax.set_title( titles[i], fontsize=35)
     
     # ax.text(0.025, 0.05, field_labels[i] + code_labels[n], color='w', alpha=1, fontsize=40, horizontalalignment='left', verticalalignment='center', transform=ax.transAxes )
-    ax.text(0.97, 0.05, field_labels[i] + code_labels[n], color='w', alpha=1, fontsize=40, horizontalalignment='right', verticalalignment='center', transform=ax.transAxes )
+    ax.text(0.97, 0.065, field_labels[i] + code_labels[n], color='w', alpha=1, fontsize=16, horizontalalignment='right', verticalalignment='center', transform=ax.transAxes )
     
     #Scale Bar
-    bar_coords = [ [ 37.5, 47.5 ], [45, 45]]
-    ax.errorbar( bar_coords[0], bar_coords[1], yerr=0.75, linewidth=5, color='w', alpha=0.9 )
-    ax.text(0.95, 0.94, r'$10\, \mathrm{Mpc}/h$', color='w', alpha=1, fontsize=30, horizontalalignment='right', verticalalignment='center', transform=ax.transAxes )
+    bar_coords = [ [ 32.5, 47.5 ], [45, 45]]
+    ax.errorbar( bar_coords[0], bar_coords[1], yerr=0., linewidth=2.5, color='w', alpha=0.9 )
+    ax.text(0.955, 0.94, r'$15\, h^{-1} \mathrm{Mpc}$', color='w', alpha=1, fontsize=16, horizontalalignment='right', verticalalignment='center', transform=ax.transAxes )
     
     # plt.text( 5, 0.05, '10kpc',  horizontalalignment='center', verticalalignment='top', transform=trans )
     
@@ -284,7 +294,7 @@ for i in range( n_cols):
 
 
 # 
-fig.tight_layout()
-fig.savefig( outDir + fileName,  bbox_inches='tight', dpi=200 )
+# fig.tight_layout()
+fig.savefig( outDir + fileName,  bbox_inches='tight', dpi=300, )
 print('Saved image: ', fileName)
 print('')

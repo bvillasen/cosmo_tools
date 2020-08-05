@@ -17,7 +17,7 @@ def get_skewer_flux_fft_amplitude( vel_Hubble, delta_F ):
   
 
 
-def get_skewer_flux_power_spectrum( vel_Hubble, delta_F, d_log_k=None, n_bins=None ):
+def get_skewer_flux_power_spectrum( vel_Hubble, delta_F, d_log_k=None, n_bins=None, k_edges=None ):
   n = len(vel_Hubble)
   dv = vel_Hubble[1] - vel_Hubble[0]
   vel_max = n * dv
@@ -28,8 +28,8 @@ def get_skewer_flux_power_spectrum( vel_Hubble, delta_F, d_log_k=None, n_bins=No
   k_vals = k_vals[indices]
   ft_amp2 = ft_amp2[indices]
 
-  if d_log_k == None and n_bins == None:
-    print("ERROR: Specify d_log_k or n_bins for Power Spectrum binning.")
+  if d_log_k == None and n_bins == None and k_edges == None:
+    print("ERROR: Specify d_log_k or n_bins or k_edges for Power Spectrum binning.")
     return 
   if d_log_k != None and n_bins != None:
     print("ERROR: Both d_log_k and n_bins were specified, make up your mind!")
@@ -40,6 +40,7 @@ def get_skewer_flux_power_spectrum( vel_Hubble, delta_F, d_log_k=None, n_bins=No
     intervals_log = np.arange( np.log10(k_min), np.log10(k_max), d_log_k )
     intervals = 10**(intervals_log)
   if n_bins  != None: intervals = np.logspace( np.log10(k_min), np.log10(k_max), n_bins )
+  if k_edges !=None: intervals = k_edges
 
   power, bin_edges= np.histogram( k_vals, bins=intervals, weights=ft_amp2 )
   n_in_bin, bin_edges = np.histogram( k_vals, bins=intervals )

@@ -102,7 +102,7 @@ n_kSamples = 20
 factor = np.linspace( 1, 1, n_kSamples )
 
 fig = plt.figure(0)
-fig.set_size_inches(fig_width,5)
+fig.set_size_inches(fig_width,6)
 fig.clf()
 ax = plt.gca()
 
@@ -138,7 +138,7 @@ for i in range(n_data):
   ax.plot( k_vals, diff[i], label = label, c=color, linewidth=3)
   counter += 1
 
-leg = ax.legend( loc=2, fontsize=legend_font_size, frameon=False, ncol=2)
+leg = ax.legend( loc=(0.02,0.5), fontsize=legend_font_size, frameon=False, ncol=2)
 for text in leg.get_texts():
     plt.setp(text, color = text_color)
 ax.set_ylabel( r'$\Delta P\,(k)/P\,(k)$', fontsize=label_size, color=text_color)
@@ -154,6 +154,8 @@ ax.set_xscale('log')
 ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in')
 ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
 
+
+ax.text(0.08, 0.92, r'Dual Energy $\beta$ - $\eta$ conditions', fontsize=14, horizontalalignment='left', verticalalignment='center', transform=ax.transAxes )
 
 
 fileName = 'ps_dual_energy_difference.pdf'
