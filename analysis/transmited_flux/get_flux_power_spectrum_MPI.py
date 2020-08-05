@@ -207,7 +207,7 @@ for nSnap in snapshots_indices:
       delta_F = ( F - F_avrg ) / F_avrg 
     
       if fixed_k:
-        n_bins = 25
+        n_bins = 21
         k_edges = np.logspace( -2.5, -0.1, n_bins )
         bin_centers, skewer_power_spectrum = get_skewer_flux_power_spectrum(vel_Hubble, delta_F, k_edges=k_edges )
       else:  
