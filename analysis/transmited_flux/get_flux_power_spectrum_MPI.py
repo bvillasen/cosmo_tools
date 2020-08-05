@@ -86,9 +86,9 @@ dataDir = '/data/groups/comp-astro/bruno/'
 # n_kSamples = 12
 binning = 'log'
 
-high_res = True
+high_res = False
 
-fixed_k = False
+fixed_k = True
 
 uvb = 'pchw18'
 # uvb = 'hm12'
