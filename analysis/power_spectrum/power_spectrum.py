@@ -28,12 +28,12 @@ def get_skewer_flux_power_spectrum( vel_Hubble, delta_F, d_log_k=None, n_bins=No
   k_vals = k_vals[indices]
   ft_amp2 = ft_amp2[indices]
 
-  if d_log_k == None and n_bins == None and k_edges == None:
-    print("ERROR: Specify d_log_k or n_bins or k_edges for Power Spectrum binning.")
-    return 
-  if d_log_k != None and n_bins != None:
-    print("ERROR: Both d_log_k and n_bins were specified, make up your mind!")
-    return 
+  # if d_log_k == None and n_bins == None :
+  #   print("ERROR: Specify d_log_k or n_bins or k_edges for Power Spectrum binning.")
+  #   return 
+  # if d_log_k != None and n_bins != None:
+  #   print("ERROR: Both d_log_k and n_bins were specified, make up your mind!")
+  #   return 
   k_min = k_vals.min()
   k_max = k_vals.max()
   if d_log_k != None: 
