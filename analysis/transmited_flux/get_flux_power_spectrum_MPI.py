@@ -31,7 +31,7 @@ print_out = False
 if rank == 0: print_out = True 
 
 
-cosmo_name = 'cosmo_3'
+cosmo_name = ''
 
 
 #Cosmological Parameters 
@@ -207,8 +207,8 @@ for nSnap in snapshots_indices:
       delta_F = ( F - F_avrg ) / F_avrg 
     
       if fixed_k:
-        n_bins = 27
-        k_edges = np.logspace( -2.6, -0., n_bins )
+        n_bins = 25
+        k_edges = np.logspace( -2.5, -0.1, n_bins )
         bin_centers, skewer_power_spectrum = get_skewer_flux_power_spectrum(vel_Hubble, delta_F, k_edges=k_edges )
       else:  
         d_log_k = 0.25

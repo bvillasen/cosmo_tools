@@ -151,7 +151,6 @@ for i,index in enumerate(indices):
     
   k_vals_plack = data['planck'][index]['k_vals']
   power_planck = data['planck'][index]['power_mean']
-  power_planck_interp = interp_log( k_vals_interp, k_vals_plack, power_planck )
   
   
   ax = ax_l[i]
@@ -160,15 +159,16 @@ for i,index in enumerate(indices):
   for alt_cosmo in alt_cosmos:
     k_vals_alt = data[alt_cosmo][index]['k_vals']
     power_alt = data[alt_cosmo][index]['power_mean']
-    power_alt_interp = interp_log( k_vals_interp, k_vals_alt, power_alt ) 
     
+    k_diff = k_vals_plack - k_vals_alt
+    print k_diff
     
-    diff = ( power_alt_interp - power_planck_interp ) / power_planck_interp
-    
-    diff_smooth, k_vals_smooth = smooth_line( diff, k_vals_interp, log=True, n_neig=n_neig, order=order, interpolate=False )
-    
-    if not plot_diff: ax.plot( k_vals_interp, power_alt_interp )
-    else: ax.plot( k_vals_smooth, diff_smooth )
+    # diff = ( power_alt_interp - power_planck_interp ) / power_planck_interp
+    # 
+    # diff_smooth, k_vals_smooth = smooth_line( diff, k_vals_interp, log=True, n_neig=n_neig, order=order, interpolate=False )
+    # 
+    # if not plot_diff: ax.plot( k_vals_interp, power_alt_interp )
+    # else: ax.plot( k_vals_smooth, diff_smooth )
 
 
 
