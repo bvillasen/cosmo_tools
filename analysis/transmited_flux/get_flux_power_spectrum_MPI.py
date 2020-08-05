@@ -132,7 +132,7 @@ skewers_ids = np.linspace(0, n_skewers-1, n_skewers ).astype(np.int)
 
 
 skewers_ids_proc = skewers_ids
-print(( ' {0}: {1}'.format( rank, skewers_ids_proc) ))
+# print(( ' {0}: {1}'.format( rank, skewers_ids_proc) ))
 if use_mpi: comm.Barrier()
 
 
