@@ -39,8 +39,8 @@ def get_skewer_flux_power_spectrum( vel_Hubble, delta_F, d_log_k=None, n_bins=No
   if d_log_k != None: 
     intervals_log = np.arange( np.log10(k_min), np.log10(k_max), d_log_k )
     intervals = 10**(intervals_log)
-  if n_bins  != None: intervals = np.logspace( np.log10(k_min), np.log10(k_max), n_bins )
-  if k_edges: intervals = k_edges
+  elif n_bins  != None: intervals = np.logspace( np.log10(k_min), np.log10(k_max), n_bins )
+  else: intervals = k_edges
 
   power, bin_edges= np.histogram( k_vals, bins=intervals, weights=ft_amp2 )
   n_in_bin, bin_edges = np.histogram( k_vals, bins=intervals )
