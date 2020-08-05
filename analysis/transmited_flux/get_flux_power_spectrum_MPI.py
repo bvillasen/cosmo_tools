@@ -31,7 +31,7 @@ print_out = False
 if rank == 0: print_out = True 
 
 
-cosmo_name = ''
+cosmo_name = 'cosmo_1'
 
 
 #Cosmological Parameters 
