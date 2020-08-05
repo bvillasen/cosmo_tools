@@ -247,7 +247,7 @@ for nSnap in snapshots_indices:
   
   
   if rank == 0:
-    print "k_vals:", k_vals
+    print "log k_vals:", np.log10(k_vals)
     outFile.attrs['current_z'] = current_z
     outFile.close()
     print("\nSaved File: ", outputFileName)
