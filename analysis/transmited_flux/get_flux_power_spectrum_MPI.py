@@ -94,11 +94,12 @@ uvb = 'pchw18'
 # uvb = 'hm12'
 
 
- 
+if cosmo_name == '': simulation_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/'.format( nPoints, cosmo_name )
+else: simulation_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc_{1}/'.format( nPoints, cosmo_name )
 
-input_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc_{2}/skewers_{1}/'.format(nPoints, uvb, cosmo_name)
-optical_depth_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc_{2}/optical_depth_{1}/multiple_axis/'.format(nPoints, uvb, cosmo_name)
-output_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc_{2}/transmited_flux_{1}/power_spectrum/multiple_axis/'.format(nPoints, uvb, cosmo_name )
+input_dir = simulation_dir + 'skewers_{0}/'.format(uvb)
+optical_depth_dir = simulation_dir + 'optical_depth_{0}/multiple_axis/'.format(uvb)
+output_dir = simulation_dir + 'transmited_flux_{0}/power_spectrum/multiple_axis/'.format(uvb)
 if high_res: output_dir += 'high_res/'
 if fixed_k: output_dir += 'fixed_k/'
 if rank == 0: create_directory( output_dir )
