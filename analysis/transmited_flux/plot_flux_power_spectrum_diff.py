@@ -88,11 +88,11 @@ for cosmo_name in cosmo_names:
   data[cosmo_name] = {}
   
   if cosmo_name == 'planck':
-    input_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/transmited_flux_{1}/power_spectrum/multiple_axis/high_res/'.format(nPoints, uvb )
+    input_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/transmited_flux_{1}/power_spectrum/multiple_axis/fixed_k/'.format(nPoints, uvb )
     snapshots_indices = [ 83, 90,  96, 102,  119, 124, 130, 136, 143, 151, 159, 169, ]
     
   else:
-    input_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc_{2}/transmited_flux_{1}/power_spectrum/multiple_axis/high_res/'.format(nPoints, uvb, cosmo_name )
+    input_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc_{2}/transmited_flux_{1}/power_spectrum/multiple_axis/fixed_k/'.format(nPoints, uvb, cosmo_name )
     snapshots_indices = [ 1, 2, 3, 4,   8, 9, 10, 11, 12, 13, 14, 15 ]
       
   counter = 0
@@ -134,7 +134,8 @@ fig, ax_l = plt.subplots(nrows=nrows, ncols=ncols, figsize=(2*fig_width,5*nrows)
 plt.subplots_adjust( hspace = 0.02, wspace=0.02)
 
 
-alt_cosmos = ['cosmo_0', 'cosmo_1', 'cosmo_2', 'cosmo_3'  ]    
+# alt_cosmos = ['cosmo_0', 'cosmo_1', 'cosmo_2', 'cosmo_3'  ]    
+alt_cosmos = ['cosmo_0',   ]    
     
 indices = [ 0, 4, 8, 11 ]
 
@@ -161,14 +162,14 @@ for i,index in enumerate(indices):
     power_alt = data[alt_cosmo][index]['power_mean']
     
     k_diff = k_vals_plack - k_vals_alt
-    print k_diff
+    # print k_diff
     
-    # diff = ( power_alt_interp - power_planck_interp ) / power_planck_interp
+    diff = ( power_alt - power_planck ) / power_planck
     # 
     # diff_smooth, k_vals_smooth = smooth_line( diff, k_vals_interp, log=True, n_neig=n_neig, order=order, interpolate=False )
-    # 
-    # if not plot_diff: ax.plot( k_vals_interp, power_alt_interp )
-    # else: ax.plot( k_vals_smooth, diff_smooth )
+    
+    if not plot_diff: ax.plot( k_vals_alt, power_alt )
+    else: ax.plot( k_vals_alt, diff )
 
 
 
