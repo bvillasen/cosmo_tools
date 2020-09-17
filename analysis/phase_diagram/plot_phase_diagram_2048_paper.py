@@ -66,7 +66,7 @@ input_dir_0 = dataDir + 'cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/'
 input_dir_1 = dataDir + 'cosmo_sims/2048_hydro_50Mpc/phase_diagram_pchw18/'
 output_dir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/figures/phase_diagram_paper/'
 
-title_all = ['UVB = HM12',  'UVB = Puchwein19']
+title_all = ['CHIPS.HM12',  'CHIPS.P19']
 
 n_data = 2
 input_dir_all = [input_dir_0, input_dir_1 ]
@@ -90,7 +90,7 @@ colormap =  palettable.cmocean.sequential.Haline_10.mpl_colormap
 out_fileName = output_dir + 'phase_diagram_haline'
 
 colormap =  'turbo'
-out_fileName = output_dir + 'phase_diagram_turbo'
+out_fileName = output_dir + 'phase_diagram_w_600'
 
 
 image_format = '.png'
@@ -220,7 +220,7 @@ for i in range(n_data):
 
   # ax = ax_l[i] 
   ax = grid[i]
-  if plot_fit:  ax.plot( overdensity_line, temperature_line, '--', c='k', alpha=0.9 )
+  if plot_fit:  ax.plot( overdensity_line, temperature_line, '--', c='w', alpha=1, lw=2 )
 
   # ax.errorbar( overdensity_values, temp_mean_values, yerr=temp_sigma_values, c='orange', alpha=0.5)
 
@@ -252,7 +252,7 @@ for i in range(n_data):
 
 
 
-  ax.set_ylabel(r'$\log_{10} \, T \,\,[K]$', fontsize=label_size , color=text_color)
+  ax.set_ylabel(r'$\log_{10} \, T \,\,[\,\mathrm{K}\,]$', fontsize=label_size , color=text_color)
   # ax.set_xlabel(r'$\log_{10}( \rho_b / \bar{\rho}_b) $ ', fontsize=label_size , color=text_color )
   ax.set_xlabel(r'$\log_{10} \, \Delta$ ', fontsize=label_size , color=text_color )
 
@@ -296,14 +296,14 @@ for i in range(n_data):
     delta_T0 =  T0 * np.log(10) * mcmc_T0_sigma
 
     T0_4 = T0 * 1e-4
-    text = r' $\,  \gamma  = {0:.2f} $'.format( mcmc_gamma+1, mcmc_gamma_sigma) + '\n' + r'$T_0 = {0:.2f} \times 10^4   \,\,\,  K$ '.format( T0_4, delta_T0) 
+    text = r' $\,  \gamma  = {0:.2f} $'.format( mcmc_gamma+1, mcmc_gamma_sigma) + '\n' + r'$T_0 = {0:.2f} \times 10^4   \,\,  $'.format( T0_4 ) + r'$\mathrm{K}$' 
     ax.text(0.65, 0.1, text, horizontalalignment='left',  verticalalignment='center', transform=ax.transAxes, fontsize=figure_text_size, color=text_color)
 
 # cb = plt.colorbar( im, cax=ax )
 # cb.outline.set_linewidth(border_width)
 
 
-fig.savefig( out_fileName,  pad_inches=0.1,  facecolor=fig.get_facecolor(),  bbox_inches='tight', dpi=fig_dpi)
+fig.savefig( out_fileName,  pad_inches=0.1,  facecolor=fig.get_facecolor(),  bbox_inches='tight', dpi=600)
 print(( 'Saved Image: ' + out_fileName ))
 
 

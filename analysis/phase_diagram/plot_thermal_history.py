@@ -51,6 +51,11 @@ tick_width_major = 1.5
 tick_width_minor = 1
 border_width = 1
 
+black_background = True
+
+text_color = 'black'
+if black_background: text_color = 'white'
+
 
 # input_dir = '/home/brvillas/cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/'
 # output_dir = '/home/brvillas/cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/figures/'
@@ -137,19 +142,23 @@ gamma_hm12 = gamma_hm12 + 1
 gamma_pchw18 = gamma_pchw18 + 1 
 
 # data_sets = [ data_thermal_history_Hiss_2018, data_thermal_history_Lidz_2010, data_thermal_history_Bolton_2014 ]
-data_sets = [   data_thermal_history_Hiss_2018,  data_thermal_history_Bolton_2014, data_thermal_history_Walther_2019, data_thermal_history_Boera_2019, data_thermal_history_Gaikwad_2020 ]
-data_formats = [ 'o', 'o', 'o', 'o', 'o']
+data_sets = [   data_thermal_history_Hiss_2018,  data_thermal_history_Bolton_2014, data_thermal_history_Walther_2019, data_thermal_history_Boera_2019, data_thermal_history_Gaikwad_2020a, data_thermal_history_Gaikwad_2020b ]
+data_formats = [ 'o', 'o', 'o', 'o', 'o', 'o']
 
 
-data_colors = ['C1', pylab.cm.viridis(.3), pylab.cm.plasma(1), 'C9', 'C3'  ]
+data_colors = ['C1', pylab.cm.viridis(.3), pylab.cm.plasma(1), 'C9', 'C4', 'C3'  ]
 
-c_pchw18 = 'C2'
-c_hm12 = 'C0'
+data_colors = ['C1', 'C3', 'violet', 'C9', 'salmon', 'yellow'  ]
+
+
 
 
 
 c_pchw18 = pylab.cm.viridis(.7)
 c_hm12 = 'C0'
+
+if black_background:
+  c_hm12 = pylab.cm.cool(.3)
 
 fs = 15
 lw = 2
@@ -164,6 +173,8 @@ nrows = 1
 ncols = 2
 fig, ax_l = plt.subplots(nrows=nrows, ncols=ncols, figsize=(fig_width*ncols,5*nrows))
 plt.subplots_adjust( hspace = 0.05, wspace=0.12)
+
+if black_background: fig.patch.set_facecolor('black')   
 
 
 ax = ax_l[0]
@@ -180,19 +191,25 @@ if plot_data:
     if i == 2: print(data_x.shape, data_mean.shape, data_error.shape)
     ax.errorbar( data_x, data_mean, yerr=data_error, fmt=data_fmt, label=data_name, alpha=data_alpha, color=data_color)
       
-ax.plot( z_list, T0_pchw18/10**4,  label='UVB=Puchwein19', color=c_pchw18, lw=lw)
-ax.plot( z_list, T0_hm12/10**4,  label='UVB=HM12', color=c_hm12, lw=lw)
+ax.plot( z_list, T0_pchw18/10**4,  label='CHIPS.P19', color=c_pchw18, lw=lw)
+ax.plot( z_list, T0_hm12/10**4,  label='CHIPS.HM12', color=c_hm12, lw=lw)
 ax.fill_between( z_list, (T0_hm12 + delta_T0_hm12)/10**4, (T0_hm12 - delta_T0_hm12)/10**4, alpha=alpha, color=c_hm12)
 ax.fill_between( z_list, (T0_pchw18 + delta_T0_pchw18)/10**4, (T0_pchw18 - delta_T0_pchw18)/10**4, alpha=alpha,  color=c_pchw18 )
-ax.set_ylabel( r'$T_0$    $[10^4\, K]$', fontsize=label_size )
-ax.set_xlabel( '$z$', fontsize=label_size )
+ax.set_ylabel( r'$T_0$    $[10^4\, \mathrm{K}]$', fontsize=label_size, color=text_color )
+ax.set_xlabel( '$z$', fontsize=label_size, color=text_color )
 ax.set_xlim( 1.85, 6.1)
 ax.set_ylim( 0.4, 2.5)
-ax.legend(loc=1, frameon=False, fontsize=legend_font_size-2, ncol=1)
+leg = ax.legend(loc=(0.51,0.40), frameon=False, fontsize=legend_font_size-2, ncol=1, handlelength=1)
+for text in leg.get_texts():
+  plt.setp(text, color = text_color)
 
-ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in')
-ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
+ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in', color=text_color, labelcolor=text_color)
+ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in', color=text_color, labelcolor=text_color)
 [sp.set_linewidth(border_width) for sp in ax.spines.values()]
+if black_background: ax.set_facecolor('k')
+for spine in list(ax.spines.values()):
+    spine.set_edgecolor(text_color)
+
 
 ax = ax_l[1]
 if plot_data:
@@ -206,60 +223,89 @@ if plot_data:
     data_fmt = data_formats[i]
     data_color = data_colors[i]
     ax.errorbar( data_x, data_mean, yerr=data_error, fmt=data_fmt, label=data_name, alpha=data_alpha, color=data_color)
-ax.plot( z_list, gamma_pchw18,  label='UVB=Puchwein19', color=c_pchw18, lw=lw)    
-ax.plot( z_list, gamma_hm12,  label='UVB=HM12', color=c_hm12, lw=lw)
+ax.plot( z_list, gamma_pchw18,  label='CHIPS.P19', color=c_pchw18, lw=lw)    
+ax.plot( z_list, gamma_hm12,  label='CHIPS.HM12', color=c_hm12, lw=lw)
 ax.fill_between( z_list, gamma_hm12 + sigma_gamma_hm12, gamma_hm12-sigma_gamma_hm12, alpha=alpha,  color=c_hm12)
 ax.fill_between( z_list, gamma_pchw18 + sigma_gamma_pchw18, gamma_pchw18-sigma_gamma_pchw18, alpha=alpha , color=c_pchw18)
-ax.set_ylabel( r'$\gamma$ ', fontsize=label_size )
-ax.set_xlabel( '$z$', fontsize=label_size )
+ax.set_ylabel( r'$\gamma$ ', fontsize=label_size, color=text_color )
+ax.set_xlabel( '$z$', fontsize=label_size, color=text_color )
 ax.set_xlim( 1.85, 6.1)
 ax.set_ylim( 0.9, 2.1)
 # ax.legend(loc=1, frameon=False, fontsize=11)
 
-ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in')
-ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
+ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in', color=text_color, labelcolor=text_color)
+ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in', color=text_color, labelcolor=text_color)
 [sp.set_linewidth(border_width) for sp in ax.spines.values()]
+if black_background: ax.set_facecolor('k')
+for spine in list(ax.spines.values()):
+    spine.set_edgecolor(text_color)
 
-fileName = output_dir + 'thermal_history_data.pdf'.format(nSnap)
-fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=300)
+fileName = output_dir + 'thermal_history_data'
+if black_background: fileName += '_black'
+
+fileName += '.png'
+
+
+fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=300,  facecolor=fig.get_facecolor())
 print('Saved Image: ', fileName)
 
-
-nrows = 1
-ncols = 2
-fig, ax_l = plt.subplots(nrows=nrows, ncols=ncols, figsize=(fig_width*ncols,5*nrows))
-plt.subplots_adjust( hspace = 0.1, wspace=0.12)
-
-
-ax = ax_l[0]
-ax.plot( z_list, T0_hm12/10**4, lw=lw, label='UVB=HM12', c=c_hm12)
-ax.plot( z_list, T0_pchw18/10**4, lw=lw,  label='UVB=Puchwein19', c=c_pchw18)
-ax.set_ylabel( r'$T_0$    $[10^4\, K]$', fontsize=label_size )
-ax.set_xlabel( '$z$', fontsize=label_size )
-ax.set_xlim( 1.8 , 16.05)
-ax.legend(loc=1, frameon=False, fontsize=legend_font_size-2)
-
-ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in')
-ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
-[sp.set_linewidth(border_width) for sp in ax.spines.values()]
-
-ax = ax_l[1]
-ax.plot( z_list, gamma_hm12, lw=lw,  label='UVB=HM12', c=c_hm12)
-ax.plot( z_list, gamma_pchw18, lw=lw,  label='UVB=Puchwein19', c=c_pchw18)
-ax.set_ylabel( r'$\gamma $ ', fontsize=label_size )
-ax.set_xlabel( '$z$', fontsize=label_size )
-ax.set_xlim( 1.8, 16.05)
-# ax.legend(loc=1, frameon=False, fontsize=legend_font_size)
-
-
-
-ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in')
-ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
-[sp.set_linewidth(border_width) for sp in ax.spines.values()]
-
-
-
-fileName = output_dir + 'thermal_history.pdf'.format(nSnap)
-fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=300)
-print('Saved Image: ', fileName)
-
+# 
+# nrows = 1
+# ncols = 2
+# fig, ax_l = plt.subplots(nrows=nrows, ncols=ncols, figsize=(fig_width*ncols,5*nrows))
+# plt.subplots_adjust( hspace = 0.1, wspace=0.12)
+# 
+# 
+# if black_background: fig.patch.set_facecolor('black')   
+# 
+# 
+# ax = ax_l[0]
+# ax.plot( z_list, T0_pchw18/10**4, lw=lw,  label='CHIPS.P19', c=c_pchw18)
+# ax.plot( z_list, T0_hm12/10**4, lw=lw, label='CHIPS.HM12', c=c_hm12)
+# ax.set_ylabel( r'$T_0$    $[10^4\, \mathrm{K}]$', fontsize=label_size, color=text_color, )
+# ax.set_xlabel( '$z$', fontsize=label_size, color=text_color, )
+# ax.set_xlim( 1.8 , 16.05)
+# leg = ax.legend(loc=1, frameon=False, fontsize=legend_font_size-2)
+# for text in leg.get_texts():
+#   plt.setp(text, color = text_color)
+# 
+# ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in', color=text_color, labelcolor=text_color)
+# ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in', color=text_color, labelcolor=text_color)
+# [sp.set_linewidth(border_width) for sp in ax.spines.values()]
+# [sp.set_linewidth(border_width) for sp in ax.spines.values()]
+# if black_background: ax.set_facecolor('k')
+# for spine in list(ax.spines.values()):
+#     spine.set_edgecolor(text_color)
+# 
+# 
+# 
+# ax = ax_l[1]
+# ax.plot( z_list, gamma_hm12, lw=lw,  label='UVB=HM12', c=c_hm12)
+# ax.plot( z_list, gamma_pchw18, lw=lw,  label='UVB=Puchwein19', c=c_pchw18)
+# ax.set_ylabel( r'$\gamma $ ', fontsize=label_size, color=text_color, )
+# ax.set_xlabel( '$z$', fontsize=label_size, color=text_color, )
+# ax.set_xlim( 1.8, 16.05)
+# # ax.legend(loc=1, frameon=False, fontsize=legend_font_size)
+# 
+# 
+# 
+# ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in', color=text_color, labelcolor=text_color)
+# ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in', color=text_color, labelcolor=text_color)
+# [sp.set_linewidth(border_width) for sp in ax.spines.values()]
+# [sp.set_linewidth(border_width) for sp in ax.spines.values()]
+# if black_background: ax.set_facecolor('k')
+# for spine in list(ax.spines.values()):
+#     spine.set_edgecolor(text_color)
+# 
+# 
+# 
+# 
+# fileName = output_dir + 'thermal_history'
+# 
+# if black_background: fileName += '_black'
+# 
+# fileName += '.png'
+# 
+# fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=300,  facecolor=fig.get_facecolor())
+# print('Saved Image: ', fileName)
+# 

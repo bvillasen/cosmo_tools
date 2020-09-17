@@ -103,7 +103,7 @@ ncols = 1
 fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(size_x*ncols,size_y*nrows))
 
 
-alpha = 0.15
+alpha = 0.12
 
 fig.patch.set_alpha(alpha)
 
@@ -117,6 +117,7 @@ text_color = 'white'
 color =  Deep_20.mpl_colors[16]
 # color =  pylab.cm.viridis(.7)
 color = 'midnightblue'
+color = 'white'
 
 # facecolor = pylab.cm.viridis(.3)
 

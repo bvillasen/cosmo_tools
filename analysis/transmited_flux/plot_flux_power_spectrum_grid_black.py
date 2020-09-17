@@ -48,13 +48,13 @@ tick_width_major = 1.5
 tick_width_minor = 1
 border_width = 1
 
-black_background = False
+black_background = True
 transparent = False
 
 errorbar = True
 
 
-plot_boss = False
+plot_boss = True
 
 plot_cholla = True
 
@@ -133,8 +133,22 @@ space = 'redshift'
 
 nPoints = 2048
 
-snapshots_indices = [ 83, 90,  96, 102,  119, 124, 130, 136, 143, 151, 159, 169, ]
-if plot_boss: snapshots_indices = [  96,  102, 106, 110,  114, 119, 124, 130, 136, 143, 151, 159 ]
+# time = 'all'
+# time = 'early'
+time = 'late'
+
+if time == 'all': snapshots_indices = [ 83, 90,  96, 102,  119, 124, 130, 136, 143, 151, 159, 169, ]
+if time == 'early': snapshots_indices = [ 83, 90,  96, 102, ]
+if time == 'late': snapshots_indices = [  119, 124, 130, 136, 143, 151, 159, 169, ]
+
+
+
+
+if plot_boss: 
+  if time == 'all': snapshots_indices = [  96,  102, 106, 110,  114, 119, 124, 130, 136, 143, 151, 159 ]
+  if time == 'early': snapshots_indices = [ 96,  102, 106, 110 ]
+  if time == 'late': snapshots_indices = [   114, 119, 124, 130, 136, 143, 151, 159 ]
+
 snapshots_indices.reverse()
 
 n_snapshots = len( snapshots_indices )
@@ -248,7 +262,9 @@ for uvb in uvb_list:
   data_all[uvb] = data
 
 
-nrows = 3
+if time == 'all': nrows = 3
+if time == 'early': nrows = 1
+if time == 'late': nrows = 2
 ncols = 4
 fig, ax_l = plt.subplots(nrows=nrows, ncols=ncols, figsize=(2*fig_width,5*nrows))
 plt.subplots_adjust( hspace = 0.02, wspace=0.02)
@@ -264,7 +280,6 @@ if black_background: text_color ='white'
 lw=3
 fs = 17
 alpha_bar = 0.4
-errorbar = True
 
 
 
@@ -277,8 +292,15 @@ c_walther = pylab.cm.viridis(.3)
 c_viel = 'C1'
 c_boera = pylab.cm.Purples(.7)
 
-alpha_bar = 0.4
 
+if black_background:
+  c_walther = 'C1'
+  c_boera = 'C9' 
+  
+  c_boss = 'C1'
+
+
+alpha_bar = 0.4
 
 uvb = 'pchw18'
 
@@ -290,8 +312,6 @@ if save_to_file:
   print("Saving to file: ", outfile_name)
   outFile = h5.File( outfile_name, 'w')
   
-plot_transparent = True
-
 lines_labels = []
 
 for uvb_index,uvb in enumerate(uvb_list):
@@ -330,15 +350,17 @@ for uvb_index,uvb in enumerate(uvb_list):
     
     print(indx_i, indx_j, nSnap, current_z)
     
-    ax = ax_l[indx_i][indx_j]
-    
+    if time == 'early': ax = ax_l[indx_j]
+    else: ax = ax_l[indx_i][indx_j]
+     
     
     factor = 1.0
-    if indx_i == nrows-1: factor = 1.1
+    if indx_i == nrows-1 and time == 'all': factor = 1.1
+    if time == 'early': factor = 1.1
     
     if plot_boss: 
       factor = 1.1
-      if indx_i == nrows-1 and indx_j==ncols-1: factor = 1.0
+      if time == 'early' and indx_j==ncols-1: factor = 1.0
       
     # if save_to_file: factor = 1.1
     
@@ -437,32 +459,49 @@ for uvb_index,uvb in enumerate(uvb_list):
 
     
     legend_loc = 3
-    if indx_i == nrows-1 and nrows!=2: legend_loc = 2
+    if time == 'all':
+      if indx_i == nrows-1 and nrows!=2: legend_loc = 2
+    if time == 'early': legend_loc = 2
     
     if plot_boss: legend_loc = 2
     label_bars =  r'1$\sigma$ skewers $P\,(\Delta_F^2)$'
     
     if indx_j == 0 and uvb_index == 1 :
       # leg = ax.legend( loc=legend_loc, frameon=False, fontsize=12)
-      if plot_boss: leg = ax.legend( [line_pchw18, line_hm12, (bar_pchw18, bar_hm12), d_boss], ['CHIPS.P19', 'CHIPS.HM12', label_bars, label_boss ], loc=legend_loc, frameon=False, fontsize=12,   handler_map={tuple: HandlerTuple(ndivide=None)}  )
+      if plot_boss: leg = ax.legend( [line_pchw18, line_hm12,  d_boss], ['CHIPS.P19', 'CHIPS.HM12',  label_boss ], loc=legend_loc, frameon=False, fontsize=12,   handler_map={tuple: HandlerTuple(ndivide=None)}  )
       else: 
-        if indx_i in [0, 1]: leg = ax.legend( [line_pchw18, line_hm12, (bar_pchw18, bar_hm12), d_walther], ['CHIPS.P19', 'CHIPS.HM12', label_bars, label_walther ], loc=legend_loc, frameon=False, fontsize=12,   handler_map={tuple: HandlerTuple(ndivide=None)}  )
-        else: leg = ax.legend( [line_pchw18, line_hm12, (bar_pchw18, bar_hm12), d_boera, d_viel], ['CHIPS.P19', 'CHIPS.HM12', label_bars, label_boera, label_viel ], loc=legend_loc, frameon=False, fontsize=12,   handler_map={tuple: HandlerTuple(ndivide=None)}  )
-    
-      
+        if time == 'all':
+          if indx_i in [0, 1]: leg = ax.legend( [line_pchw18, line_hm12,  d_walther], ['CHIPS.P19', 'CHIPS.HM12',  label_walther ], loc=legend_loc, frameon=False, fontsize=12,   handler_map={tuple: HandlerTuple(ndivide=None)}  )
+          else: leg = ax.legend( [line_pchw18, line_hm12,  d_boera, d_viel], ['CHIPS.P19', 'CHIPS.HM12',  label_boera, label_viel ], loc=legend_loc, frameon=False, fontsize=12,   handler_map={tuple: HandlerTuple(ndivide=None)}  )
+        if time == 'early': leg = ax.legend( [line_pchw18, line_hm12,  d_boera, d_viel], ['CHIPS.P19', 'CHIPS.HM12',  label_boera, label_viel ], loc=legend_loc, frameon=False, fontsize=12,   handler_map={tuple: HandlerTuple(ndivide=None)}  )
+        if time == 'late': leg = ax.legend( [line_pchw18, line_hm12,  d_walther], ['CHIPS.P19', 'CHIPS.HM12',  label_walther ], loc=legend_loc, frameon=False, fontsize=12,   handler_map={tuple: HandlerTuple(ndivide=None)}  )
+        
       for text in leg.get_texts():
           plt.setp(text, color = text_color)
     
     x_min, x_max = 4e-3, 2.5e-1
-    if indx_i == 0: y_min, y_max = 1e-3, 9e-2
-    if indx_i == 1: y_min, y_max = 5e-3, 2e-1
-    if indx_i == 2: y_min, y_max = 5e-2, 3
+    
+    if time == 'all':
+      if indx_i == 0: y_min, y_max = 1e-3, 9e-2
+      if indx_i == 1: y_min, y_max = 5e-3, 2e-1
+      if indx_i == 2: y_min, y_max = 5e-2, 3
+      
+    if time == 'early': y_min, y_max = 5e-2, 3
+    if time == 'late': 
+      if indx_i == 0: y_min, y_max = 1e-3, 9e-2
+      if indx_i == 1: y_min, y_max = 5e-3, 2e-1
+      
     
     if plot_boss:
       x_min, x_max = 2e-3, 2.3e-2
       if indx_i == 0: y_min, y_max = 8e-3, 1e-1
       if indx_i == 1: y_min, y_max = 8e-3, 3e-1
       if indx_i == 2: y_min, y_max = 3e-2, 9e-1
+      
+      if time == 'early': y_min, y_max = 4e-2, .9
+      if time == 'late': 
+        if indx_i == 0: y_min, y_max = 9e-3, 1e-1
+        if indx_i == 1: y_min, y_max = 2e-2, 3e-1
 
 
     
@@ -478,17 +517,20 @@ for uvb_index,uvb in enumerate(uvb_list):
     if indx_j > 0:ax.set_yticklabels([])
     if indx_i != nrows-1 :ax.set_xticklabels([])
     
-    ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in' )
-    ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
+    ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in', color=text_color, labelcolor=text_color )
+    ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in', color=text_color, labelcolor=text_color )
 
     if indx_j == 0: ax.set_ylabel( r' $\Delta_F^2(k)$', fontsize=label_size, color= text_color )
     if indx_i == nrows-1: ax.set_xlabel( r'$ k   \,\,\,  [\mathrm{s}\,\mathrm{km}^{-1}] $',  fontsize=label_size, color= text_color )
     
     
     
+    if not transparent and black_background: ax.set_facecolor('k')
+    
+    for spine in list(ax.spines.values()):
+        spine.set_edgecolor(text_color)
   
 
-if not transparent and black_background: ax.set_facecolor('k')
 # 
 fileName = output_dir + 'flux_power_spectrum_grid'
 
@@ -499,6 +541,10 @@ if plot_boss: fileName += '_BOSS'
 if black_background: fileName += '_black'
 if transparent: fileName += '_transparent'
 
+fileName += '_{0}'.format(time)
+
+if not errorbar: fileName += '_NERR'
+
 z_vals_out = np.array(z_vals_out)
 
 
@@ -507,8 +553,9 @@ if save_to_file:
   outFile.create_dataset('z_vals', data=z_vals_out)
   outFile.close()
 
-# fileName += '.png'
-fileName += '.pdf'
+fileName += '.png'
+# fileName += '.pdf'
+
 if not transparent: fig.savefig( fileName,  pad_inches=0.1, facecolor=fig.get_facecolor(), bbox_inches='tight', dpi=fig_dpi)
 else: fig.savefig( fileName,  pad_inches=0.1, transparent=True, bbox_inches='tight', dpi=200)
 print('Saved Image: ', fileName)

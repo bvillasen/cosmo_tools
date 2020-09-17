@@ -112,19 +112,20 @@ ax.plot( n_procs_256, t_total_256, c=c_total, alpha=0.6, marker='D', markersize=
 ax.legend( loc=2, frameon=False, fontsize=9)
 
 fs = 8
-ax.text(0.05, 0.05, 'Hydro', fontsize=fs, color=c_hydro, horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
+ax.text(0.05, 0.015, 'Hydro', fontsize=fs, color=c_hydro, horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
 
-ax.text(0.05, 0.28, 'MPI comm', fontsize=fs, color=c_mpi, horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
+ax.text(0.05, 0.21, 'MPI comm', fontsize=fs, color=c_mpi, horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
 
-ax.text(0.05, 0.21, 'Particles', fontsize=fs, color=c_particles, horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
+ax.text(0.05, 0.18, 'Particles', fontsize=fs, color=c_particles, horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
 
-ax.text(0.05, 0.12, 'Poisson', fontsize=fs, color=c_grav, horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
-ax.text(0.05, 0.65, 'Total', fontsize=fs, color=c_total, horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
+ax.text(0.05, 0.15, 'Poisson', fontsize=fs, color=c_grav, horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
+ax.text(0.05, 0.32, 'Total', fontsize=fs, color=c_total, horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
 
-ax.text(0.45, 0.93, 'Cholla Weak Scaling on Summit 2020', fontsize=12, color=c_total, horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
+ax.text(0.4, 0.93, 'Cholla Weak Scaling on Summit 2020', fontsize=12, color=c_total, horizontalalignment='left', verticalalignment='center', transform=ax.transAxes)
 
 
-ax.set_ylim(0, 280)
+# ax.set_ylim(0, 280)
+ax.set_ylim(0, 550)
 
 fs = 10
 ax.set_ylabel( r'Milliseconds / 128$^3$ Cells / GPU', fontsize=fs)

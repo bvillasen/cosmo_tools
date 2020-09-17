@@ -222,8 +222,8 @@ for i in range( n_plots ):
   ax2.set_xlabel( r'$k \, \, [\,h \mathrm{Mpc}^{-1}\,]$', fontsize=17)
 
   if i == 0:
-    ax1.set_ylabel( r'$P\,(k)\,\,[\,h^3\mathrm{Mpc}^{-3}\,]$', fontsize=17)
-    ax2.set_ylabel( r'$\Delta P\,(k)/P\,(k)$', fontsize=17, labelpad=1)
+    ax1.set_ylabel( r'$P_m(k)\,\,[\,h^3\mathrm{Mpc}^{-3}\,]$', fontsize=17)
+    ax2.set_ylabel( r'$\Delta P_m(k)/P_m(k)$', fontsize=17, labelpad=1)
 
   [i.set_linewidth(border_width) for i in ax1.spines.values()]
   [i.set_linewidth(border_width) for i in ax2.spines.values()]

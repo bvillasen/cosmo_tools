@@ -310,9 +310,9 @@ line = draw.line( [(lx0, ly), (lx1, ly) ], fill=line_color, width=lw )
 image_rgb = Image.new("RGB", image_out.size, (255, 255, 255) )
 image_rgb.paste( image_out, mask=image_out.split()[3] )
 
-image_out_name = output_dir + 'image_composed_dm_new'
+image_out_name = output_dir + 'image_composed_dm_white'
 
-image_out.save( image_out_name + '.png', quality=200 )
+image_out.save( image_out_name + '.png', quality=300 )
 image_rgb.save( image_out_name + '.pdf', quality=300 )
 print('Saved Image: ', image_out_name)
 

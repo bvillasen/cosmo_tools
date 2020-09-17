@@ -2,17 +2,18 @@
   "logger": {
     "title": "Remote Sync"
   },
-  "uploadOnSave": false,
+  "uploadOnSave": true,
   "useAtomicWrites": false,
   "deleteLocal": false,
-  "hostname": "lux-1.ucsc.edu",
-  "target": "/data/groups/comp-astro/bruno/cosmo_tools",
+  "hostname": "shamrock.ucsc.edu",
+  "target": "/raid/bruno/data/cosmo_tools",
   "ignore": [
     ".remote-sync.json",
     ".git/**"
   ],
-  "username": "brvillas",
+  "username": "bruno",
   "watch": [],
   "transport": "scp",
-  "port": "22"
+  "port": "22",
+  "useAgent": true
 }

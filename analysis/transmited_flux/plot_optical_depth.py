@@ -31,7 +31,7 @@ matplotlib.rcParams['mathtext.rm'] = 'serif'
 outputs_file = '../../scale_outputs/outputs_cosmo_2048.txt'
 outputs = np.loadtxt( outputs_file )
 
-black_background = False
+black_background = True
 
 transparent = False
 
@@ -70,6 +70,7 @@ c_3 = pylab.cm.hsv(.5)
 
 if not black_background: c_3 = 'k'
 
+
 #Cosmological Parameters 
 H0 = 67.66 
 cosmo_h = H0 / 100
@@ -102,7 +103,7 @@ snapshots_indices = list(range(74, 170, 1))
 
 nrows = 1
 ncols = 1
-fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(fig_width,7*nrows))
+fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(fig_width,6*nrows))
 fs = 22
 
 
@@ -125,12 +126,15 @@ for i,uvb in enumerate(['hm12', 'pchw18' ]):
   if uvb == 'pchw18':
     color_line = c_0
     color_bar = c_0
-    label = "UVB=Puchwein19"
+    label = "CHIPS.P19"
     
   if uvb == 'hm12':
     color_line = 'C0'
     color_bar = 'C0'
-    label = "UVB=HM12"
+    if black_background:
+      color_line = c_1
+      color_bar = c_1
+    label = "CHIPS.HM12"
 
   input_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/optical_depth_{1}/multiple_axis/'.format(nPoints, uvb, )
 
@@ -197,13 +201,15 @@ for i,uvb in enumerate(['hm12', 'pchw18' ]):
 
 
 
-c_1 = 'C1'
+c_1 = pylab.cm.viridis(.3)
 c_2 = c_3
 c_3 = 'C3'
 c_4 = 'C9'
 
 
-if black_background: c_3 = 'C4'
+if black_background: 
+  c_1 = 'C4'
+  c_3 = 'C9'
 
 #Add data Walter
 data_optical_depth_Becker_2013 = data_optical_depth_Becker_2013.T
@@ -211,7 +217,7 @@ z = data_optical_depth_Becker_2013[0]
 F = data_optical_depth_Becker_2013[1]
 tau = -np.log(data_optical_depth_Becker_2013[1])
 tau_error = 1/F * data_optical_depth_Becker_2013[2] 
-ax.errorbar( z, tau, yerr=tau_error, fmt='o', c=pylab.cm.viridis(.3), label='Becker+2013' )
+ax.errorbar( z, tau, yerr=tau_error, fmt='o', c=c_1, label='Becker et al. (2013)' )
 
 #Add data Boera
 z = data_optical_depth_Boera_2019['z'] - 0.05
@@ -219,7 +225,7 @@ tau = data_optical_depth_Boera_2019['tau']
 tau_p = data_optical_depth_Boera_2019['tau_p']
 tau_m = data_optical_depth_Boera_2019['tau_m']
 tau_error = np.array([ tau_p, tau_m])
-ax.errorbar( z, tau, yerr=tau_error, fmt='o', c='C1', label='Boera+2019' )
+ax.errorbar( z, tau, yerr=tau_error, fmt='o', c='C1', label='Boera et al. (2019)' )
 
 
 #Add data Bosman
@@ -228,7 +234,15 @@ z = data_optical_depth_Bosman_2018[0]
 F = data_optical_depth_Bosman_2018[1]
 tau = -np.log(data_optical_depth_Bosman_2018[1])
 tau_error = 1/F * data_optical_depth_Bosman_2018[2] 
-ax.errorbar( z, tau, yerr=tau_error, fmt='o', c=c_3, label='Bosman+2018' )
+ax.errorbar( z, tau, yerr=tau_error, fmt='o', c=c_3, label='Bosman et al. (2018)' )
+
+# 
+# data_optical_depth_Gaikward_2020 = data_optical_depth_Gaikward_2020.T
+# z = data_optical_depth_Gaikward_2020[0]
+# F = data_optical_depth_Gaikward_2020[1]
+# tau = -np.log(data_optical_depth_Gaikward_2020[1])
+# tau_error = 1/F * data_optical_depth_Gaikward_2020[2] 
+# ax.errorbar( z, tau, yerr=tau_error, fmt='o', c='C9', label='Gaikwad et al. (2020b)' )
 
 
 ax.tick_params(color=text_color, labelcolor=text_color, labelsize=15,  length=8)
@@ -267,8 +281,8 @@ if black_background: fileName += '_black'
 if transparent: fileName += '_transparent'
 
 
-# fileName += '.png'
-fileName += '.pdf'
+fileName += '.png'
+# fileName += '.pdf'
 
 if not transparent: fig.savefig( fileName ,  pad_inches=0.1, facecolor=fig.get_facecolor(), bbox_inches='tight', dpi=300)
 else: fig.savefig( fileName,  pad_inches=0.1, transparent=True, bbox_inches='tight', dpi=200)

@@ -14,7 +14,11 @@ sys.path.extend(subDirectories)
 from tools import *
 
 from matplotlib import rc, font_manager
-rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+import matplotlib
+matplotlib.rcParams['font.sans-serif'] = "Helvetica"
+matplotlib.rcParams['font.family'] = "sans-serif"
+matplotlib.rcParams['mathtext.fontset'] = 'cm'
+matplotlib.rcParams['mathtext.rm'] = 'serif'
 
 
 # input_dir = '/home/brvillas/cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/'
@@ -28,6 +32,27 @@ input_dir_1 = '/home/bruno/Desktop/ssd_0/data/cosmo_sims/2048_hydro_50Mpc/phase_
 output_dir = '/home/bruno/Desktop/ssd_0/data/cosmo_sims/2048_hydro_50Mpc/figures/phase_diagram_black/'
 
 title_all = ['UVB = HM12',  'UVB = Puchwein18']
+
+
+fig_width = 8
+fig_dpi = 300
+
+label_size = 18
+
+figure_text_size = 18
+
+legend_font_size = 16
+
+tick_label_size_major = 15
+tick_label_size_minor = 13
+tick_size_major = 5
+tick_size_minor = 3
+tick_width_major = 1.5
+tick_width_minor = 1
+border_width = 1
+
+text_color = 'white'
+
 
 n_data = 1
 input_dir_all = [input_dir_0, input_dir_1 ]
@@ -43,7 +68,7 @@ ncells = float(nx * ny * nz)
 
 plot_fit = True
 
-use_mpi = True
+use_mpi = False
 if use_mpi:
   from mpi4py import MPI
   comm = MPI.COMM_WORLD
@@ -84,9 +109,9 @@ grid = ImageGrid(fig, 111,          # as in plt.subplot(111)
                  )
                  
                  
-transparent = True         
+transparent = False
                  
-# fig.patch.set_facecolor('black') 
+fig.patch.set_facecolor('black') 
 
 for i in range(n_data):
 
@@ -176,7 +201,9 @@ for i in range(n_data):
   # cb.ax.tick_params(labelsize=29, size=15, color='white', width=5, length=30, labelcolor='white' )
   # 
   cb = ax.cax.colorbar(im,   )
-  cb.ax.tick_params(labelsize=12, size=7, color='white', width=2, length=6, labelcolor='white' )
+  # cb.ax.tick_params(labelsize=12, size=7, color='white', width=2, length=6, labelcolor='white' )
+  ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in', color=text_color, labelcolor=text_color)
+  ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in', color=text_color, labelcolor=text_color)
   ax.cax.toggle_label(True)
   # cb.ax.text(2.5,2.5,r'$\mathrm{log_{10}} ( \rho_{\mathrm{DM}} )$',rotation=90)
   
@@ -186,11 +213,17 @@ for i in range(n_data):
       'size': 20,
       'ha':'center'
       }
-  cb.set_label_text( r'$\mathrm{log_{10}}  \,\, P(\Delta, T) $', fontdict=font )
+  cb.set_label_text( r'$\mathrm{log_{10}}  \,\, P\,(\Delta, T\,) $', fontdict=font )
+  cb.ax.tick_params(labelsize=12, size=tick_size_major, color=text_color, width=tick_width_major, length=tick_size_major, labelcolor=text_color, direction='in' )
+  ax.cax.toggle_label(True)
+  [sp.set_linewidth(border_width) for sp in cb.ax.spines.values()]
+  for spine in list(cb.ax.spines.values()):
+      spine.set_edgecolor('white')
+
   
   
-  ax.set_ylabel(r'$\mathrm{log_{10}}$ Temperature $[K]$', fontsize=15 , color='white')
-  ax.set_xlabel(r'$\mathrm{log_{10}}$ Gas Overdensity   ( $\Delta$ )', fontsize=15 , color='white' )
+  ax.set_ylabel(r'$\mathrm{log_{10}} \,\,\, \mathrm{Temperature} \,\,\,   [\mathrm{K}]$', fontsize=15 , color='white')
+  ax.set_xlabel(r'$\mathrm{log_{10}} \,\,\, \mathrm{Gas \,\, Overdensity} \,\,\,   ( \Delta ) $' , fontsize=15 , color='white' )
   
   ax.set_aspect( 1.3)
 
@@ -220,8 +253,9 @@ for i in range(n_data):
   ax.set_xlim(x_min, x_max)
   ax.set_ylim( y_min, y_max)
   
-  # ax.set_facecolor('k')
+  ax.set_facecolor('k')
   
+  [sp.set_linewidth(border_width) for sp in ax.spines.values()]
   ax.tick_params(color='white', labelcolor='white', labelsize=15)
   for spine in list(ax.spines.values()):
       spine.set_edgecolor('white')
@@ -234,8 +268,8 @@ for i in range(n_data):
     delta_T0 =  T0 * np.log(10) * mcmc_T0_sigma
     
     T0_4 = T0 * 1e-4
-    text = r' $\,  \gamma = {0:.2f} $'.format( mcmc_gamma+1, mcmc_gamma_sigma) + '\n' + r'$T_0 = {0:.2f} \times 10^4   $  K '.format( T0_4, delta_T0) 
-    ax.text(0.60, 0.1, text, horizontalalignment='left',  verticalalignment='center', transform=ax.transAxes, fontsize=17, color='white')
+    text = r' $\,  \gamma = {0:.2f} $'.format( mcmc_gamma+1, mcmc_gamma_sigma) + '\n' + r'$T_0 = {0:.2f} \times 10^4$'.format( T0_4, delta_T0)  + r'$ \,\,\,  \mathrm{K}$ ' 
+    ax.text(0.70, 0.1, text, horizontalalignment='left',  verticalalignment='center', transform=ax.transAxes, fontsize=17, color='white')
 
 
 fileName = output_dir + 'phase_diagram_annotaded_{0}.png'.format(nSnap)

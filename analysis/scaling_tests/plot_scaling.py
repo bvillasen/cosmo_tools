@@ -22,18 +22,24 @@ n_per_gpu = n_per_gpu[:-2]
 
 #n_proc  nx  ny  nz  n_omp  n_steps  dt  hydo  bound  grav_pot  pot_bound  part_dens  part_bound  part_dens_boud  part_adv_1  part_adv_2  total  
 n_procs = data[0]
-nx, ny, nz =  data[1:4]
-t_dt = data[6]
-t_hydro = data[7]
-t_bound = data[8]
-t_pot = data[9]
-t_pot_bound = data[10]
-t_part_dens = data[11]
-t_part_bound = data[12]
-t_part_dens_bound = data[13]
-t_part_adv1 = data[14]
-t_part_adv2 = data[15]
-t_total = data[16]
+indx = n_procs < 5000
+
+n_procs = n_procs[indx]
+n_per_gpu = n_per_gpu[indx]
+# nx, ny, nz =  data[1:4][indx]
+t_dt = data[6][indx]
+t_hydro = data[7][indx]
+t_bound = data[8][indx]
+t_pot = data[9][indx]
+t_pot_bound = data[10][indx]
+t_part_dens = data[11][indx]
+t_part_bound = data[12][indx]
+t_part_dens_bound = data[13][indx]
+t_part_adv1 = data[14][indx]
+t_part_adv2 = data[15][indx]
+t_total = data[16][indx]
+
+
 
 
 t_hydro = t_hydro + t_dt
@@ -104,6 +110,7 @@ ax.text(0.45, 0.93, 'Cholla Weak Scaling on Summit', fontsize=12, color=c_total,
 
 
 ax.set_ylim(0, 550)
+ax.set_xlim(6, 5000)
 
 fs = 10
 ax.set_ylabel( r'Milliseconds / 128$^3$ Cells / GPU', fontsize=fs)

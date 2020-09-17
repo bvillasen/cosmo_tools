@@ -14,6 +14,7 @@ subDirectories = [x[0] for x in os.walk(cosmo_dir)]
 sys.path.extend(subDirectories)
 from tools import *
 from turbo_cmap import *
+from power_spectra_functions import *
 
 import matplotlib
 # set some global options
@@ -98,6 +99,8 @@ for cosmo_name in cosmo_names:
   z_vals = []
   T0_vals = []
   gamma_vals = []
+  sigma_T0 = []
+  sigma_gamma = []
   for i,nSnap in enumerate(snapshots_indices):  
     inFileName = input_dir + 'phase_diagram_data_{0}.h5'.format(nSnap)
     # print(( 'Loading File: ' + inFileName ))
@@ -119,6 +122,8 @@ for cosmo_name in cosmo_names:
     z_vals.append( current_z )
     T0_vals.append( 10**mcmc_T0 )
     gamma_vals.append( mcmc_gamma + 1 )
+    sigma_T0.append(10**mcmc_T0 * np.log(10) * mcmc_T0_sigma)
+    sigma_gamma.append(mcmc_gamma_sigma)
     # data[cosmo_name][i] = {}
     # data[cosmo_name][i]['currentv_z'] = current_z
     # data[cosmo_name][i]['T0'] = 10**mcmc_T0
@@ -127,13 +132,41 @@ for cosmo_name in cosmo_names:
   data[cosmo_name]['z'] = np.array( z_vals )[::-1]
   data[cosmo_name]['T0'] = np.array( T0_vals )[::-1]
   data[cosmo_name]['gamma'] = np.array( gamma_vals )[::-1]
+  data[cosmo_name]['sigma_T0'] = np.array( sigma_T0 )[::-1]
+  data[cosmo_name]['sigma_gamma'] = np.array( sigma_gamma )[::-1]
     
+
+
+
+
+Name = 'NAME.P19.'
+labels = ['A1', 'A2', 'A3', 'A4' ]    
+
+colors = palettable.cmocean.sequential.Haline_10_r.mpl_colors
+colors_1 = palettable.colorbrewer.sequential.PuBu_9.mpl_colors
+purples = palettable.colorbrewer.sequential.Purples_9.mpl_colors
+yellows = palettable.colorbrewer.sequential.YlOrRd_9.mpl_colors 
+
+
+
+
+c_0 = colors[-3]
+c_1 = colors[4]
+c_2 = colors_1[4]
+c_3 = purples[-1]
+c_4 = yellows[3]
+    
+
+colors = [ c_2, c_1, c_0, c_3  ]  
+
 
 nrows = 1
 ncols = 2
-fig, ax_l = plt.subplots(nrows=nrows, ncols=ncols, figsize=(fig_width*ncols,5*nrows))
+fig, ax_l = plt.subplots(nrows=nrows, ncols=ncols, figsize=(fig_width*ncols,6*nrows))
 plt.subplots_adjust( hspace = 0.05, wspace=0.15)
 
+
+lw=2.2
 
 n_neig = 5
 order = 1
@@ -160,8 +193,15 @@ for i,alt_cosmo in enumerate(alt_cosmos):
   # z_interp = z_alt
   # val_interp = val_alt
   # 
+  # 
   val_diff = ( val_interp - val_planck ) / val_planck
-  ax.plot( z_interp, val_diff/ 1e-2, label=labels[i] )
+  # val_diff = get_running_average( val_diff, log=False, n_neig=1 )
+  # val_diff = get_running_average( val_diff, log=False, n_neig=1 )
+  
+  
+  label = Name + labels[i]
+  color = colors[i]
+  ax.plot( z_interp, val_diff/ 1e-2, c=color, label=label, lw=lw )
   
   
 
@@ -173,8 +213,7 @@ ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size
 ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
 [sp.set_linewidth(border_width) for sp in ax.spines.values()]
 
-ax.legend(loc=3, frameon=False, fontsize=legend_font_size)
-
+ax.legend(loc=1, frameon=False, fontsize=12)
 
 
 
@@ -194,7 +233,7 @@ z_plank =  data['planck']['z']
 val_planck = data['planck'][field]
 alt_cosmos = [  'cosmo_0', 'cosmo_1', 'cosmo_2', 'cosmo_3' ]
 # ax.plot( z_plank, val_planck )
-for alt_cosmo in alt_cosmos:
+for i,alt_cosmo in enumerate(alt_cosmos):
   z_alt =  data[alt_cosmo]['z']
   val_alt = data[alt_cosmo][field]
   z_diff = np.abs( z_alt - z_plank )
@@ -204,17 +243,23 @@ for alt_cosmo in alt_cosmos:
   val_interp = np.interp( z_interp, z_alt, val_alt )
   
   
-  val_interp = savgol_filter(val_interp, n_neig, order)
+  # val_interp = savgol_filter(val_interp, n_neig, order)
 
   
   # z_interp = z_alt
   # val_interp = val_alt
   # 
   val_diff = ( val_interp - val_planck ) / val_planck
-  ax.plot( z_interp, val_diff/ 1e-2 )
+  # val_diff = get_running_average( val_diff, log=False, n_neig=1 )
+  # val_diff = get_running_average( val_diff, log=False, n_neig=1 )
+  # 
+  
+  label = Name + labels[i]
+  color = colors[i]
+  ax.plot( z_interp, val_diff/ 1e-2, c=color, lw=lw )
   
   
-ax.set_ylabel( r'$\Delta  \gamma / \gamma \,\,\,\,\,[ \times 10^{-2}]$', fontsize=label_size, labelpad=0)
+ax.set_ylabel( r'$\Delta  \gamma / \gamma \,\,\,\,\,[ \times 10^{-2}]$', fontsize=label_size, labelpad=5)
 ax.set_xlabel( '$z$', fontsize=label_size )
 ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in')
 ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')

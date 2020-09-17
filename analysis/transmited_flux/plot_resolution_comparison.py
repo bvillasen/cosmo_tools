@@ -193,7 +193,7 @@ data_tau = { }
 snapshots_indices = list(range(74, 170, 1))
 
 
-label_prefix = 'NAME.P19'
+label_prefix = 'CHIPS.P19'
 
 
 
@@ -257,6 +257,15 @@ for nPoints in nPoints_list:
 
 
 
+c_0 = colors[-3]
+c_1 = colors[4]
+c_2 = colors_1[4]
+c_3 = purples[-1]
+c_4 = yellows[3]
+    
+
+colors = [ c_2, c_1, c_0, c_3  ]    
+
 nrows = 1
 ncols = 2
 fig, ax_l = plt.subplots(nrows=nrows, ncols=ncols, figsize=(ncols*fig_width,6*nrows))
@@ -279,16 +288,16 @@ factor = 1.1
 
 sim_name = label_prefix
 label = sim_name + '      ' + r'$\, \Delta x= {0:.0f}  $'.format(data[2048]['dx']) + r'$\,\, h^{-1} \mathrm{kpc}$'
-ax.plot( data[2048]['k_vals'],  data[2048]['power_mean']*factor, label=label, c='C2',  lw=lw)
+ax.plot( data[2048]['k_vals'],  data[2048]['power_mean']*factor, label=label, c=c_1,  lw=lw)
 
 
 sim_name = label_prefix + '.R1'
 label = sim_name + ' ' +  r'$\Delta x= {0:.0f}  $'.format(data[1024]['dx']) + r'$\,\, h^{-1} \mathrm{kpc}$'
-ax.plot( data[1024]['k_vals'],  data[1024]['power_mean']*factor, label=label, c='C3',  lw=lw)
+ax.plot( data[1024]['k_vals'],  data[1024]['power_mean']*factor, '--', label=label, c=c_3,  lw=lw)
 
 sim_name = label_prefix + '.R2'
 label = sim_name + ' ' +  r'$\Delta x= {0:.0f}  $'.format(data[512]['dx']) + r'$\,\, h^{-1} \mathrm{kpc}$'
-ax.plot( data[512]['k_vals'],  data[512]['power_mean']*factor, label=label, c='C0',  lw=lw  )
+ax.plot( data[512]['k_vals'],  data[512]['power_mean']*factor, '--', label=label, c="C0",  lw=lw  )
 
 ax.text(0.90, 0.95, r'$z={0:.1f}$'.format(current_z_pk), horizontalalignment='center',  verticalalignment='center', transform=ax.transAxes, fontsize=figure_text_size, color=text_color) 
 
@@ -312,7 +321,7 @@ fs = 16
 ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in' )
 ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
 
-ax.set_xlabel( r'$ k   \,\,\, \,\,  [s\,km^{-1}] $',  fontsize=label_size, color= text_color )
+ax.set_xlabel( r'$ k   \,\,\,   [\mathrm{s}\,\mathrm{km}^{-1}] $',  fontsize=label_size, color= text_color )
 ax.set_ylabel( r' $\Delta_F^2(k)$', fontsize=label_size, color= text_color )
 
 [sp.set_linewidth(border_width) for sp in ax.spines.values()]
@@ -325,7 +334,7 @@ ax = ax_l[1]
 
 
 nPoints = 2048 
-color_line = 'C2'
+color_line = c_1
 sim_name = label_prefix
 label = sim_name + '      ' + r'$\, \Delta x= {0:.0f}  $'.format(data[2048]['dx']) + r'$\,\, h^{-1} \mathrm{kpc}$'
 ax.plot(  data_tau[nPoints]['z'], data_tau[nPoints]['mean'], color=color_line, label=label, lw=3 )
@@ -335,10 +344,10 @@ ax.plot(  data_tau[nPoints]['z'], data_tau[nPoints]['mean'], color=color_line, l
 
 
 nPoints = 1024
-color_line = 'C3'
+color_line = c_3
 sim_name = label_prefix + '.R1'
 label = sim_name + ' ' +  r'$\Delta x= {0:.0f}  $'.format(data[1024]['dx']) + r'$\,\, h^{-1} \mathrm{kpc}$'
-ax.plot(  data_tau[nPoints]['z'], data_tau[nPoints]['mean'], color=color_line, label=label, lw=3 )
+ax.plot(  data_tau[nPoints]['z'], data_tau[nPoints]['mean'], '--',  color=color_line, label=label, lw=3 )
 # ax.fill_between( data[nPoints]['z'], data[nPoints]['plus'], data[nPoints]['minus'], facecolor=color_line, alpha=0.3,  )
 
   
@@ -346,7 +355,7 @@ nPoints = 512
 color_line = 'C0'
 sim_name = label_prefix + '.R2'
 label = sim_name + ' ' +  r'$\Delta x= {0:.0f}  $'.format(data[512]['dx']) + r'$\,\, h^{-1} \mathrm{kpc}$'
-ax.plot(  data_tau[nPoints]['z'], data_tau[nPoints]['mean'], color=color_line, label=label, lw=3 )
+ax.plot(  data_tau[nPoints]['z'], data_tau[nPoints]['mean'], '--', color=color_line, label=label, lw=3 )
 # ax.fill_between( data[nPoints]['z'], data[nPoints]['plus'], data[nPoints]['minus'], facecolor=color_line, alpha=0.3,  )
 
 

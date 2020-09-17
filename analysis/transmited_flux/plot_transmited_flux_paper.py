@@ -242,7 +242,9 @@ axes = []
 
 
 projection = np.log10(projection)
-vmax = projection.max()/40
+vmin = projection.min()
+projection -= vmin
+vmax = projection.max()/1.8
 vmin = projection.min()
 
 print vmin, vmax
@@ -251,14 +253,14 @@ index = 0
 ax = plt.subplot(gs1[index*n_per_subplot:(index+1)*n_per_subplot])
 # ax.set_title( r"Simulated Ly-$\alpha$ Forest Spectra    z={0:.2f}".format(current_z), fontsize=font_size)
 ax.xaxis.tick_top()
-ax.set_title(r'$ x \,\,\,[h^{-1} \mathrm{Mpc}]$', fontsize=font_size, pad = 60, color=text_color)
+ax.set_title(r'$ x \,\,\,[\,h^{-1} \mathrm{Mpc}\,]$', fontsize=font_size, pad = 60, color=text_color)
 ax.xaxis.label_position ='top'
 ax.imshow( projection, cmap=colormap, extent=[0,Lbox, 0, Lbox/nPoints*n_height], vmax=vmax )
 ax.axhline( Lbox/nPoints*n_height/2.0, linestyle='--',  c='w', alpha=0.7, linewidth =4 )
 # ax.set_yscale('log')
 # ax.set_ylabel( r'$n_{HI}  \,\,\, [cm^{-3}]$ ', fontsize=font_size)
 ax.tick_params(axis='both', which='major', labelsize=tick_size_0, length=10, width=5  )
-ax.set_ylabel( r'$\rho_\mathrm{HI} $ ', fontsize=font_size, labelpad=60, color=text_color)
+ax.set_ylabel( r'$\rho_\mathrm{HI} $ ', fontsize=font_size, labelpad=65, color=text_color)
 ax.text(0.95, 0.85, r'$z={0:.1f}$'.format(current_z), horizontalalignment='center',  verticalalignment='center', transform=ax.transAxes, fontsize=50, color='w') 
 ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in' )
 ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
@@ -278,7 +280,7 @@ ax.plot( vel_Hubble, N_HI_los, linewidth=line_width, c=color)
 # ax.plot( vel_Hubble_interp, N_HI_interp, '--', linewidth=2, c='C3')
 ax.set_yscale('log')
 ax.set_xlim( vel_Hubble.min(), vel_Hubble.max())
-ax.set_ylabel( r'$N_\mathrm{HI}  \,\,\,\,\, [cm^{-2}]$ ', fontsize=font_size, color=text_color)
+ax.set_ylabel( r'$N_\mathrm{HI}  \,\,\,\,\, [\,\mathrm{cm}^{-2}\,]$ ', fontsize=font_size, color=text_color)
 # ax.tick_params(axis='both', which='major', labelsize=tick_size_0, length=10, width=5)
 # ax.tick_params(axis='both', which='minor', labelsize=tick_size_1)
 ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size=tick_size_major, width=tick_width_major, direction='in' )
@@ -339,7 +341,7 @@ ax.plot( vel_Hubble, F_real, '--', linewidth=line_width_1, c=color_real, label='
 ax.plot( vel_Hubble, F_redshift, linewidth=line_width, c=color, label='Redshift Space')
 ax.set_xlim( vel_Hubble.min(), vel_Hubble.max())
 ax.set_ylabel( r'$F$ ', fontsize=font_size, color=text_color)
-ax.set_xlabel( r'$v \,\,\,  [km / s]$', fontsize=font_size, color=text_color)
+ax.set_xlabel( r'$v \,\,\,  [\,\mathrm{km} \,\, \mathrm{s}^{-1}\,]$', fontsize=font_size, color=text_color)
 ax.tick_params(axis='both', which='major', labelsize=tick_size_0, length=10, width=5)
 ax.tick_params(axis='both', which='minor', labelsize=tick_size_1)
 ax.set_ylim( 0, 1)

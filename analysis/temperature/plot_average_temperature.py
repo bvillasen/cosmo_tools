@@ -137,9 +137,9 @@ lw = 3
 ax.plot( data_ramses[0]+1, data_ramses[1], c=c_3, linewidth=lw, label='Ramses')
 ax.plot( data_cholla_beta[0]+1, t_ch_beta, c=c_2, linewidth=lw, label=r'Cholla $\beta=0.50$', alpha=0.9)
 
-ax.plot( z_ch+1,t_ch, c=c_0, linewidth=lw, label=r'Cholla $\eta=0.035$')
-
 ax.plot( data_enzo[0]+1, data_enzo[1], c=c_1, linewidth=lw, label='Enzo')
+
+ax.plot( z_ch+1,t_ch, c=c_0, linewidth=lw, label=r'Cholla $\eta=0.035$')
 # 
 ax.plot( data_virial[0]+1, data_virial[1], '--', c=c_4, linewidth=lw, label=r'Virial Temperature ($\bar{T}_{vir}$)')
 
@@ -159,7 +159,7 @@ ax.set_xlim( 1, 101 )
 ax.set_ylim( 0.5, 7e6 )
 
 ax.set_xlabel(r'$1+z$', fontsize=label_size)
-ax.set_ylabel(r'$\overline{T} \,\,\,\,  [\,K\,]$', fontsize=fs)
+ax.set_ylabel(r'$\overline{T} \,\,\,\,  [\,\mathrm{K}\,]$', fontsize=fs)
 
 
 fileName = 'virial_temperature_log.pdf'

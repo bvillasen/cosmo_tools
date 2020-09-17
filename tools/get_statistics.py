@@ -18,8 +18,8 @@ nprocs = comm.Get_size()
 # dataDir = homeDir
 dataDir = '/data/groups/comp-astro/bruno/'
 # dataDir = '/gpfs/alpine/proj-shared/ast149/'
-inDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/output_files_pchw18/'
-outDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/output_files_pchw18/statistics/'
+inDir = dataDir + 'cosmo_sims/512_hydro_50Mpc/output_files_pchw18/'
+outDir = dataDir + 'cosmo_sims/512_hydro_50Mpc/output_files_pchw18/statistics/'
 
 hydro = True
 particles = False

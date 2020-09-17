@@ -135,8 +135,8 @@ fields = [ 'density_dm', 'density', 'HI_density', 'temperature' ]
 
 ticks_list = [  [1.5, 5.0], [0.5, 4], [-6.0, -1.5],  [3.5, 7 ]]
 
-cbar_labels = [ r'$\log_{10}\,\,\, \mathrm{Density}  \,\,\,[ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$', r'$\log_{10} \,\,\, \mathrm{Density} \,\,\,  [ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$',  r'$\log_{10}  \,\,\, \mathrm{Density} \,\,\, [ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$',  r'$\log_{10} \,\,\, \mathrm{Temperature} \,\,\, [K\, ]$']
-field_labels = [ r'$\rho_{DM}$', r'$\rho_{b}$', r'$\rho_{HI}$', r'$T$',   ]
+cbar_labels = [ r'$\log_{10}\,\,\, \mathrm{Density}  \,\,\,[ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$', r'$\log_{10} \,\,\, \mathrm{Density} \,\,\,  [ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$',  r'$\log_{10}  \,\,\, \mathrm{Density} \,\,\, [ h^2 \mathrm{M_{\odot} } \mathrm{kpc}^{-3}  ]$',  r'$\log_{10} \,\,\, \mathrm{Temperature} \,\,\, [\,\mathrm{K}\,]$']
+field_labels = [ r'$\rho_{\mathrm{DM}}$', r'$\rho_{b}$', r'$\rho_{\mathrm{HI}}$', r'$T$',   ]
 code_labels = [' (Cholla)', ' (Enzo)']
 
 nSnap = 33

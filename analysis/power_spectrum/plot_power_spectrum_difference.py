@@ -138,12 +138,12 @@ for i in range(n_data):
   ax.plot( k_vals, diff[i], label = label, c=color, linewidth=3)
   counter += 1
 
-leg = ax.legend( loc=(0.02,0.5), fontsize=legend_font_size, frameon=False, ncol=2)
+leg = ax.legend( loc=(0.045,0.48), fontsize=legend_font_size, frameon=False, ncol=2)
 for text in leg.get_texts():
     plt.setp(text, color = text_color)
-ax.set_ylabel( r'$\Delta P\,(k)/P\,(k)$', fontsize=label_size, color=text_color)
+ax.set_ylabel( r'$\Delta P_m(k)/P_m(k)$', fontsize=label_size, color=text_color)
 
-ax.set_xlabel( r'$k \, \, \, \,[h \mathrm{Mpc}^{-1}]$', fontsize=label_size, color=text_color)
+ax.set_xlabel( r'$k \, \, \, \,[\,h \mathrm{Mpc}^{-1}\,]$', fontsize=label_size, color=text_color)
 
 for spine in list(ax.spines.values()):
   spine.set_edgecolor(text_color)
@@ -155,7 +155,7 @@ ax.tick_params(axis='both', which='major', labelsize=tick_label_size_major, size
 ax.tick_params(axis='both', which='minor', labelsize=tick_label_size_minor, size=tick_size_minor, width=tick_width_minor, direction='in')
 
 
-ax.text(0.08, 0.92, r'Dual Energy $\beta$ - $\eta$ conditions', fontsize=14, horizontalalignment='left', verticalalignment='center', transform=ax.transAxes )
+ax.text(0.30, 0.92, r'Relative difference in gas $P_m(k)$ from' +'\ntwo Dual Energy implementations', fontsize=15, horizontalalignment='center', verticalalignment='center', transform=ax.transAxes )
 
 
 fileName = 'ps_dual_energy_difference.pdf'
