@@ -122,7 +122,8 @@ temp_end   = np.log10( max_temp * 1.001 )
 
 
 #Get Bin Egdes for the histogram
-nbins = 2000
+# nbins = 2000
+nbins = 1000
 bins_dens = np.logspace( dens_start, dens_end, nbins, base=10 )
 bins_temp = np.logspace( temp_start, temp_end, nbins, base=10 )
 
