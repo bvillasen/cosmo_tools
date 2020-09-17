@@ -51,7 +51,7 @@ data_type = 'hydro'
 
 #Load statistics
 n_snapshots = 170
-stats_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/output_files_pchw18/statistics/'.format(nPoints)
+stats_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc_noZ/output_files_pchw18/statistics/'.format(nPoints)
 statistics = load_statistics( n_snapshots, stats_dir, data_type )
 
 
