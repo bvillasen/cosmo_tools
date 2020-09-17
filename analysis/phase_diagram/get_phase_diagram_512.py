@@ -70,7 +70,7 @@ grid_size = [ 512, 512, 512 ]
 domain = get_domain_block( proc_grid, box_size, grid_size )
 
 
-grid_complete_size = [ 2048, 2048, 2048 ]
+grid_complete_size = [ 512, 512, 512 ]
 
 n_per_proces = grid_complete_size[0] / nprocs
 index_start = rank * n_per_proces
@@ -79,8 +79,8 @@ index_end = (rank + 1) * n_per_proces
 
 
 subgrid_x = [ index_start, index_end ]
-subgrid_y = [ 0, 2048 ]
-subgrid_z = [ 0, 2048 ]
+subgrid_y = [ 0, 512 ]
+subgrid_z = [ 0, 512 ]
 # subgrid_x = [ 0, 256 ]
 # subgrid_y = [ 0, 256 ]
 # subgrid_z = [ 0, 256 ]
