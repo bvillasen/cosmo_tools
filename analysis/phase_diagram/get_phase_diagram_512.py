@@ -31,9 +31,7 @@ show_progess = False
 if rank == 0: show_progess = True
 
 
-homeDir = '/home/brvillas/'
-dataDir = homeDir
-# dataDir = '/data/groups/comp-astro/bruno/'
+dataDir = '/data/groups/comp-astro/bruno/'
 # dataDir = '/gpfs/alpine/proj-shared/ast149/'
 
 nPoints = 512
