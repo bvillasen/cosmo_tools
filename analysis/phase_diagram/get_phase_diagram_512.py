@@ -40,8 +40,8 @@ ny = nPoints
 nz = nPoints
 ncells = nx * ny * nz
 
-inDir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/output_files_pchw18/'.format(nPoints)
-output_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/phase_diagram_pchw18/'.format(nPoints)
+inDir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc_noZ/output_files_pchw18/'.format(nPoints)
+output_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc_noZ/phase_diagram_pchw18/'.format(nPoints)
 # output_dir = '/home/brvillas/cosmo_sims/2048_hydro_50Mpc/phase_diagram_hm12/'
 if rank == 0: create_directory( output_dir )
 
