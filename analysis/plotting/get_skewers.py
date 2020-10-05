@@ -50,9 +50,6 @@ precision = np.float32
 
 
 
-zoom_data_file_name = output_dir + 'zoom_data_{0}.pkl'.format(nSnap)
-zoom_data = pickle.load( open(zoom_data_file_name, 'rb') )
-
 
 
 out_file_name = output_dir + 'skewers_{0}_{1}.h5'.format( nSnap, n_depth )
