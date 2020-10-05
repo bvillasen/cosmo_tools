@@ -172,9 +172,9 @@ rgba_data_bytes = to_bytes( rgba_data )
 
 
 n = 0 
-n_divide = 0
+n_divide = 1
 
-for n in range(n_divide):
+# for n in range(n_divide):
   #Create and Save the Image
   img_alpha = Image.fromarray( rgba_data_bytes )
   shape = [(int((n_divide-n)*w/n_divide), h/2), (w, h/2)] 
