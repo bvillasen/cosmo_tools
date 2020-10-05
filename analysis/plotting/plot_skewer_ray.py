@@ -64,7 +64,7 @@ index_j = 100
 in_file_name = input_dir + 'skewers_{0}_{1}.h5'.format( nSnap, n_depth )
 in_file = h5.File( in_file_name, 'r' )
 
-current_z = in_file.attrs['current_z']
+current_z = in_file.attrs['Current_z']
 density = in_file['density'][...]
 HI_density = in_file['HI_density'][...]
 temperature = in_file['temperature'][...]
