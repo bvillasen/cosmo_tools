@@ -61,7 +61,7 @@ log = True
 if field == 'density': 
   colorMap = Deep_20_r.mpl_colormap
   factor_max = 1.0
-  factor_min = 1.5
+  factor_min = 1.4
   factor_max_zoom = 1.0
   factor_min_zoom = 1.2
   save_full = True
@@ -104,7 +104,7 @@ projection_ext[:ny, nx:2*nx] = projection
 projection_ext[ny:2*ny, :nx] = projection
 projection_ext[ny:2*ny, nx:2*nx] = projection
 
-full_edge = [ 150, 0 ]
+full_edge = [ 300, 0 ]
 full_size = [ 800, 1024*3, ]
 
 

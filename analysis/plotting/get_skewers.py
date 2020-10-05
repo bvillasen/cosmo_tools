@@ -18,7 +18,7 @@ uvb = 'pchw18'
 
 nPoints = 2048
 input_dir  = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/output_files_{1}/'.format(nPoints, uvb)
-output_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/figures/projections_new/'.format(nPoints, uvb)
+output_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/figures/projections/'.format(nPoints, uvb)
 create_directory( output_dir )
 
 show_progess = True
@@ -50,6 +50,12 @@ precision = np.float32
 
 
 
+full_edge = [ 300, 0 ]
+full_size = [ 800, 1024*3, ]
+
+
+j_start = full_edge[0]
+j_end = full_edge + full_size[0]
 
 
 out_file_name = output_dir + 'skewers_{0}_{1}.h5'.format( nSnap, n_depth )
@@ -67,7 +73,7 @@ current_z = data_snapshot['Current_z']
 for field in fields:
   
   data = data_snapshot[data_type][field]
-  data_skewers = data
+  data_skewers = data[:, j_start:j_end, : ]
   out_file.create_dataset( field, data=data_skewers)
 
 

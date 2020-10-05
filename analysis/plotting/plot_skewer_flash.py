@@ -48,7 +48,7 @@ Lbox = 50.0 #Mpc/h
 nSnap = 169
 n_depth =  64
 
-full_edge = [ 150, 0 ]
+full_edge = [ 0, 200 ]
 full_size = [ 800, 1024*3, ]
 
 index_i = n_depth//2
@@ -86,6 +86,7 @@ nz = len( density_los )
 L = Lbox / nPoints * nz
 x_comov, vel_Hubble, n_HI_los, tau = compute_optical_depth( H0, cosmo_h, Omega_M, Omega_L, Lbox, current_z, HI_density_los, temperature_los, velocity_los, space='real', method='error_function', turbulence_boost=0.0 )
 F = np.exp(-tau)
+F_full = 
 F_skewer = F
 
 # F_skewer = F[edge_l: edge_r]
