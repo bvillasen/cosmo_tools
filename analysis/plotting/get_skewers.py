@@ -55,7 +55,7 @@ full_size = [ 800, 1024*3, ]
 
 
 j_start = full_edge[0]
-j_end = full_edge + full_size[0]
+j_end = full_edge[0] + full_size[0]
 
 
 out_file_name = output_dir + 'skewers_{0}_{1}.h5'.format( nSnap, n_depth )
