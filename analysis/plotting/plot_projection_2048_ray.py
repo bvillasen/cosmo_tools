@@ -175,15 +175,15 @@ n = 0
 n_divide = 1
 
 # for n in range(n_divide):
-  #Create and Save the Image
-  img_alpha = Image.fromarray( rgba_data_bytes )
-  shape = [(int((n_divide-n)*w/n_divide), h/2), (w, h/2)] 
-  line = ImageDraw.Draw(img_alpha) 
-  line.line(shape, fill ="white", width = 10)
-  # out_file_name = output_dir + 'projection_{0}_{1}_{2}_zoom_{3:.1f}_{4:.1f}.png'.format( field, nSnap, n_depth, expand_factor, factor_min_zoom )
-  out_file_name = output_dir + 'projection_{0}.png'.format( n )
-  img_alpha.save( out_file_name )
-  print('Saved Image: ', out_file_name)
+#Create and Save the Image
+img_alpha = Image.fromarray( rgba_data_bytes )
+shape = [(int((n_divide-n)*w/n_divide), h/2), (w, h/2)] 
+line = ImageDraw.Draw(img_alpha) 
+line.line(shape, fill ="white", width = 10)
+# out_file_name = output_dir + 'projection_{0}_{1}_{2}_zoom_{3:.1f}_{4:.1f}.png'.format( field, nSnap, n_depth, expand_factor, factor_min_zoom )
+out_file_name = output_dir + 'projection_{0}.png'.format( n )
+img_alpha.save( out_file_name )
+print('Saved Image: ', out_file_name)
 
 
 in_file.close()
