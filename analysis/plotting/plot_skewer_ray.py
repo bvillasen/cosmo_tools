@@ -27,8 +27,8 @@ matplotlib.rcParams['mathtext.rm'] = 'serif'
 
 
 
-# dataDir = '/data/groups/comp-astro/bruno/'
-dataDir = '/home/bruno/Desktop/ssd_0/data/'
+dataDir = '/data/groups/comp-astro/bruno/'
+# dataDir = '/home/bruno/Desktop/ssd_0/data/'
 
 uvb = 'pchw18'
 
