@@ -327,6 +327,7 @@ def generate_ics_particles( data_in, outDir, outputBaseName, proc_grid, box_size
   for pId in range(nprocs):
 
     outputFileName = outDir + outputBaseName + ".{0}".format(pId)
+    if n_procs == 1: outputFileName = outDir + outputBaseName 
     print(' Writing h5 file: ', outputFileName)
     outFile = h5.File( outputFileName, 'w')
     outFile.attrs['current_a'] = current_a

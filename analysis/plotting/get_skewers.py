@@ -18,7 +18,7 @@ uvb = 'pchw18'
 
 nPoints = 2048
 input_dir  = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/output_files_{1}/'.format(nPoints, uvb)
-output_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/figures/projections/'.format(nPoints, uvb)
+output_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/figures/projections_new/'.format(nPoints, uvb)
 create_directory( output_dir )
 
 show_progess = True

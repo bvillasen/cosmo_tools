@@ -10,8 +10,10 @@ from internal_energy import *
 from tools import *
 
 data_dir = '/raid/bruno/data/'
+data_dir = '/home/bruno/Desktop/ssd_0/data/'
+
 input_dir = data_dir + 'cosmo_sims/chemistry_test/output_files/'
-output_dir = data_dir + 'figures/'
+output_dir = data_dir + 'cosmo_sims/chemistry_test/figures/'
 
 create_directory( output_dir )
 
@@ -28,15 +30,16 @@ for nSnap in range( 170 ):
 
   current_z = inFile.attrs['Current_z'][0]
   dens = inFile['density'][...][0,0,0]
-  U = inFile['GasEnergy'][...][0,0,0]
-  HI_dens = inFile['HI_density'][...][0,0,0]
-  HII_dens = inFile['HII_density'][...][0,0,0]
-  HeI_dens = inFile['HeI_density'][...][0,0,0]
-  HeII_dens = inFile['HeII_density'][...][0,0,0]
-  HeIII_dens = inFile['HeIII_density'][...][0,0,0]
-
-  mu =  dens / ( HI_dens + 2*HII_dens + ( HeI_dens + 2*HeII_dens + 3*HeIII_dens) / 4 )
-  temp = get_temp( U/dens*1e6, mu=mu )  
+  # U = inFile['GasEnergy'][...][0,0,0]
+  # HI_dens = inFile['HI_density'][...][0,0,0]
+  # HII_dens = inFile['HII_density'][...][0,0,0]
+  # HeI_dens = inFile['HeI_density'][...][0,0,0]
+  # HeII_dens = inFile['HeII_density'][...][0,0,0]
+  # HeIII_dens = inFile['HeIII_density'][...][0,0,0]
+  # 
+  # mu =  dens / ( HI_dens + 2*HII_dens + ( HeI_dens + 2*HeII_dens + 3*HeIII_dens) / 4 )
+  # temp = get_temp( U/dens*1e6, mu=mu )  
+  temp = inFile['temperature'][...][0,0,0]
   
   if nSnap == 0:
     T0 = temp
@@ -56,12 +59,13 @@ fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(8*ncols,6*nrows))
 
 
 ax.plot( z_vals, temp_vals )
-ax.plot( z_vals, T0 * ( a0/a_vals)**2, '--' )
+# ax.plot( z_vals, T0 * ( a0/a_vals)**2, '--' )
 
+# 
+# ax.set_xscale('log')
+# ax.set_yscale('log')
 
-ax.set_xscale('log')
-ax.set_yscale('log')
-
+ax.set_xlim(2,16)
 
 
 fileName = output_dir + 'temp_solver.png'.format(nSnap)

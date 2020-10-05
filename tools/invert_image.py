@@ -2,17 +2,17 @@ from PIL import Image
 import PIL.ImageOps    
 from tools import *
 
-dataDir = '/home/bruno/Desktop/ssd_0/data/'
-inDir = dataDir + 'cosmo_sims/zeldovich/figures_white/'
-outDir = dataDir + 'cosmo_sims/zeldovich/figures_black/'
-create_directory( outDir )
+# dataDir = '/home/bruno/Desktop/ssd_0/data/'
+# inDir = dataDir + 'cosmo_sims/zeldovich/figures_white/'
+# outDir = dataDir + 'cosmo_sims/zeldovich/figures_black/'
+# create_directory( outDir )
 
 
 n = 0
 
 inDir = '/home/bruno/Desktop/'
 outDir = inDir
-img_name  = 'lya_0'
+img_name  = 'th_boss'
 
 in_image_name = inDir + "{0}.png".format(img_name)
 

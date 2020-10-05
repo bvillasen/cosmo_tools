@@ -1,7 +1,7 @@
 import sys, os
 import numpy as np
 import h5py as h5
-from PIL import Image
+from PIL import Image, ImageDraw 
 import subprocess
 import matplotlib as mpl
 import matplotlib.colors as cl
@@ -63,7 +63,7 @@ if field == 'density':
   factor_max = 1.0
   factor_min = 1.5
   factor_max_zoom = 1.0
-  factor_min_zoom = 1.2
+  factor_min_zoom = 1.4
   save_full = True
   if plot_dm:
     save_full = False
@@ -117,6 +117,8 @@ min_val = data.min() * factor_min
 
 zoom_edge = [ 130, 200 ]
 zoom_size = [ int(100*2)*4, int(1024*0.75)*3 ]
+w = zoom_size[1]
+h = zoom_size[0]
 # data[ zoom_edge[0]:zoom_edge[0]+zoom_size[0], zoom_edge[1]:zoom_edge[1]+zoom_size[1], ] = 0
 
 zoom_data = {}
@@ -167,12 +169,22 @@ rgba_data = cmap.to_rgba( data_zoom )
 #Convert to 0-255 numbers
 rgba_data_bytes = to_bytes( rgba_data )
 
-#Create and Save the Image
-img_alpha = Image.fromarray( rgba_data_bytes )
-out_file_name = output_dir + 'projection_{0}_{1}_{2}_zoom_{3:.1f}_{4:.1f}.png'.format( field, nSnap, n_depth, expand_factor, factor_min_zoom )
-img_alpha.save( out_file_name )
-print('Saved Image: ', out_file_name)
 
+
+n = 0 
+n_divide = 0
+
+for n in range(n_divide):
+  #Create and Save the Image
+  img_alpha = Image.fromarray( rgba_data_bytes )
+  shape = [(int((n_divide-n)*w/n_divide), h/2), (w, h/2)] 
+  line = ImageDraw.Draw(img_alpha) 
+  line.line(shape, fill ="white", width = 10)
+  # out_file_name = output_dir + 'projection_{0}_{1}_{2}_zoom_{3:.1f}_{4:.1f}.png'.format( field, nSnap, n_depth, expand_factor, factor_min_zoom )
+  out_file_name = output_dir + 'projection_{0}.png'.format( n )
+  img_alpha.save( out_file_name )
+  print('Saved Image: ', out_file_name)
 
 
 in_file.close()
+

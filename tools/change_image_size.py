@@ -3,14 +3,17 @@ import PIL.ImageOps
 from tools import *
 
 dataDir = '/home/bruno/Desktop/ssd_0/data/'
-inDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/figures/phase_diagram_black/'
-outDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/figures/phase_diagram_black/anim/'
+# inDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/figures/phase_diagram_black/'
+# outDir = dataDir + 'cosmo_sims/2048_hydro_50Mpc/figures/phase_diagram_black/anim/'
+
+inDir = '/home/bruno/Desktop/ssd_0/data/cosmo_sims/2048_hydro_50Mpc/figures/projections_new/'
+outDir = '/home/bruno/Desktop/ssd_0/data/cosmo_sims/2048_hydro_50Mpc/figures/projections_new/anim/'
 create_directory( outDir )
 
-image_name = 'phase_diagram'
+image_name = 'skewer'
 
 n_image = 0 
-for n_image in range( 170 ):
+for n_image in range( 500 ):
   in_image_name = inDir + "{1}_{0}.png".format(n_image, image_name)
   out_image_name = outDir + "{1}_{0}.png".format(n_image, image_name)
 

@@ -124,7 +124,7 @@ c_1 = colors[3]
 
 nrows = 1
 ncols = 2
-fig, ax_l = plt.subplots(nrows=nrows, ncols=ncols, figsize=(8*ncols,6*nrows))
+fig, ax_l = plt.subplots(nrows=nrows, ncols=ncols, figsize=(8*ncols,8*nrows))
 
 fs = 17
 if not transparent: fig.patch.set_facecolor('black') 
@@ -197,7 +197,7 @@ print('Saved Image: ', fileName)
 
 nrows = 1
 ncols = 2
-fig, ax_l = plt.subplots(nrows=nrows, ncols=ncols, figsize=(8*ncols,6*nrows))
+fig, ax_l = plt.subplots(nrows=nrows, ncols=ncols, figsize=(8*ncols,8*nrows))
 
 
 if not transparent:fig.patch.set_facecolor('black') 

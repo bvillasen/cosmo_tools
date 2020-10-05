@@ -50,6 +50,11 @@ tick_width_minor = 1
 border_width = 1
  
 
+black_background = True
+
+text_color = 'black'
+if black_background: text_color = 'white'
+
 
 def smooth_line( x_vals, y_vals, x_new, log=False ):
   if log:
@@ -262,7 +267,13 @@ c_1 = colors[4]
 c_2 = colors_1[4]
 c_3 = purples[-1]
 c_4 = yellows[3]
-    
+
+c_0 = 'C0'
+
+if black_background:
+  c_1 = pylab.cm.viridis(.7)
+  c_0 =  pylab.cm.cool(.3)
+  c_3 = 'C1'  
 
 colors = [ c_2, c_1, c_0, c_3  ]    
 
@@ -297,7 +308,7 @@ ax.plot( data[1024]['k_vals'],  data[1024]['power_mean']*factor, '--', label=lab
 
 sim_name = label_prefix + '.R2'
 label = sim_name + ' ' +  r'$\Delta x= {0:.0f}  $'.format(data[512]['dx']) + r'$\,\, h^{-1} \mathrm{kpc}$'
-ax.plot( data[512]['k_vals'],  data[512]['power_mean']*factor, '--', label=label, c="C0",  lw=lw  )
+ax.plot( data[512]['k_vals'],  data[512]['power_mean']*factor, '--', label=label, c=c_0,  lw=lw  )
 
 ax.text(0.90, 0.95, r'$z={0:.1f}$'.format(current_z_pk), horizontalalignment='center',  verticalalignment='center', transform=ax.transAxes, fontsize=figure_text_size, color=text_color) 
 
@@ -328,6 +339,8 @@ ax.set_ylabel( r' $\Delta_F^2(k)$', fontsize=label_size, color= text_color )
 
 
 
+if not transparent and black_background: ax.set_facecolor('k')
+
 
 
 ax = ax_l[1]
@@ -352,7 +365,7 @@ ax.plot(  data_tau[nPoints]['z'], data_tau[nPoints]['mean'], '--',  color=color_
 
   
 nPoints = 512
-color_line = 'C0'
+color_line = c_0
 sim_name = label_prefix + '.R2'
 label = sim_name + ' ' +  r'$\Delta x= {0:.0f}  $'.format(data[512]['dx']) + r'$\,\, h^{-1} \mathrm{kpc}$'
 ax.plot(  data_tau[nPoints]['z'], data_tau[nPoints]['mean'], '--', color=color_line, label=label, lw=3 )
@@ -387,18 +400,6 @@ ax.set_ylabel( r' $\tau_{eff}$', fontsize=label_size, color= text_color )
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 if not transparent and black_background: ax.set_facecolor('k')
 
 fileName = output_dir + 'resolution_comparison'
@@ -408,7 +409,8 @@ if black_background: fileName += '_black'
 if transparent: fileName += '_transparent'
 
 
-fileName += '.pdf'
+# fileName += '.pdf'
+fileName += '.png'
 if not transparent: fig.savefig( fileName,  pad_inches=0.1, facecolor=fig.get_facecolor(), bbox_inches='tight', dpi=fig_dpi)
 else: fig.savefig( fileName,  pad_inches=0.1, transparent=True, bbox_inches='tight', dpi=200)
 print('Saved Image: ', fileName)

@@ -96,7 +96,7 @@ for nSnap in indices_to_generate:
   # fig, ax_l = plt.subplots(nrows=nrows, ncols=ncols, figsize=(9*ncols,8*nrows))
 
   # Set up figure and image grid
-  fig = plt.figure(0, figsize=(9*n_cols,15*n_rows),  )
+  fig = plt.figure(0, figsize=(9*n_cols,18*n_rows),  )
   grid = ImageGrid(fig, 111,          # as in plt.subplot(111)
                    nrows_ncols=(n_rows,n_cols),
                    axes_pad=0.2,
