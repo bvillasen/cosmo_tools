@@ -27,13 +27,13 @@ matplotlib.rcParams['mathtext.rm'] = 'serif'
 
 
 
-dataDir = '/data/groups/comp-astro/bruno/'
-# dataDir = '/home/bruno/Desktop/ssd_0/data/'
+# dataDir = '/data/groups/comp-astro/bruno/'
+dataDir = '/home/bruno/Desktop/ssd_0/data/'
 
 uvb = 'pchw18'
 
 nPoints = 2048
-input_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/figures/projections/'.format(nPoints, uvb)
+input_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/figures/projections_new/'.format(nPoints, uvb)
 output_dir = dataDir + 'cosmo_sims/{0}_hydro_50Mpc/figures/projections_new/'.format(nPoints, uvb)
 create_directory( output_dir )
 
@@ -64,7 +64,7 @@ index_j = 100
 in_file_name = input_dir + 'skewers_{0}_{1}.h5'.format( nSnap, n_depth )
 in_file = h5.File( in_file_name, 'r' )
 
-current_z = in_file.attrs['Current_z']
+current_z = in_file.attrs['current_z']
 density = in_file['density'][...]
 HI_density = in_file['HI_density'][...]
 temperature = in_file['temperature'][...]
@@ -97,7 +97,7 @@ ny = zoom_data['size'][0]
 nx = zoom_data['size'][1]
 scale = float(nx)/ny
 
-n_divide = 2
+n_divide = 1
 w = F_skewer.shape[0]
 x = np.linspace( 0, 1,w)
 
@@ -123,8 +123,10 @@ for n in range( n_divide ):
   # color = 'midnightblue'
   # color = 'white'
 
-  F_plot = F_skewer[int((n_divide-n)*w/n_divide):]
-  x_plot = x[int((n_divide-n)*w/n_divide):]
+  # F_plot = F_skewer[int((n_divide-n)*w/n_divide):]
+  # x_plot = x[int((n_divide-n)*w/n_divide):]
+  F_plot = F_skewer
+  x_plot = x
   ax.plot( x_plot, F_plot, c=color, linewidth=2 )
 
   delta = 0.015

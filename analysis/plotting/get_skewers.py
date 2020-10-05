@@ -38,7 +38,7 @@ domain = get_domain_block( proc_grid, box_size, grid_size )
 
 n_depth =  64
 
-indx_start = 700
+indx_start = 0
 print("Index: {0}".format(indx_start))
 
 grid_complete_size = [ 2048, 2048, 2048 ]
