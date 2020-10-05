@@ -53,10 +53,6 @@ precision = np.float32
 zoom_data_file_name = output_dir + 'zoom_data_{0}.pkl'.format(nSnap)
 zoom_data = pickle.load( open(zoom_data_file_name, 'rb') )
 
-j_start = zoom_data['edge'][0]
-j_end = zoom_data['edge'][0] + zoom_data['size'][0]
-k_start = zoom_data['edge'][1]
-k_end = zoom_data['edge'][1] + zoom_data['size'][1]
 
 
 out_file_name = output_dir + 'skewers_{0}_{1}.h5'.format( nSnap, n_depth )
@@ -74,7 +70,7 @@ current_z = data_snapshot['Current_z']
 for field in fields:
   
   data = data_snapshot[data_type][field]
-  data_skewers = data[:, j_start:j_end, : ]
+  data_skewers = data
   out_file.create_dataset( field, data=data_skewers)
 
 
